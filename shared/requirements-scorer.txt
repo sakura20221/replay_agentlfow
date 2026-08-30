@@ -1,0 +1,14 @@
+# Dependencies of shared/bench.py, which delegates MATH/AMC/MBPP/DROP grading to
+# AFlow's published benchmark classes. Every family env that scores needs these.
+regex
+tqdm
+sympy
+antlr4-python3-runtime==4.11
+tenacity
+aiofiles
+pandas
+pydantic
+loguru
+tree-sitter
+tree-sitter-python
+setuptools<81

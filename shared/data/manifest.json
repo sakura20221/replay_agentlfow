@@ -1,0 +1,145 @@
+{
+  "seed": 20260821,
+  "datasets": {
+    "math": {
+      "file": "math.jsonl",
+      "n": 486,
+      "sha256": "f1ea8c9cdc3dea04",
+      "source": "AFlow official data bundle math_test.jsonl (byte-identical to FlowBank's shipped split)",
+      "sampling": "none (full shipped Level-5 test split)",
+      "adopted": "2026-08-24",
+      "levels": {
+        "Level 5": 486
+      },
+      "replaces": "HuggingFaceH4/MATH-500 mixed-level n=500"
+    },
+    "amc": {
+      "file": "amc.jsonl",
+      "n": 648,
+      "sha256": "26c80bcc1d54f9b8",
+      "source": "third_party/flowbank/datasets (shipped with the FlowBank repo, origin undocumented upstream; historical AMC8/10/12 problems, none from 2022-2023)",
+      "sampling": "their amc_test.jsonl minus the rows whose content appears in amc_validate (user decision 2026-08-24; archive/amc_leak_removed.jsonl)",
+      "adopted": "2026-08-24",
+      "declared_defects": {
+        "test_dup_contents": 5,
+        "validate_dup_contents": 0,
+        "validate_test_overlap": 7,
+        "letter_golds_test": 2,
+        "letter_golds_validate": 0,
+        "levels_test": {
+          "Level 2": 229,
+          "Level 1": 224,
+          "Level 4": 108,
+          "Level 3": 84,
+          "Level 5": 10
+        }
+      },
+      "replaces": "AI-MO/aimo-validation-amc n=83 (archive/amc83_aimo/)"
+    },
+    "mbpp": {
+      "file": "mbpp.jsonl",
+      "n": 500,
+      "sha256": "acfed00033c53e5d",
+      "source": "google-research-datasets/mbpp [full/test]",
+      "sampling": "none (full canonical split)",
+      "task_id_range": [
+        11,
+        510
+      ],
+      "inside_official_11_510": 500
+    },
+    "drop": {
+      "file": "drop.jsonl",
+      "n": 1000,
+      "sha256": "fa60481b505fb673",
+      "source": "ucinlp/drop [validation]",
+      "sampling": "uniform random 1000 of 9535, seed=20260821"
+    },
+    "mmlu_pro": {
+      "file": "mmlu_pro.jsonl",
+      "n": 1120,
+      "sha256": "a3c31deccfddb9db",
+      "source": "TIGER-Lab/MMLU-Pro [test]",
+      "sampling": "stratified 80 per category, seed=20260821",
+      "categories": {
+        "biology": 80,
+        "business": 80,
+        "chemistry": 80,
+        "computer science": 80,
+        "economics": 80,
+        "engineering": 80,
+        "health": 80,
+        "history": 80,
+        "law": 80,
+        "math": 80,
+        "other": 80,
+        "philosophy": 80,
+        "physics": 80,
+        "psychology": 80
+      }
+    }
+  },
+  "total_items": 3754,
+  "search_splits": {
+    "math_search": {
+      "file": "math_search.jsonl",
+      "n": 119,
+      "sha256": "ab28c861fc743fe8",
+      "source": "AFlow official data bundle math_validate.jsonl (byte-identical to FlowBank's shipped split)",
+      "sampling": "none (full shipped Level-5 validation split)",
+      "levels": {
+        "Level 5": 119
+      }
+    },
+    "mbpp_search": {
+      "file": "mbpp_search.jsonl",
+      "n": 256,
+      "sha256": "40fb3e2a8003a289",
+      "source": "google-research-datasets/mbpp [full/train]",
+      "sampling": "uniform random 256, seed=20260821"
+    },
+    "drop_search": {
+      "file": "drop_search.jsonl",
+      "n": 256,
+      "sha256": "50bfac443eff12db",
+      "source": "ucinlp/drop [train]",
+      "sampling": "uniform random 256 of 77400, seed=20260821"
+    },
+    "mmlu_pro_search": {
+      "file": "mmlu_pro_search.jsonl",
+      "n": 252,
+      "sha256": "7724b736b400ff25",
+      "source": "TIGER-Lab/MMLU-Pro [test, disjoint from evaluation subset]",
+      "sampling": "stratified 18 per category, seed=20260821",
+      "overlap_with_eval": 0,
+      "order": "stratified per category, then globally shuffled with seed=20260821 so that any prefix is representative (methods with a fixed batch budget consume only a prefix)"
+    },
+    "amc_search": {
+      "file": "amc_search.jsonl",
+      "n": 165,
+      "sha256": "ba9b01451691d133",
+      "source": "third_party/flowbank/datasets (shipped with the FlowBank repo, origin undocumented upstream; historical AMC8/10/12 problems, none from 2022-2023)",
+      "sampling": "none (their amc_validate.jsonl verbatim)"
+    }
+  },
+  "file_integrity": {
+    "algorithm": "sha256 over exact file bytes",
+    "files": {
+      "amc.jsonl": {"rows": 648, "sha256": "a1945bf65d6d964b0f78dc000ef3d1cd68212c4b6dc50327be8eb1f3967cbfa3"},
+      "amc_search.jsonl": {"rows": 165, "sha256": "281cfb2da040cdc53a015cca9260e9c6adef159ca65e991de7a775c94e7679fb"},
+      "amc_train_then_eval.jsonl": {"rows": 812, "sha256": "98b93446064e35457bbca23aa5db7bcb22f7898dd547a743c044c77da48f7cf0"},
+      "drop.jsonl": {"rows": 1000, "sha256": "6fad389777852cf27df622616b54e13218b863061f9023a2c668d8d81a33f96c"},
+      "drop_search.jsonl": {"rows": 256, "sha256": "a949401f965f8e89eab78f921c2f638c32bead6b63fd3418fa309753e8c7888d"},
+      "drop_train_then_eval.jsonl": {"rows": 1256, "sha256": "33f4c88e7cf3f43d7dde822597fec197d0f937339df289a629ea544f31038cdc"},
+      "math.jsonl": {"rows": 486, "sha256": "deec485e64ca3da30224460f9ea2099271aefa52462247a96bf533a54b848b2e"},
+      "math_search.jsonl": {"rows": 119, "sha256": "7a59d109bbcc51274cad289a86413e38b6645ddfcc11c951b5dc8ff0659557ba"},
+      "math_train_then_eval.jsonl": {"rows": 602, "sha256": "8fce42a3093874b204c52f3951106a17249981abfe2cdfcfefb2c91cbe62eb7a"},
+      "mbpp.jsonl": {"rows": 500, "sha256": "696004460df0abda2ddbb8646404e3da1febaa324737230d2524528d93005104"},
+      "mbpp_search.jsonl": {"rows": 256, "sha256": "25de857398becd26fb4a687b4b06d3342f402fc7e68d24c17fa5a2bd55807db9"},
+      "mbpp_train_then_eval.jsonl": {"rows": 756, "sha256": "5e94b190b20f0e50739a94491eeb58cb78a027a77feadb492938c5e3cf02460e"},
+      "mmlu_pro.jsonl": {"rows": 1120, "sha256": "0baf6d6340ba7f3dcbfa1d3c8da77e5f116c66e9747ea66a5d0388997e345e49"},
+      "mmlu_pro_search.jsonl": {"rows": 252, "sha256": "7724b736b400ff253e46b64ad156ad4529f2255b236648881ac90dbf80781cbb"},
+      "mmlu_pro_train_then_eval.jsonl": {"rows": 1372, "sha256": "74c6d86618876a7c9a7834602136d901655b7d11810f39b9cd58a9f3543ff7a1"}
+    }
+  }
+}

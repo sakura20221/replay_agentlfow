@@ -1,0 +1,26 @@
+{
+  "captured_from": "A800 on 2026-08-30",
+  "notes": "Key runtime packages only; author repositories retain their own dependency metadata.",
+  "environments": {
+    "tools": {
+      "python": "3.10.12",
+      "packages": {"datasets": "5.0.1", "numpy": "2.2.6", "pandas": "2.3.3", "aiohttp": "3.14.3"}
+    },
+    "maas": {
+      "python": "3.12.14",
+      "packages": {"torch": "2.10.0", "transformers": "5.15.1", "sentence-transformers": "6.0.0", "openai": "3.3.1", "sympy": "1.14.0", "antlr4-python3-runtime": "4.11.1", "scikit-learn": "1.9.0", "pandas": "3.0.5"}
+    },
+    "gdesigner": {
+      "python": "3.12.14",
+      "packages": {"torch": "2.10.0", "torch-geometric": "2.8.0.post1", "transformers": "5.15.1", "sentence-transformers": "6.0.0", "openai": "3.3.1", "sympy": "1.14.0", "antlr4-python3-runtime": "4.11.0"}
+    },
+    "pyg": {
+      "python": "3.12.14",
+      "packages": {"torch": "2.10.0+cpu", "torch-geometric": "2.8.0.post1", "transformers": "5.15.1", "sentence-transformers": "6.0.0", "openai": "3.3.1", "sympy": "1.14.0", "antlr4-python3-runtime": "4.11.0"}
+    },
+    "vllm": {
+      "python": "3.12.14",
+      "packages": {"vllm": "0.19.1", "torch": "2.10.0", "transformers": "5.15.1", "openai": "3.3.1"}
+    }
+  }
+}

@@ -1,0 +1,69 @@
+# New-server migration
+
+## What Git contains
+
+- orchestration, proxy, scorer, collectors, and audits;
+- all five shim installers and their source templates;
+- frozen dataset splits and provenance manifest;
+- exact author-repository commits in `upstreams.lock.json`;
+- the complete reproduction modification log.
+
+Git does not contain generated results, transcripts, checkpoints, model weights,
+Python environments, package caches, or the author repositories themselves.
+
+## Restore order
+
+```bash
+git clone <private-repository-url> agent_wf
+cd agent_wf
+python3 scripts/bootstrap_upstreams.py
+```
+
+The bootstrap command fetches each exact commit, applies every shim, then runs
+each installer's assertions. It refuses to overwrite a pre-existing non-Git,
+wrong-remote, or wrong-commit directory.
+
+Create the required Python environments next. The experiment uses separate
+environments named `tools`, `maas`, `gdesigner`, `pyg`, and `vllm` under
+`envs/`; do not copy the old environments between servers. Recreate them for the
+new server's Python/CUDA/driver combination. The serving environment used
+`vllm==0.19.1` with `torch==2.10.0` on the original CUDA 12.8 host.
+The key versions captured from the working host are in `environments.lock.json`.
+
+Download these untracked models:
+
+- `Qwen/Qwen3-8B` into the Hugging Face cache used by `launch_vllm.sh`;
+- `sentence-transformers/all-MiniLM-L6-v2` into
+  `shared/models/all-MiniLM-L6-v2`.
+
+Then start two vLLM instances and the proxy. The backend servers have a 40,960
+token allocation, while the frozen experiment protocol deliberately exposes a
+32,768-token window through the proxy. This matches the protocol fingerprints
+written by the latest smoke run; changing it creates a new protocol and requires
+a new result tree.
+
+Before a full run:
+
+```bash
+envs/maas/bin/python make_train_then_eval.py --check
+python3 scripts/verify_data.py
+envs/maas/bin/python preflight.py
+```
+
+Run a small smoke matrix and inspect saved transcripts before spending on the
+full matrix. Never reuse an old `runs_*` directory under a changed prompt,
+scorer, sampling setting, shim, or dataset split.
+
+## Data and result backup
+
+The committed data files are enough to recreate the exact task inputs. Old
+`logs/`, `runs_*`, `archive/`, and checkpoints are evidence rather than source;
+copy them to object storage or a separate archival disk if they must be retained.
+Do not add them to this Git history.
+
+## Security and publication
+
+No A800 password or remote credential belongs in this repository. Local API keys
+with the literal value `local` are non-secret placeholders for loopback vLLM.
+Use a private remote unless the benchmark redistribution licenses have been
+reviewed.

@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local credentials and host-specific configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Recreated from upstreams.lock.json
+/third_party/
+
+# Recreated environments, package caches, and model weights
+/envs/
+/.uv_cache/
+/.uv_python/
+/hf_cache/
+/shared/models/
+
+# Runtime state and generated experiment products
+/logs/
+/archive/
+/runs/
+/runs_*/
+/shared/logs/
+/shared/results/
+*.log
+*.pid
+error.log
+
+# Historical A800-only launch/recovery scripts and stale session handoff
+/HANDOVER.md
+/aflow_redo.sh
+/fb_redo.sh
+/mbpp_redo.sh
+/mbpp_v4.sh
+/mmlupro_fix.sh
+/nanny.sh
+/postfinal.sh
+/relaunch_col.sh
+/relaunch_one.sh
+/shepherd_amc.sh
+
+# Generated model and optimizer artifacts
+*.bin
+*.ckpt
+*.onnx
+*.pt
+*.pth
+*.safetensors
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*~

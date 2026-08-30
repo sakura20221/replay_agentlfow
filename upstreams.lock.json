@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "name": "aflow",
+      "url": "https://github.com/FoundationAgents/AFlow.git",
+      "commit": "3f457218fc716093fe53f6df8a5d5e6379d66346"
+    },
+    {
+      "name": "maas",
+      "url": "https://github.com/bingreeky/MaAS.git",
+      "commit": "987f3c1bc9a96e844fe090db3791446e3ef0f5c7"
+    },
+    {
+      "name": "daao",
+      "url": "https://github.com/AutoAgents-ai/DAAO.git",
+      "commit": "5e260bb9e0f9af1b196c0ef6611db7b168326b9b",
+      "sparse_exclude": ["all-MiniLM-L6-v2"]
+    },
+    {
+      "name": "gdesigner",
+      "url": "https://github.com/yanweiyue/GDesigner.git",
+      "commit": "a6efcfa3b40bb4d9cbf46f883a95d62020bd8251"
+    },
+    {
+      "name": "card",
+      "url": "https://github.com/Warma10032/CARD.git",
+      "commit": "d5d1f682a459074c0225b78eca94ab1ea92476e7"
+    },
+    {
+      "name": "flowbank",
+      "url": "https://github.com/lingzhiyxp/FlowBank.git",
+      "commit": "dde948d9f65cede15e6a3418dde3bf7feffdd087"
+    },
+    {
+      "name": "masrouter",
+      "url": "https://github.com/yanweiyue/masrouter.git",
+      "commit": "e005f7696fe0c0412563f6cd67f4cd3712fa2822"
+    }
+  ]
+}
