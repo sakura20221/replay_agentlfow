@@ -32,6 +32,40 @@ new server's Python/CUDA/driver combination. The serving environment used
 `vllm==0.19.1` with `torch==2.10.0` on the original CUDA 12.8 host.
 The key versions captured from the working host are in `environments.lock.json`.
 
+The repository does not assume a system Python package manager. On a Linux host,
+install `uv` first, then create the five environments with the Python versions in
+the lock file. Install the root tooling requirements into `tools`, the author
+requirements into the method environments, and run the two existing setup scripts
+for the serving and MaAS environments. A practical order is:
+
+```bash
+uv venv --python 3.10 envs/tools
+uv pip install --python envs/tools/bin/python \
+  datasets==5.0.1 numpy==2.2.6 pandas==2.3.3 aiohttp==3.14.3 \
+  huggingface_hub
+uv venv --python 3.12 envs/maas
+uv pip install --python envs/maas/bin/python -r third_party/maas/requirements.txt
+uv pip install --python envs/maas/bin/python -r third_party/aflow/requirements.txt
+uv pip install --python envs/maas/bin/python -r third_party/flowbank/DiverseFlow/requirements.txt
+uv venv --python 3.12 envs/gdesigner
+uv pip install --python envs/gdesigner/bin/python -r third_party/gdesigner/requirements.txt
+uv pip install --python envs/gdesigner/bin/python torch-geometric
+uv venv --python 3.12 envs/pyg
+uv pip install --python envs/pyg/bin/python \
+  torch transformers sentence-transformers openai sympy \
+  scikit-learn pandas pyyaml python-dotenv requests aiohttp loguru
+./install_maas_env.sh
+./install_vllm.sh
+```
+
+The exact Torch and PyG wheels must match the new host's CUDA/driver. The lock
+file records the versions used for this snapshot; verify them with `--check`
+before a run instead of assuming a CPU wheel is interchangeable with a CUDA
+wheel. MasRouter has no separate requirements file; the explicit list above is
+the dependency set used by its shared runner. The author requirement files are
+retained for reference, but their original CUDA pins are not the experiment
+environment pins and should not silently override the versions in the lock file.
+
 Download these untracked models:
 
 - `Qwen/Qwen3-8B` into the Hugging Face cache used by `launch_vllm.sh`;

@@ -37,6 +37,9 @@ def run(label: str, command: list[str], must_contain: str | None = None,
     except subprocess.TimeoutExpired:
         report(False, label, "timed out")
         return
+    except OSError as exc:
+        report(False, label, f"cannot start command: {exc}")
+        return
     output = (proc.stdout or "") + (proc.stderr or "")
     ok = proc.returncode == 0 and (must_contain is None or must_contain in output)
     detail = "" if ok else output.strip().splitlines()[-1][:140] if output.strip() else "no output"
@@ -87,8 +90,13 @@ def main() -> None:
                       ("maas", "shims/diverseflow/install.py"),
                       ("gdesigner", "shims/gdesigner_family/install.py"),
                       ("pyg", "shims/masrouter/install.py")):
-        proc = subprocess.run([str(ROOT / f"envs/{env}/bin/python"), shim, "--check"],
-                              capture_output=True, text=True, cwd=ROOT, timeout=600)
+        executable = ROOT / f"envs/{env}/bin/python"
+        try:
+            proc = subprocess.run([str(executable), shim, "--check"],
+                                  capture_output=True, text=True, cwd=ROOT, timeout=600)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            report(False, f"{shim} --check", f"cannot run {executable}: {exc}")
+            continue
         bad = [l for l in (proc.stdout or "").splitlines() if "[FAIL" in l]
         report(proc.returncode == 0 and not bad, f"{shim} --check",
                bad[0].strip() if bad else "")

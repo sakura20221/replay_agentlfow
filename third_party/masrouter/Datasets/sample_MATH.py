@@ -3,10 +3,13 @@ import json
 import random
 import shutil
 import math
+from pathlib import Path
 
-# 设置路径
-test_dir = '/Users/lby/Desktop/master/code/MAR/Datasets/MATH/test'
-output_dir = '/Users/lby/Desktop/master/code/MAR/Datasets/MATH/sampled_test'
+# Keep this standalone author utility portable. It is not part of the shared
+# benchmark sweep, but it should not point at the original author's workstation.
+_MATH_ROOT = Path(__file__).resolve().parent / "MATH"
+test_dir = str(_MATH_ROOT / "test")
+output_dir = str(_MATH_ROOT / "sampled_test")
 
 random.seed(42)  # 固定随机种子以确保可重复性
 

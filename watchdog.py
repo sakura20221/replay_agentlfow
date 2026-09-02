@@ -42,9 +42,11 @@ RUNS = Path(os.getenv("SWEEP_RUNS", str(ROOT / "runs")))
 LOG = ROOT / "logs" / "watchdog.jsonl"
 STATUS = ROOT / "logs" / "watchdog_status.txt"
 PROXY = os.getenv("PROXY_URL", "http://127.0.0.1:18080")
-# Below this, the run is close enough to filling a disk that nine people share
-# for it to be worth saying so loudly.
+# Below this, the run is close enough to filling the filesystem that it is worth
+# saying so loudly. The path is configurable because `/home/users` was specific
+# to the original shared host and made a fresh clone fail before monitoring.
 DISK_FLOOR_GB = float(os.getenv("WATCHDOG_DISK_FLOOR_GB", "25"))
+DISK_PATH = Path(os.getenv("WATCHDOG_DISK_PATH", str(ROOT)))
 
 
 def shell(command: str, timeout: int = 30) -> str:
@@ -330,7 +332,7 @@ def check() -> dict:
 
     totals = (stats or {}).get("totals", {})
     requests = totals.get("requests", 0) or 0
-    usage = shutil.disk_usage("/home/users")
+    usage = shutil.disk_usage(DISK_PATH)
     free_gb = usage.free / 1024 ** 3
 
     driver_alive = bool(shell("pgrep -f 'sweep[.]py --repeats' | head -1"))
