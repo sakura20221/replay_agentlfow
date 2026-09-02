@@ -12,8 +12,26 @@ __pycache__/
 *.pem
 *.key
 
-# Recreated from upstreams.lock.json
-/third_party/
+# Vendored author source is tracked so a clone contains the exact adapted code.
+# The nested .git histories and generated/runtime artefacts are not part of the
+# reproducible source snapshot.
+/third_party/**/.git/
+/third_party/**/.git/**
+/third_party/**/all-MiniLM-L6-v2/
+/third_party/**/*.pth
+/third_party/**/*.pt
+/third_party/**/*.bin
+/third_party/**/*.safetensors
+/third_party/**/*.h5
+/third_party/**/*.ot
+/third_party/**/*.onnx
+/third_party/**/*.pkl
+/third_party/**/*.npz
+/third_party/**/results.json
+/third_party/**/test_predictions.json
+/third_party/**/training_log.csv
+/third_party/**/log.json
+/third_party/**/error.log
 
 # Recreated environments, package caches, and model weights
 /envs/

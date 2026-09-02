@@ -1,0 +1,39 @@
+{
+    "combination_1": [
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Mathematician",
+            "external_tool_type": null,
+            "external_tool": null,
+            "external_source": null
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Critic",
+            "external_tool_type": null,
+            "external_tool": null,
+            "external_source": null
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Psychologist",
+            "external_tool_type": null,
+            "external_tool": null,
+            "external_source": null
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Historian",
+            "external_tool_type": null,
+            "external_tool": null,
+            "external_source": null
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Doctor",
+            "external_tool_type": null,
+            "external_tool": null,
+            "external_source": null
+        }
+    ]
+}

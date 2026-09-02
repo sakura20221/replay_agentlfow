@@ -1,0 +1,17 @@
+# math config (k=4 rel-α=0.03, single-run median labels)
+batch_size: 32
+cost_weight: 0.1
+edge_dim: 3
+embedding_dim: 8
+learning_rate: 0.0003
+llm_num: 4
+loss_type: bce
+num_task: 1
+seed: 1881
+split_ratio:
+- 0.2
+- 0.0
+- 0.8
+train_epoch: 500
+train_mask_rate: 0.5
+weight_decay: 0.0001

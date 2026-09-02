@@ -1,0 +1,29 @@
+# DiverseFlow LLM configuration.
+#
+#   cp config/config.example.yaml config/config.yaml
+#   # then fill in base_url / api_key for each model you use
+#
+# Each top-level key under `models:` is a model NAME you pass via
+# --opt_model_name / --exec_model_name in run.py. The two entries below match
+# run.py's defaults (optimizer = claude-3-5-sonnet, executor = gpt-4o-mini);
+# rename / add entries for any provider (OpenAI, Azure, a local vLLM/Ollama
+# server, etc.). api_type "openai" works for any OpenAI-compatible endpoint.
+models:
+  "claude-3-5-sonnet-20241022":          # optimizer LLM (proposes new workflows)
+    api_type: "openai"
+    base_url: "<your base url>"           # e.g. https://api.openai.com/v1
+    api_key: "<your api key>"
+    temperature: 0
+
+  "gpt-4o-mini":                          # executor LLM (runs the workflows)
+    api_type: "openai"
+    base_url: "<your base url>"
+    api_key: "<your api key>"
+    temperature: 0
+
+  # Example of a local OpenAI-compatible server (e.g. vLLM serving Qwen):
+  # "Qwen/Qwen3-8B":
+  #   api_type: "openai"
+  #   base_url: "http://localhost:8000/v1"
+  #   api_key: "EMPTY"
+  #   temperature: 0.7

@@ -1,0 +1,14 @@
+{
+  "W1": {
+    "feature": "Three-stage pipeline combining code generation, solution refinement, and ensemble voting. Step 1 (Custom) generates a Python code snippet for verification against the problem. Step 2 (Programmer) executes the code and extracts the numeric result. Steps 3-4 (Custom) produce two independent refined solutions from the original problem, each informed by code outputs. Step 5 (ScEnsemble) selects the best solution via consensus. Final output concatenates the ensemble result with code verification. Four LLM calls plus code execution \u2014 moderate cost workflow emphasizing verification-driven refinement rather than purely diverse-reasoning ensembling."
+  },
+  "W2": {
+    "feature": "Five-stage ensemble combining role-based argumentation, majority voting, and code verification. Step 1 (Proposer Custom) generates an initial step-by-step solution with a boxed answer. Step 2 (Critic Custom) consumes that solution and produces a targeted critique identifying errors, inconsistencies, and a revised solution. Step 3 (Judge Custom) sees both the proposer and critic outputs and synthesizes a best-reasoned final solution. Step 4 (ScEnsemble) votes across the three candidate solutions to pick the most consistent answer. Step 5 (Programmer) takes the chosen analysis and verifies it by generating and executing Python code. A regex pass then extracts the boxed answer. Five LLM calls plus code execution \u2014 the highest-cost workflow in the portfolio. Best on problems where diverse reasoning paths plus numerical verification meaningfully reduce error; overkill on easy problems the single-shot baseline already solves."
+  },
+  "W3": {
+    "feature": "Three-step workflow combining dynamic prompting, code verification, and solution ensemble. Step 1 (Custom) solves the problem with a context-aware prompt emphasizing exact values and boxed answers. Step 2 (Programmer) generates and executes Python code to verify the symbolic solution. Step 3 (ScEnsemble) ranks both approaches and selects the best. Three LLM calls plus code execution \u2014 streamlined workflow for problems requiring exact symbolic answers, leveraging dynamic prompt generation to adapt to problem context before ensemble voting."
+  },
+  "W4": {
+    "feature": "Linear verification pipeline with optional code validation. Step 1 (Custom) solves the problem step-by-step with boxed final answer. Step 2 (Custom) verifies the solution by checking reasoning and calculations, optionally correcting errors. Step 3 (Programmer) analyzes the verified solution and executes symbolic Python code to confirm accuracy. Three LLM calls plus code execution \u2014 lightweight sequential workflow suitable for straightforward problems where verification gates refinement, avoiding redundant ensemble overhead."
+  }
+}

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Clone pinned author repositories and apply the local reproduction shims.
+"""Verify the pinned author source and apply the local reproduction shims.
 
-The author repositories are deliberately not vendored into this Git repository.
-Their exact revisions live in upstreams.lock.json; the shims are the reviewable
-description of every local source modification.
+The adapted author source is vendored in ``third_party`` so a Git clone is
+immediately runnable. A fresh checkout may still use the original clone-and-patch
+path when those directories are absent; both paths are checked against the same
+locked upstream commit.
 """
 
 from __future__ import annotations
@@ -52,8 +53,16 @@ def clone_one(entry: dict) -> None:
     target = THIRD_PARTY / entry["name"]
     expected = entry["commit"]
     if target.exists():
+        vendored = target / ".repro_vendored_commit"
         if not (target / ".git").is_dir():
-            raise SystemExit(f"refusing to replace non-Git path: {target}")
+            marker_value = vendored.read_text(encoding="utf-8").strip() \
+                if vendored.exists() else ""
+            if marker_value != expected:
+                raise SystemExit(
+                    f"{target}: source exists without a matching vendored commit marker"
+                )
+            print(f"[ok] vendored {entry['name']} at {expected[:12]}")
+            return
         origin = git(target, "remote", "get-url", "origin", capture=True)
         head = git(target, "rev-parse", "HEAD", capture=True)
         dirty = git(target, "status", "--porcelain", "--untracked-files=no", capture=True)
@@ -96,6 +105,14 @@ def verify_commits() -> None:
     failures = []
     for entry in entries():
         target = THIRD_PARTY / entry["name"]
+        marker = target / ".repro_vendored_commit"
+        if marker.exists() and not (target / ".git").is_dir():
+            head = marker.read_text(encoding="utf-8").strip()
+            if head != entry["commit"]:
+                failures.append(f"{entry['name']}: vendored {head} != {entry['commit']}")
+            else:
+                print(f"[ok] vendored {entry['name']} {head[:12]}")
+            continue
         if not (target / ".git").is_dir():
             failures.append(f"{entry['name']}: missing")
             continue

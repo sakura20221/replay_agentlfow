@@ -1,0 +1,8 @@
+{
+  "W1": {
+    "feature": "Conditional routing workflow based on question-type classification. First classifies the question into NUMERIC, COMPARE, DATE, SPAN, or other. For NUMERIC/COMPARE questions, routes to QANumerical \u2014 a DROP-tailored Programmer variant that generates Python code to extract numbers and compute the answer in a sandboxed subprocess. For DATE questions, uses a Custom operator with a date-extraction prompt. For SPAN questions, uses a Custom operator with a span-extraction prompt. All other questions fall back to AnswerGenerate. This selective routing applies QANumerical's strength (code-based computation) only where it fits, avoiding it on text-span or date questions where it would overfit to numeric patterns. Low cost (2 LLM calls: classify + solve)."
+  },
+  "W2": {
+    "feature": "ScoreFlow query-level workflow generator. Unlike fixed-graph workflows that apply one static computation graph to every query, ScoreFlow synthesizes a custom workflow on-the-fly for each individual query at inference time. An optimizer LLM inspects the query and produces a tailored graph before execution. The exposed cost includes both the generated workflow's runtime cost and ScoreFlow's own generation overhead, making it ~7-8\u00d7 more expensive than fixed-graph candidates. Strong overall accuracy, especially on queries where fixed routing heuristics fail; provides genuine per-query adaptability that cannot be replicated by any single fixed graph."
+  }
+}

@@ -1,0 +1,7 @@
+k,oracle_total,oracle_per_query,oracle_gain_per_query,avg_pair_corr_tiebreaker,redundancy_report,n_evaluated,n_oracle_ties,best_combo
+1,74.0000,0.6218,0.6218,0.0000,0.00,31,0,Flow_29
+2,88.0000,0.7395,0.1176,0.3446,68.07,465,3,Flow_11; Flow_21
+3,93.0000,0.7815,0.0420,0.4335,84.03,4495,16,Flow_1; Flow_3; Flow_22
+4,97.0000,0.8151,0.0336,0.5154,83.19,31465,1,Flow_12; Flow_21; Flow_27; Flow_30
+5,99.0000,0.8319,0.0168,0.5427,84.87,169911,5,Flow_1; Flow_12; Flow_21; Flow_27; Flow_30
+6,100.6667,0.8459,0.0140,0.5498,83.19,736281,2,Flow_12; Flow_21; Flow_24; Flow_27; Flow_30; ScoreFlow

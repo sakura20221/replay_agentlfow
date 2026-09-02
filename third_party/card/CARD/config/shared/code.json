@@ -1,0 +1,39 @@
+{
+    "combination_1": [
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Project Manager",
+            "external_tool": "",
+            "external_tool_type": "",
+            "external_source": ""
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Algorithm Designer",
+            "external_tool": "",
+            "external_tool_type": "",
+            "external_source": ""
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Programming Expert",
+            "external_tool": "",
+            "external_tool_type": "",
+            "external_source": ""
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Test Analyst",
+            "external_tool": "",
+            "external_tool_type": "",
+            "external_source": ""
+        },
+        {
+            "llm_name": "qwen3-8b",
+            "role": "Bug Fixer",
+            "external_tool": "",
+            "external_tool_type": "",
+            "external_source": ""
+        }
+    ]
+}

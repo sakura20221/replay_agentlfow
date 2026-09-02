@@ -1,0 +1,2602 @@
+[
+    {
+        "question": "What is the minimum number of base substitutions that must bemade to change thecodonsfrom a)glutamicacid to lysine? b)leucinetoalanine? c)phenylalaninetoglycine? d)tryptophanto serine? e)valinetoglutamicacid?",
+        "prediction": "B",
+        "expected_output": "I",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00020339999999999941,
+        "judge_score": 0,
+        "accumulated_cost": 0.02181915
+    },
+    {
+        "question": "The theory of evolution is most accurately described as",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00014294999999999933,
+        "judge_score": 1,
+        "accumulated_cost": 0.02617215
+    },
+    {
+        "question": "Describe the structure and function of the nuclear membrane.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00015764999999999876,
+        "judge_score": 1,
+        "accumulated_cost": 0.0265149
+    },
+    {
+        "question": "A woman opens a can of ham and beans and suspects food poisoning . She boils the contents for half an hour. A few hours after eating the ham and beans, nausea, vomit-ing, and diarrhea set in. Explain.",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00029010000000000147,
+        "judge_score": 1,
+        "accumulated_cost": 0.02989185
+    },
+    {
+        "question": "Monoploidlines of many species exist. Plant breeders often convert these to diploids orpolyploidsthroughcolchicine treatment. Can you see any advantages to this?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00014849999999999933,
+        "judge_score": 1,
+        "accumulated_cost": 0.024597450000000003
+    },
+    {
+        "question": "All of the following may serve as intracellular messengers EXCEPT",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00011099999999999999,
+        "judge_score": 1,
+        "accumulated_cost": 0.024324900000000003
+    },
+    {
+        "question": "Euglena is a common green flagellate protozoan found in fresh water ponds. Describe briefly the method of locomotion, nutrition, and asexual reproduction in this organism.",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.0002866499999999994,
+        "judge_score": 1,
+        "accumulated_cost": 0.0316974
+    },
+    {
+        "question": "What experimental evidence indicates that genes control the aminoacid sequences in proteins?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.000204300000000001,
+        "judge_score": 1,
+        "accumulated_cost": 0.03063315
+    },
+    {
+        "question": "Discuss the adaptations for land life evident in the bryophytes.",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00015480000000000008,
+        "judge_score": 1,
+        "accumulated_cost": 0.0283698
+    },
+    {
+        "question": "What properties of water make it an essential component of living matter?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.0001303500000000013,
+        "judge_score": 1,
+        "accumulated_cost": 0.028215
+    },
+    {
+        "question": "Contrast the meanings of the terms \"gene pool\" and \"genotype\\textquotedblright.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00026804999999999884,
+        "judge_score": 1,
+        "accumulated_cost": 0.03458834999999999
+    },
+    {
+        "question": "Explain how a \"Skinner box\" can be used in operant conditioning.",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.0001621499999999998,
+        "judge_score": 1,
+        "accumulated_cost": 0.031233300000000002
+    },
+    {
+        "question": "The ability to roll the tongue is conferred by a dominant gene, while its recessive allele fails to confer this ability. If 16 percent of the students in a school cannot roll their tongues, what percentage of students are heterozygous?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00020595000000000335,
+        "judge_score": 1,
+        "accumulated_cost": 0.03511424999999999
+    },
+    {
+        "question": "A cross between two yellow-haired mice results in an F_1 ratio of: 2 yellow: 1nonyellow: 1 yellow (dies). Diagram a cross to explainthese results. P_1: yellow × yellow Y^ly^L Y^ly^L G_1: (1/2)Y^l, (1/2)y^L (1/2)Y^l, (1/2)y^L F_1: (1/4)Y^lY^l (1/2)Y^ly^L (1/4)y^Ly^L dies yellow nonyellow",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00020760000000000223,
+        "judge_score": 1,
+        "accumulated_cost": 0.035452349999999994
+    },
+    {
+        "question": "Convergent evolution is best exemplified by which of the following?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.0002937000000000009,
+        "judge_score": 1,
+        "accumulated_cost": 0.03761759999999999
+    },
+    {
+        "question": "A dominant trait has a fitness of 0.6. The frequency in a population of this trait is 1 in 8,000. What is the mutation rate?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.0002493000000000009,
+        "judge_score": 1,
+        "accumulated_cost": 0.03705899999999999
+    },
+    {
+        "question": "Why does milk \\textquotedblleftspoil\\textquotedblright when kept in a refrigerator?",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00011850000000000055,
+        "judge_score": 1,
+        "accumulated_cost": 0.03470684999999999
+    },
+    {
+        "question": "The relatives of a group of pelicans from the same species that separated from each other because of an unsuccessful migration are reunited 150 years later and find that they are unable to produce offspring. This is an example of",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00011565000000000186,
+        "judge_score": 1,
+        "accumulated_cost": 0.03390119999999999
+    },
+    {
+        "question": "What is an organizer and how does it influence develop-ment ?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00015090000000000242,
+        "judge_score": 1,
+        "accumulated_cost": 0.03581429999999999
+    },
+    {
+        "question": "Why would one call a flock of birds a \\textquotedblleftsociety\\textquotedblright?",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00013769999999999755,
+        "judge_score": 1,
+        "accumulated_cost": 0.036487949999999984
+    },
+    {
+        "question": " Types of non-random samples include:",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.0002062499999999981,
+        "judge_score": 1,
+        "accumulated_cost": 0.041718599999999995
+    },
+    {
+        "question": "A framework categorizes different services, which, in turn, influence the degree to which market offerings can be evaluated, and three main properties are identified:",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00014324999999999755,
+        "judge_score": 1,
+        "accumulated_cost": 0.03618599999999999
+    },
+    {
+        "question": "Circle Electronics can produce and sell x number of calculators a month. If it costs x^2 dollars to produce x number of calculators and each calculator is sold wholesale at $100, how many calculators should Circle Electronics produce monthly to maximize its profit?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00017489999999999867,
+        "judge_score": 1,
+        "accumulated_cost": 0.03933284999999998
+    },
+    {
+        "question": " During the __________ stage of the adoption process, the innovation is tried for the first time. Sales promotions are often used as samples to allow individuals to test the product without any undue risk. Individuals accept or reject an innovation on the basis of their experience of the trial.",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00012659999999999755,
+        "judge_score": 1,
+        "accumulated_cost": 0.037323899999999986
+    },
+    {
+        "question": " Which type of research methods are designed to elicit responses to predetermined, standardized questions from many respondents?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00011400000000000299,
+        "judge_score": 1,
+        "accumulated_cost": 0.04092464999999999
+    },
+    {
+        "question": "Jefferson's Clothing has current assets of $150,000, current liabilitiesof $50,000, and capital of $200,000. What is their currentratio?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00011264999999999886,
+        "judge_score": 1,
+        "accumulated_cost": 0.04238684999999999
+    },
+    {
+        "question": "Find the total sale in a gas station if a motorist purchases 13 (6/10) gallons of gas at $.539 a gallon and 2 quarts of oil at $1.10 a quart.",
+        "prediction": "C",
+        "expected_output": "J",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00012779999999999736,
+        "judge_score": 0,
+        "accumulated_cost": 0.04227419999999999
+    },
+    {
+        "question": "What percent of .65% is .42%?",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00013830000000000092,
+        "judge_score": 1,
+        "accumulated_cost": 0.04590044999999999
+    },
+    {
+        "question": "Grey's Truck Rental Service currently charges $180 per week for the use of one of their moving trucks. Presently, Ms. Grey is renting out an average of 200 trucks per week. She estimates there will be a drop in demand of 1 truck per week if she raises the rental price by $1 a truck. What is the price that will maximize revenues?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00021240000000000148,
+        "judge_score": 1,
+        "accumulated_cost": 0.04985429999999998
+    },
+    {
+        "question": "What is a normative perspective?",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 8.579999999999699e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.042674849999999986
+    },
+    {
+        "question": "The Charge-It revolving charge card requires payment of one-sixth of the balance each month, along with an interest charge of 1(1/2)%. How much must be paid on a balance of $75? What is the new unpaid balance? What is the annual rate of interest charged?",
+        "prediction": "D",
+        "expected_output": "E",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.0002617499999999981,
+        "judge_score": 0,
+        "accumulated_cost": 0.04824434999999998
+    },
+    {
+        "question": "Under the Truth-In-Lending regulations, what must a retailer indicate on the sales contract as the annual interest rate if he charges 1(1 / 2)% interest per month on the unpaid balance of each customer's account?",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00013529999999999792,
+        "judge_score": 1,
+        "accumulated_cost": 0.04680554999999998
+    },
+    {
+        "question": "A draft for $800, due in 3 months and bearing interest at 4(1/2)%, was discounted 60 days before it was due. If the discount rate was 5%, what were the proceeds?",
+        "prediction": "E",
+        "expected_output": "C",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.0003226500000000007,
+        "judge_score": 0,
+        "accumulated_cost": 0.017398350000000003
+    },
+    {
+        "question": "The population of Victoria is approximately 42,600. Ten years ago, the population was approximately 30,000. Find the percent of increase.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00013664999999999988,
+        "judge_score": 1,
+        "accumulated_cost": 0.0022048499999999995
+    },
+    {
+        "question": " Which of the following is not an issue that marketers need to consider when using digital resources for marketing activities?",
+        "prediction": "I",
+        "expected_output": "F",
+        "extracted_output": "I",
+        "score": 0.0,
+        "cost": 0.00011220000000000002,
+        "judge_score": 0,
+        "accumulated_cost": 0.0017725499999999997
+    },
+    {
+        "question": " _______ can be a likened to their natural counterparts, comprising of a balanced network of interdependent organisms and their environments thus adding value to sustainability thinking due to the consideration of companies and industries as being bound together, and interdependent due to all kinds of resources and wastes.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00012570000000000007,
+        "judge_score": 1,
+        "accumulated_cost": 0.0015349499999999998
+    },
+    {
+        "question": " The ________ perspective on sustainability resulted from growth models that analysed the carrying capacity of the planet, overall concluding that the finite capacity of the earth and_______, ________ and _______ by current and past generations could reduce quality of life for future generations. This contrasts with the environmental perspective with focuses on the need to maintain and preserve the natural environment.",
+        "prediction": "F",
+        "expected_output": "B",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.00017864999999999982,
+        "judge_score": 0,
+        "accumulated_cost": 0.0023834999999999993
+    },
+    {
+        "question": "What is the effective rates for 3% compounded monthly?",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00017339999999999977,
+        "judge_score": 1,
+        "accumulated_cost": 0.0038347499999999987
+    },
+    {
+        "question": "____________ is very effective at delivering messages to target audiences as it allows for explanation in a way that most other media cannot.",
+        "prediction": "J",
+        "expected_output": "I",
+        "extracted_output": "J",
+        "score": 0.0,
+        "cost": 0.0001429500000000002,
+        "judge_score": 0,
+        "accumulated_cost": 0.0028702499999999995
+    },
+    {
+        "question": "Reeves Corporation is going to pay a total dividend of $50,000 for the year.The Corporation has 1,000 shares of 6%, $50 par value preferred stock outstanding, as well as 5,000 shares of common stock outstanding.Find the dividendsper share for each class of stock.",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00020415000000000016,
+        "judge_score": 1,
+        "accumulated_cost": 0.004317599999999999
+    },
+    {
+        "question": "The barometric pressure on the lunar surface is about 10^-10 torr. At a temperature of 100°K, what volume of lunar atmosphere contains (a) 10^6 molecules of gas, and (b) 1 millimole of gas?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.0003571500000000005,
+        "judge_score": 1,
+        "accumulated_cost": 0.011677650000000003
+    },
+    {
+        "question": "Assume that all gases are perfect and that data refer to 298 K unless otherwise stated. At $298 \\mathrm{~K}$ the standard enthalpy of combustion of sucrose is $-5797 \\mathrm{~kJ}$ $\\mathrm{mol}^{-1}$ and the standard Gibbs energy of the reaction is $-6333 \\mathrm{~kJ} \\mathrm{~mol}^{-1}$.\nEstimate the additional non-expansion work that may be obtained by raising the temperature to blood temperature, $37^{\\circ} \\mathrm{C}$.",
+        "prediction": "B",
+        "expected_output": "E",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00017115000000000012,
+        "judge_score": 0,
+        "accumulated_cost": 0.0025546499999999995
+    },
+    {
+        "question": "40.0 kJ of energy is added to 1.00 gram of magnesium atoms in the vapor state. What is the composition of the final mixture? The first ionization potential of Mg is 735 kJ/mole and the second ionization potential is 1447 kJ/mole.",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.0004414499999999995,
+        "judge_score": 1,
+        "accumulated_cost": 0.018910649999999998
+    },
+    {
+        "question": "A sample of beryllium powder was placed in a box having an effusion hole of 3.18 mm in diameter. After 15.2 min and a temperature of 1537°K , 8.88 mg of the powder had effused. Use the method of Knudsen to determine the vapor pressure of Be at 1537°K .",
+        "prediction": "A",
+        "expected_output": "G",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00029115000000000044,
+        "judge_score": 0,
+        "accumulated_cost": 0.00853725
+    },
+    {
+        "question": "One of the two principal methods for the determination of viscosities of gases is thePoiseuille'sflow experiment. In this experiment, a sample of air at 298°K was allowed to flow through a tube with radius 1mm and length 1m. Pressures at both ends of the tube were 765 mm Hg and 760 mm Hg respectively. A volume of 90.2 cm^3 measured at the lower pressure of 760 mm Hg passed through the tube after 100 sec. Calculate the viscosity of air at this temperature.",
+        "prediction": "B",
+        "expected_output": "D",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00032894999999999973,
+        "judge_score": 0,
+        "accumulated_cost": 0.0093489
+    },
+    {
+        "question": "Calculate the energy of one mole of UV photons of wavelength $300 \\mathrm{~nm}$ and compare it with a typical single-bond energy of $400 \\mathrm{~kJ} / \\mathrm{mol}$.",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.0001927500000000002,
+        "judge_score": 0,
+        "accumulated_cost": 0.006167399999999998
+    },
+    {
+        "question": "Per day, an average adult may lose liquid water in the following liter amounts: as urine 1.0; as sweat, 0.6; as fecal matter, 0.1; in expired air, 0.4. How many gallons of water pass through a human being, assuming these data hold for 60 years?",
+        "prediction": "B",
+        "expected_output": "G",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0002082000000000004,
+        "judge_score": 0,
+        "accumulated_cost": 0.012120150000000003
+    },
+    {
+        "question": "Calculate the Q value of the following reaction (^106 _46)Pd + (^1 _0)n \\rightarrow (^106 _45)Rh+ (^1 _1)H + Q (^106 _45)Rh\\rightarrow (^106 _46)Pd + \\beta-+ѵ+ 3.54MeV The product (^106 _45)Rhdecays with a half-life of 30 seconds and 3.54MeV\\beta particles are emitted to the ground state of ^106Pd.",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00021674999999999993,
+        "judge_score": 0,
+        "accumulated_cost": 0.0101013
+    },
+    {
+        "question": "Consider a sample of hydrogen confined to a cylinder fitted with a piston of 5 cm^2 cross-section. At room temperature 25°C, it exerts a pressure of 2atmand it occupies 500 cm^3 . What is the change of entropy of the gas when the piston is withdrawn isothermally through a length of 100 cm?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00040919999999999845,
+        "judge_score": 1,
+        "accumulated_cost": 0.022550849999999997
+    },
+    {
+        "question": "The maximum safe concentration of fluoride ion in drinking water is 2.0ppm(parts per million). Express this concentration in milligram %.",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.0001410000000000005,
+        "judge_score": 1,
+        "accumulated_cost": 0.0094899
+    },
+    {
+        "question": "Determine the value of (0.0081)^\\rule{1em}{1pt}3/4.",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00016979999999999947,
+        "judge_score": 1,
+        "accumulated_cost": 0.0102711
+    },
+    {
+        "question": "Calculate theCoulombicbarrier in the bombardment of ^209Bi Calculate theCoulombicbarrier in the bombardment of ^209Bi with alpha particles.",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.0001966499999999996,
+        "judge_score": 1,
+        "accumulated_cost": 0.011320500000000002
+    },
+    {
+        "question": "Without referring to a table, place the following hydro-carbons in order of increasing boiling points. (a) methane(d)neopentane (b) n-hexane(e) 2,3-dimethylbutane (c) n-undecane",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00023429999999999979,
+        "judge_score": 1,
+        "accumulated_cost": 0.011911950000000003
+    },
+    {
+        "question": "The van der Waal equation is a modification of the ideal gas equation. It reads [P + (an^2 / V^2)] (V - nb) = nRT where P = pressure, V = volume, n = number of moles, R = gas constant, T = absolute temperature, and (a) and (b) are constants for a particular gas. The term an^2 /V^2 corrects the pressure for intermolecular attraction and the term - nb corrects the volume for molecular volume. Using this equation, determine whether a gas becomes more or less ideal when: (a.) the gas is compressed at constant temperature; (b.) more gas is added at constant volume and temperature; and (c.) The temperature of the gas is raised at constant volume.",
+        "prediction": "B",
+        "expected_output": "H",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00023385000000000072,
+        "judge_score": 0,
+        "accumulated_cost": 0.013791150000000005
+    },
+    {
+        "question": "What is the work involved if a gas in a 2.0-liter container at 2.4 atmospheres pressure is allowed to expand against a pressure of 0.80 atmosphere?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00030225000000000043,
+        "judge_score": 1,
+        "accumulated_cost": 0.016573800000000003
+    },
+    {
+        "question": "Calculate the energy of a hydrogen atom in its ground state (n = 1) using the mass of the electron rather than the reduced mass of the hydrogen atom.",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00013515000000000055,
+        "judge_score": 1,
+        "accumulated_cost": 0.011001600000000002
+    },
+    {
+        "question": "Calculate $\\Delta_{\\mathrm{r}} G^{\\ominus}(375 \\mathrm{~K})$ for the reaction $2 \\mathrm{CO}(\\mathrm{g})+\\mathrm{O}_2(\\mathrm{~g}) \\rightarrow 2 \\mathrm{CO}_2(\\mathrm{~g})$ from the values of $\\Delta_{\\mathrm{r}} G^{\\ominus}(298 \\mathrm{~K})$ : and $\\Delta_{\\mathrm{r}} H^{\\ominus}(298 \\mathrm{~K})$, and the GibbsHelmholtz equation.",
+        "prediction": "H",
+        "expected_output": "D",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.0004380000000000009,
+        "judge_score": 0,
+        "accumulated_cost": 0.031071150000000002
+    },
+    {
+        "question": "A chemist decides to react 2 g of VO (vanadium oxide) with 5.75 g of Fe_2 O_3 to produce V_2 O_5 andFeO. How many grams of V_2 O_5 can be obtained?",
+        "prediction": "I",
+        "expected_output": "D",
+        "extracted_output": "I",
+        "score": 0.0,
+        "cost": 0.0003698999999999994,
+        "judge_score": 0,
+        "accumulated_cost": 0.025599900000000002
+    },
+    {
+        "question": "Assume that all gases are perfect and that data refer to 298 K unless otherwise stated. Find an expression for the fugacity coefficient of a gas that obeys the equation of state $p V_{\\mathrm{m}}=R T\\left(1+B / V_{\\mathrm{m}}+C / V_{\\mathrm{m}}^2\\right)$. Use the resulting expression to estimate the fugacity of argon at 1.00 atm and $100 \\mathrm{~K}$ using $B=-21.13 \\mathrm{~cm}^3 \\mathrm{~mol}^{-1}$ and $C=1054 \\mathrm{~cm}^6 \\mathrm{~mol}^{-2}$.",
+        "prediction": "C",
+        "expected_output": "D",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00041370000000000295,
+        "judge_score": 0,
+        "accumulated_cost": 0.03264495
+    },
+    {
+        "question": "Nickel (Z = 28, A = 59) has a first ionization energy of 737 kJ/mol and a boiling point of 2913 °C, while Pt (Z = 78, A = 195) has a first ionization energy of 870 kJ/mol and a boiling point of 3825 °C. Which of the following are the most reasonable values of ionization energy and boiling point for palladium?",
+        "prediction": "A",
+        "expected_output": "F",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0004238999999999979,
+        "judge_score": 0,
+        "accumulated_cost": 0.0321213
+    },
+    {
+        "question": "How many trees are there on 5 labeled vertices?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00010095000000000069,
+        "judge_score": 1,
+        "accumulated_cost": 0.013557300000000005
+    },
+    {
+        "question": "We are training fully connected network with two hidden layers to predict housing prices. Inputs are $100$-dimensional, and have several features such as the number of square feet, the median family income, etc. The first hidden layer has $1000$ activations. The second hidden layer has $10$ activations. The output is a scalar representing the house price. Assuming a vanilla network with affine transformations and with no batch normalization and no learnable parameters in the activation function, how many parameters does this network have?",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.0003032999999999994,
+        "judge_score": 1,
+        "accumulated_cost": 0.022984499999999998
+    },
+    {
+        "question": "What are the port states determined by Nmap?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00011924999999999956,
+        "judge_score": 1,
+        "accumulated_cost": 0.015071550000000005
+    },
+    {
+        "question": "Consider the Bayesian network given below. How many independent parameters would we need if we made no assumptions about independence or conditional independence H -> U <- P <- W?",
+        "prediction": "C",
+        "expected_output": "B",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00032249999999999987,
+        "judge_score": 0,
+        "accumulated_cost": 0.02214165
+    },
+    {
+        "question": "Say the incidence of a disease D is about 5 cases per 100 people (i.e., P(D) = 0.05). Let Boolean random variable D mean a patient “has disease D” and let Boolean random variable TP stand for \"tests positive.\" Tests for disease D are known to be very accurate in the sense that the probability of testing positive when you have the disease is 0.99, and the probability of testing negative when you do not have the disease is 0.97. What is P(TP), the prior probability of testing positive.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00022965000000000138,
+        "judge_score": 1,
+        "accumulated_cost": 0.01995075
+    },
+    {
+        "question": "Let $X \\sim N(0,1)$ and let the distortion measure be squared error. Here we do not allow block descriptions. Compute the minimum expected distortion for one bit quantization of $X$ using a squared error distortion measure.",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.0002758500000000011,
+        "judge_score": 1,
+        "accumulated_cost": 0.024083700000000003
+    },
+    {
+        "question": "Which of the following statements about horizontal versus vertical microarchitecture is (are) true?\nI. Programs for horizontal architectures require more time steps than those for vertical architectures.\nII. Horizontal microinstructions are unencoded.\nIII. Horizontal microinstructions usually have a single opcode and multiple operand specifiers.",
+        "prediction": "D",
+        "expected_output": "F",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00017549999999999857,
+        "judge_score": 0,
+        "accumulated_cost": 0.019421849999999997
+    },
+    {
+        "question": "An Euler circuit of an undirected graph is a circuit in which each edge of the graph appears exactly once. Which of the following undirected graphs must have an Euler circuit?\nI. A complete graph with 12 vertices\nII. A complete graph with 13 vertices\nIII. A tree with 13 vertices",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.0002882999999999983,
+        "judge_score": 1,
+        "accumulated_cost": 0.0286581
+    },
+    {
+        "question": "Of the following problems concerning a given undirected graph G, which is currently known to be solvable in polynomial time?",
+        "prediction": "E",
+        "expected_output": "I",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00019589999999999885,
+        "judge_score": 0,
+        "accumulated_cost": 0.02147145
+    },
+    {
+        "question": "Statement 1| A neural network's convergence depends on the learning rate. Statement 2| Dropout multiplies randomly chosen activation values by zero.",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00013335000000000083,
+        "judge_score": 1,
+        "accumulated_cost": 0.019044
+    },
+    {
+        "question": "Statement 1| RoBERTa pretrains on a corpus that is approximate 10x larger than the corpus BERT pretrained on. Statement 2| ResNeXts in 2018 usually used tanh activation functions.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00013799999999999923,
+        "judge_score": 1,
+        "accumulated_cost": 0.0197211
+    },
+    {
+        "question": "Given 2 colors whose HSI representations are given as follows: (a) $(pi, 0.3,0.5)$, (b) $(0.5 pi, 0.8,0.3)$, which color is brighter?",
+        "prediction": "A",
+        "expected_output": "F",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00018510000000000054,
+        "judge_score": 0,
+        "accumulated_cost": 0.026357250000000002
+    },
+    {
+        "question": "Statement 1| The SVM learning algorithm is guaranteed to find the globally optimal hypothesis with respect to its object function. Statement 2| After being mapped into feature space Q through a radial basis kernel function, a Perceptron may be able to achieve better classification performance than in its original space (though we can’t guarantee this).",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.0001531500000000012,
+        "judge_score": 1,
+        "accumulated_cost": 0.0210786
+    },
+    {
+        "question": "Statement 1| The Stanford Sentiment Treebank contained movie reviews, not book reviews. Statement 2| The Penn Treebank has been used for language modeling.",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 9.674999999999961e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.0202059
+    },
+    {
+        "question": "Let HH be a Merkle-Damgard hash function is H:X^{\\leq L} \\to TH:X^≤L  →T. Construct a MAC from this HH as follows: \\ \\ S(k,m) = H(k \\| m)  S(k,m)=H(k∥m). This mac is insecure because:",
+        "prediction": "B",
+        "expected_output": "C",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0002536500000000011,
+        "judge_score": 0,
+        "accumulated_cost": 0.02960175
+    },
+    {
+        "question": "Let $X$ be uniformly distributed over $\\{1, 2, \\ldots, m\\}$. Assume $m=2^n$ . We ask random questions: Is $X\\in S_1$? Is $X\\in S_2$? ... until only one integer remains. All $2^m$ subsets of $\\{1, 2, \\ldots, m\\}$ are equally likely. Suppose we ask $n+\\sqrt{n}$ random questions. Use Markov's inequality to find the probability of error (one or more wrong objects remaining) when $n$ goes to infinity?",
+        "prediction": "H",
+        "expected_output": "D",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.000319800000000002,
+        "judge_score": 0,
+        "accumulated_cost": 0.038741549999999986
+    },
+    {
+        "question": "Which of the following is LEAST likely to indicate a phishing attack?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00021989999999999857,
+        "judge_score": 1,
+        "accumulated_cost": 0.0258198
+    },
+    {
+        "question": "Let a undirected graph G with edges E = {<1,2>,<2,4>,<5,4>,<5,6>}, which <A,B> represent Node A is connected to Node B. What is the shortest path from node 1 to node 6? Represent the path as a list.",
+        "prediction": "A",
+        "expected_output": "C",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0002844000000000006,
+        "judge_score": 0,
+        "accumulated_cost": 0.0293481
+    },
+    {
+        "question": "Failed sessions allow brute-force attacks on access credentials. This type of attacks are done in which layer of the OSI model?",
+        "prediction": "E",
+        "expected_output": "J",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00010500000000000093,
+        "judge_score": 0,
+        "accumulated_cost": 0.0259248
+    },
+    {
+        "question": "Consider the discrete memoryless channel $Y=XZ$ where $X$ and $Z$ are independent binary random variables that take on values 0 and 1. Let $P(Z=1)=0.5$. Find the capacity of this channel in bits.",
+        "prediction": "J",
+        "expected_output": "H",
+        "extracted_output": "J",
+        "score": 0.0,
+        "cost": 0.00041639999999999733,
+        "judge_score": 0,
+        "accumulated_cost": 0.03915794999999998
+    },
+    {
+        "question": "If total product of labor is rising at an increasing rate,",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.0001066499999999998,
+        "judge_score": 1,
+        "accumulated_cost": 0.024704100000000003
+    },
+    {
+        "question": "What is the advantage of using money in trade as compared tobarter trade?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00022769999999999735,
+        "judge_score": 1,
+        "accumulated_cost": 0.03333149999999999
+    },
+    {
+        "question": "Which of the following is true about the consumption function?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 9.70500000000013e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.026870400000000003
+    },
+    {
+        "question": "A balance of payments deficit means that a country has",
+        "prediction": "I",
+        "expected_output": "E",
+        "extracted_output": "I",
+        "score": 0.0,
+        "cost": 8.145000000000027e-05,
+        "judge_score": 0,
+        "accumulated_cost": 0.02677335
+    },
+    {
+        "question": "An increase in the price of forklifts imported into the United States from Belgium will",
+        "prediction": "B",
+        "expected_output": "D",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00013215000000000102,
+        "judge_score": 0,
+        "accumulated_cost": 0.029063699999999998
+    },
+    {
+        "question": "What is the economic definition of \\textquotedblleftland\\textquotedblright?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.0001522499999999996,
+        "judge_score": 1,
+        "accumulated_cost": 0.028931549999999997
+    },
+    {
+        "question": "If the standard tools for time-series analysis, such as estimation of the acf, pacf and spectral analysis, find no evidence of structure in the data, this implies that the data are which of the following?",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 9.375000000000008e-05,
+        "judge_score": 0,
+        "accumulated_cost": 0.02795745
+    },
+    {
+        "question": "Which function of money best defines $1.25 as the price of a 20-ounce bottle of pop?",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00012104999999999755,
+        "judge_score": 1,
+        "accumulated_cost": 0.03402224999999999
+    },
+    {
+        "question": "According to Marshall and Fisher, what are thecomponents of the demand for money?",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00010559999999999736,
+        "judge_score": 1,
+        "accumulated_cost": 0.033103799999999996
+    },
+    {
+        "question": "A production possibility frontier will be a straight line when",
+        "prediction": "J",
+        "expected_output": "D",
+        "extracted_output": "J",
+        "score": 0.0,
+        "cost": 0.00012720000000000092,
+        "judge_score": 0,
+        "accumulated_cost": 0.033458699999999994
+    },
+    {
+        "question": "What do you expect the rate of growth to be of aneconomy where , on average, the population saves 15% of its income and marginal capital/output ratio is 2.5, i.e., an in-crease in output of $100 billion per year is produced by an increase in the capital stock of $250 billion.",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00012974999999999792,
+        "judge_score": 1,
+        "accumulated_cost": 0.03415199999999999
+    },
+    {
+        "question": "What is a value-added tax?",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00013049999999999867,
+        "judge_score": 0,
+        "accumulated_cost": 0.03524474999999999
+    },
+    {
+        "question": "Good X is exchanged in a competitive market. Which of the following is true if an excise tax is now imposed on the production of good X?",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.0001855499999999996,
+        "judge_score": 1,
+        "accumulated_cost": 0.038421749999999984
+    },
+    {
+        "question": "Which of the following is NOT a feature of continuously compounded returns (i.e. log-returns)?",
+        "prediction": "D",
+        "expected_output": "C",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00013830000000000092,
+        "judge_score": 0,
+        "accumulated_cost": 0.03719729999999999
+    },
+    {
+        "question": "Suppose a bank has made a total of $100,000 in loans and still has excess reserves of $25,000. If the required re-serve ratio is 10%, how much must the bank's demand deposit liabilities be? Assume that other liabilities and net worth are just matched by assets other than loans and reserves.",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00029969999999999997,
+        "judge_score": 1,
+        "accumulated_cost": 0.04405259999999999
+    },
+    {
+        "question": "Define income inequality.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00015749999999999792,
+        "judge_score": 1,
+        "accumulated_cost": 0.041512349999999996
+    },
+    {
+        "question": "Suppose a nation is experiencing an annual budget surplus and uses some of this surplus to pay down part of the national debt. One potential side effect of this policy would be",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.0001330500000000026,
+        "judge_score": 1,
+        "accumulated_cost": 0.041057699999999996
+    },
+    {
+        "question": "The cabbages you grow in your summer garden are",
+        "prediction": "A",
+        "expected_output": "B",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00013200000000000017,
+        "judge_score": 0,
+        "accumulated_cost": 0.040435049999999986
+    },
+    {
+        "question": "Which characteristic is likely a part of a monopoly market but not of monopolistic competition?",
+        "prediction": "E",
+        "expected_output": "F",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.0002271000000000009,
+        "judge_score": 0,
+        "accumulated_cost": 0.04703264999999998
+    },
+    {
+        "question": "How is the demand for a factor of production such as land a derived demand?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00014444999999999736,
+        "judge_score": 1,
+        "accumulated_cost": 0.042146399999999994
+    },
+    {
+        "question": "A short-circuit test on a 15-kva, 2400/240-volt, 60- cycle transformer yields the following result: 6.25 amperes, 131 volts, and 214 watts. Determine the regulation of the transformer for a load of 0.8 lagging power factor by means of the approximate equivalent circuit.",
+        "prediction": "A",
+        "expected_output": "D",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00042434999999999695,
+        "judge_score": 0,
+        "accumulated_cost": 0.05027864999999998
+    },
+    {
+        "question": "The density of liquid gallium is 6.09 g/cm^3 at 35°C. If this element is employed in a barometer instead of mercury, what is the height of a column of gallium sustained in the barometer at 1 atm. pressure?",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00026430000000000203,
+        "judge_score": 1,
+        "accumulated_cost": 0.04893389999999998
+    },
+    {
+        "question": "A factory draws a lagging load of 2000 kW at a power factor of 0.6 from 6000 V mains. A synchronous capacitor is purchased to raise the overall power factor to unity. Assuming that the synchronous capacitor losses are 275 kW, calculate: (a) Originalkilovarsof lagging load. (b)kvarsof correction needed to bring the power factor to unity. (c)kVArating of synchronous capacitor and its power factor.",
+        "prediction": "G",
+        "expected_output": "J",
+        "extracted_output": "G",
+        "score": 0.0,
+        "cost": 0.0005601000000000009,
+        "judge_score": 0,
+        "accumulated_cost": 0.05083874999999998
+    },
+    {
+        "question": "For point-to-point communication at higher frequencies, the desiredradiation pattern is a single narrow lobe or beam. To obtainsuch a characteristic (at least approximately) a multi-elementlinear array is usually used. An array is linear whenthe elements of the ar-ray are spaced equally along a straightline. In a uniform linear array the elements are fed withcurrents of equal magnitude and having a uniform progressivephase shift along the line. The pattern of such anarray can be obtained by addingvectoriallythe field strengthsdue to each of the elements. For a uniform array of non-directionalelements the field strength would be E_T = E_0 \\vert1 +e^J\\psi+ e^J2\\psi + e^J3\\psi + ... +e^j^(^n-1)\\psi \\vert(1) where \\psi =\\betadcos\\textphi + \\alpha and\\alpha is the progressive phase shift between elements, (\\alpha is theangle by which the current in any element leads the currentin the preceding element.) Compute the pattern of such a linear array.",
+        "prediction": "A",
+        "expected_output": "C",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00016304999999999792,
+        "judge_score": 0,
+        "accumulated_cost": 0.046063499999999986
+    },
+    {
+        "question": "A piston cylinder arrangement contains saturated Freon - 12 at- 10°C. The vapor is then compressed to a final pressure of1.6MPa. If the process is assumed to be reversible and adiabaticcalculate the work per kilogram of Freon - 12 for thisprocess.",
+        "prediction": "B",
+        "expected_output": "H",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00013484999999999994,
+        "judge_score": 0,
+        "accumulated_cost": 0.0012956999999999997
+    },
+    {
+        "question": "Use Laplace's equation to find the capacitance of a parallel platecapacitor.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00013739999999999976,
+        "judge_score": 1,
+        "accumulated_cost": 0.003661349999999999
+    },
+    {
+        "question": "The sodium chloride formation reaction is Na_(_1) + (1/2)Cl_2(g) \\rightleftharpoonsNaCl_(s). The standard heat of formation of sodium chloride is equal to - 98.6 kcal mole^-1 and is temperature independent. When H_2 andHClgas are in equilibrium with liquid sodium and solidNaCl.thepartial pressure of chlorine gas is 1.672 × 10^-43 mmHg @ 773°K.Using this information, determinethe equilibrium partial pressure of chlorine @ 823°K.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.0001726499999999999,
+        "judge_score": 1,
+        "accumulated_cost": 0.0027272999999999993
+    },
+    {
+        "question": "If the mean radius of atoroidalcoil is 10 cm and it has 1500 turns, find the average self-inductance (a) with an air core (b) with an iron core having an average relative incremental permeability of 100.",
+        "prediction": "A",
+        "expected_output": "D",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0004696500000000003,
+        "judge_score": 0,
+        "accumulated_cost": 0.014502450000000005
+    },
+    {
+        "question": "At a frequency of 1590 Hz find (a) the characteristic impedance; (b) the phase velocity of wave propagation for a transmissionline with the following constants R = 10^-2 ohm/meter, G = 10^-6 mho/meter, L = 10^-6 Henry/meter, C = 10^-9 Farad/meter.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.0002788500000000006,
+        "judge_score": 1,
+        "accumulated_cost": 0.0080784
+    },
+    {
+        "question": "A one-fifth scale model of an airplane is tested in (a) a wind tunnel, and (b) a water tunnel. Calculate the tunnel speeds required to correspond to a full-scale speed of 100 fps at sea level. TABLE 1 Liquid Sp gr \\mu × 10^5 lb-sec/ft^2 Alcohol 0.8 2.4 Benzine 0.88 1.36 Gasoline 0.8 0.63 Glycerine 1.3 1,800 Linseed oil 0.95 90 Mercury 13.55 3.24 Olive oil 0.9 175 Turpentine 0.85 3.11 Water, fresh 1.0 2.09 Water, sea 1.03 3.2 TABLE 2 Gas \\rho, slug/ft^3 \\mu × 10^5 lb-sec/ft^2 Air 0.00238 0.0378 Carbon dioxide 0.00363 0.0305 Hydrogen 0.000166 0.0184 Nitrogen 0.00229 0.0363 Oxygen 0.00262 0.0417",
+        "prediction": "A",
+        "expected_output": "I",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00042584999999999845,
+        "judge_score": 0,
+        "accumulated_cost": 0.018469199999999998
+    },
+    {
+        "question": "If E = 5 volts/meter is the amplitude of an incident plane wave which is reflected at normal incidence from a boundary surface and E_1 is the amplitude of the reflected wave, find: (a) Under what conditions is there a pure standing wave? (b) The standing wave ratio when E_1 = 1/10 volt/meter. (c) The value ofE_maxandE_minwhen E_1 = 3/5 volt/meter.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.0003677999999999997,
+        "judge_score": 1,
+        "accumulated_cost": 0.007045649999999998
+    },
+    {
+        "question": "Carbon dioxide obeys the reduced Berthelot equation reasonably well z = [(PV) / (RT)] = 1 + [9 / (128)] [(PT_c) / (P_cT)] [1 - 6 {(T_c^2) / (T^2)}] Given:T_c= 304.3 K and P_c = 73.0atm, calculate the fugacity of carbon dioxide at a temperature of 150°C and pressure of 50 atm.",
+        "prediction": "A",
+        "expected_output": "G",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00018899999999999993,
+        "judge_score": 0,
+        "accumulated_cost": 0.0041134499999999985
+    },
+    {
+        "question": "Find a recursion equation satisfying y [n] where y [n] is the sum of the squares of all integers from 0 to n.",
+        "prediction": "A",
+        "expected_output": "F",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00023474999999999972,
+        "judge_score": 0,
+        "accumulated_cost": 0.005873999999999998
+    },
+    {
+        "question": "The amplitude of a plane wave in a medium with \\mu_r = 1 and\\epsilon_r= 4 is H_o = 5 amp/meter. Find (a) the average Poynting vector,(b) the maximum energy density for this plane wave.",
+        "prediction": "A",
+        "expected_output": "B",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0002999999999999999,
+        "judge_score": 0,
+        "accumulated_cost": 0.005515349999999999
+    },
+    {
+        "question": "The surface temperature of a long circular duct, 8 in OD, is 115°F and the ambient air temperature is 65°F. Determine the rate of heat loss from the surface of the duct if it is placed horizontally.",
+        "prediction": "H",
+        "expected_output": "G",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.0003760499999999993,
+        "judge_score": 0,
+        "accumulated_cost": 0.013229250000000003
+    },
+    {
+        "question": "Steam at 230°F in the shell side of a multi-pass regenerator is used to heat oil flowing at 550lbm/hr in 0.625 in OD steel pipes, 16-gage and 8 ft long. The oil is heated from 80 to 130°F. Assume that the thermal conductivity K and the specific heat C_P of the oil remains stable at 0.080 Btu/hr-ft-°F and 0.50 Btu/lbm-°F, respectively. The viscosity \\mu of the oil will differ with an increase in temperature as shown in the table. Determine the required number of passes to effectively heat the oil. T, °F 68 80 90 100 110 120 130 140 220 \\mu,lbm/ft.hr 55.66 48.4 43.56 39.2 36.3 32.67 29.04 26.62 8.71",
+        "prediction": "6",
+        "expected_output": "I",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.0002698500000000003,
+        "judge_score": 0,
+        "accumulated_cost": 0.0088071
+    },
+    {
+        "question": "A gravity fed lock in a proposed shipping canal is to be studied with a 1/100-scale geometrically similar model. (a) If the model lock fills in 0.8 min, estimate the time for the prototype to fill. (b) Find the ratio of corresponding mass flow rates in the model and prototype locks.",
+        "prediction": "A",
+        "expected_output": "G",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00027150000000000004,
+        "judge_score": 0,
+        "accumulated_cost": 0.007421849999999998
+    },
+    {
+        "question": "A mixture of ideal gases consisting of 0.4 mole fraction of N_2 and 0.6 mole fraction of argon is flowing at a rate of 2500 lbm/hr through a heat exchanger, where its temperature is increased from 80°F to 450°F. Assuming that the heating process takes place at a constant pressure of 14.7 psia, determine the rate of heat addition.",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00021285000000000054,
+        "judge_score": 1,
+        "accumulated_cost": 0.00901995
+    },
+    {
+        "question": "The surface of a space ship, at temperature 40°F and emissivity0.1, is exposed to space. Consider the space as a perfectblack body at temperature 0°R,and the space ship as agray infinite cylinder. Calculate the net radiant heat loss persquare foot.",
+        "prediction": "A",
+        "expected_output": "G",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00028904999999999903,
+        "judge_score": 0,
+        "accumulated_cost": 0.017687400000000002
+    },
+    {
+        "question": "Find the Laplace transform L{g(t)}, where g(t)= 0,t < 4 and= (t - 4)^2,t \\geq 4",
+        "prediction": "C",
+        "expected_output": "A",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.0002447999999999999,
+        "judge_score": 0,
+        "accumulated_cost": 0.015472650000000004
+    },
+    {
+        "question": "A 27-year-old woman comes to the physician because of a 3-year history of chronic diarrhea and intermittent, crampy, lower abdominal pain. The pain is usually relieved with defecation and does not occur at night or interfere with sleep. She says she is frustrated by her symptoms and has stopped traveling because of her frequent, urgent need to use the bathroom. She has no history of serious illness and takes no medications. Her temperature is 37°C (98.6°F), pulse is 70/min, respirations are 14/min, and blood pressure is 120/80 mm Hg. The lower abdomen is mildly tender to palpation; there is no rebound tenderness or guarding. The remainder of the examination shows no abnormalities. Results of laboratory studies are within the reference ranges. Test of the stool for occult blood is negative. Antigliadin antibodies are not present. Which of the following is the most appropriate pharmacotherapy? ",
+        "prediction": "A",
+        "expected_output": "E",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0001676999999999998,
+        "judge_score": 0,
+        "accumulated_cost": 0.0082461
+    },
+    {
+        "question": "When using bioelectrical impedance for measuring body composition, why does an electrical current travel faster through muscle than it does through fat?\n",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00012404999999999968,
+        "judge_score": 1,
+        "accumulated_cost": 0.006418199999999998
+    },
+    {
+        "question": "The mucosa of the upper larynx is innervated by the",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00017955000000000054,
+        "judge_score": 1,
+        "accumulated_cost": 0.009797100000000001
+    },
+    {
+        "question": "A couple comes for preconceptional genetic counseling because they both have a family history of α-thalassemia. The woman has a minimally decreased hemoglobin concentration. Genetic studies show a single gene deletion. The man has microcytic anemia and a two-gene deletion. If the two-gene deletion is in trans (one deletion on the maternal gene and one deletion on the paternal gene), which of the following percentages of their offspring will have a two-gene deletion?",
+        "prediction": "I",
+        "expected_output": "B",
+        "extracted_output": "I",
+        "score": 0.0,
+        "cost": 0.00022695000000000007,
+        "judge_score": 0,
+        "accumulated_cost": 0.014729400000000005
+    },
+    {
+        "question": "A previously healthy 37-year-old woman comes to the physician because of a 3-month history of episodes of severe anxiety, shortness of breath, palpitations, and numbness in her hands and feet. Her vital signs are within normal limits. Physical examination shows no abnormalities. Thyroid function studies and an ECG show no abnormalities. Which of the following is the most appropriate pharmacotherapy?",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00014835000000000022,
+        "judge_score": 1,
+        "accumulated_cost": 0.01041945
+    },
+    {
+        "question": "The group that permits analysis of the entire natural history of HIV/AIDS is:",
+        "prediction": "D",
+        "expected_output": "B",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.0002416499999999995,
+        "judge_score": 0,
+        "accumulated_cost": 0.014032800000000005
+    },
+    {
+        "question": "Which of the following coronaviruses has caused thousands of deaths around the world as an 'emergent' virus?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00012764999999999999,
+        "judge_score": 1,
+        "accumulated_cost": 0.00961755
+    },
+    {
+        "question": "Which of the following diagnostic techniques is of no value for the diagnosis of neural tube defects?",
+        "prediction": "E",
+        "expected_output": "A",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00014579999999999975,
+        "judge_score": 0,
+        "accumulated_cost": 0.012370200000000003
+    },
+    {
+        "question": "The normal respiratory rate for an adult male is:",
+        "prediction": "E",
+        "expected_output": "D",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00020235000000000045,
+        "judge_score": 0,
+        "accumulated_cost": 0.01924635
+    },
+    {
+        "question": "Which of the following statements about methods of evaluating protein quality in human nutrition is correct?\n",
+        "prediction": "D",
+        "expected_output": "E",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00023849999999999913,
+        "judge_score": 0,
+        "accumulated_cost": 0.017075700000000003
+    },
+    {
+        "question": "A 37-year-old man comes to the physician because of nonradiating low back pain for 3 days. The pain began after he worked in his yard. He has not had any change in bowel movements or urination. He had one similar episode 3 years ago that resolved spontaneously. Vital signs are within normal limits. Examination of the back shows bilateral paravertebral muscle spasm. Range of motion is limited by pain. Straight-leg raising is negative. In addition to analgesia, which of the following is the most appropriate next step in management?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00013515000000000055,
+        "judge_score": 1,
+        "accumulated_cost": 0.012505350000000004
+    },
+    {
+        "question": "Which vitamin is a major lipid-soluble antioxidant in cell membranes?\n ",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00010425000000000018,
+        "judge_score": 1,
+        "accumulated_cost": 0.012224400000000003
+    },
+    {
+        "question": "One of the most common reasons for stoma formation is:",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00012645000000000017,
+        "judge_score": 1,
+        "accumulated_cost": 0.013355700000000003
+    },
+    {
+        "question": "A 37-year-old woman comes to the physician because of a 1-day history of throbbing facial pain. She describes the pain as 7 out of 10 in intensity. Over the past 9 days, she has had nasal congestion, purulent nasal discharge, sore throat, and a nonproductive cough. She does not smoke. Her husband and children have had no recent illness. Her temperature is 38.5°C (101.3°F). Examination shows congested nasal mucosa and purulent discharge on the left. There is tenderness to palpation over the left cheek and no transillumination over the left maxillary sinus. The tympanic membranes are normal, and there is no erythema of the throat. Examination shows no cervical adenopathy. The lungs are clear to auscultation. Which of the following is the most likely causal organism?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00015629999999999984,
+        "judge_score": 1,
+        "accumulated_cost": 0.015227850000000005
+    },
+    {
+        "question": "Which of one of the following statements about the postnatal growth of the maxilla is correct?",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.0002488499999999984,
+        "judge_score": 0,
+        "accumulated_cost": 0.020925449999999998
+    },
+    {
+        "question": "Which virus infection was not first identified by clinical observation?",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00010065000000000074,
+        "judge_score": 1,
+        "accumulated_cost": 0.013456350000000004
+    },
+    {
+        "question": "Which statement about intestinal \"brakes\" and \"accelerators\" is FALSE?\n",
+        "prediction": "G",
+        "expected_output": "I",
+        "extracted_output": "G",
+        "score": 0.0,
+        "cost": 0.0002302500000000013,
+        "judge_score": 0,
+        "accumulated_cost": 0.0234651
+    },
+    {
+        "question": "Eosinophilic oesophagitis\n",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00010305000000000036,
+        "judge_score": 1,
+        "accumulated_cost": 0.015676950000000005
+    },
+    {
+        "question": "A 49-year-old man, who is recovering in the hospital 2 days after uncomplicated left femoral-popliteal bypass grafting for claudication, has now developed increasing pain in his left foot. Until now, the patient's postoperative course had been unremarkable and he has been treated with low-dose morphine for pain control. Medical history is remarkable for type 2 diabetes mellitus controlled with metformin and diet. Vital signs now are temperature 36.8°C (98.2°F), pulse 80/min and regular, respirations 20/min, and blood pressure 150/92 mm Hg. The surgical incision appears clean and well approximated without abnormal erythema or swelling. The left lower extremity and foot appear pale. Palpation of the left lower extremity discloses a strong femoral pulse, a weak popliteal pulse, and a cool, pulseless foot. Which of the following is the most appropriate management?",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00017054999999999848,
+        "judge_score": 1,
+        "accumulated_cost": 0.01804335
+    },
+    {
+        "question": "Which of the following best describes the location where the carotid pulse can be found?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.0001045499999999984,
+        "judge_score": 1,
+        "accumulated_cost": 0.016271550000000003
+    },
+    {
+        "question": "This question refers to the following information.\n\"Wherever I go—the street, the shop, the house, or the steamboat—I hear the people talk in such a way as to indicate that they are yet unable to conceive of the Negro as possessing any rights at all. Men who are honorable in their dealings with their white neighbors will cheat a Negro without feeling a single twinge of their honor. To kill a Negro they do not deem murder; to debauch a Negro woman they do not think fornication; to take the property away from a Negro they do not consider robbery. The people boast that when they get freedmen affairs in their own hands, to use their own classic expression, 'the niggers will catch hell.'\n\"The reason of all this is simple and manifest. The whites esteem the blacks their property by natural right, and however much they may admit that the individual relations of masters and slaves have been destroyed by the war and the President's emancipation proclamation, they still have an ingrained feeling that the blacks at large belong to the whites at large, and whenever opportunity serves they treat the colored people just as their profit, caprice or passion may dictate.\"\n—Congressional testimony of Col. Samuel Thomas, Assistant Commissioner, Bureau of Refugees, Freedmen and Abandoned Lands, 1865\nWhich of the following factors did Alexander Hamilton believe was a source for the problems in the excerpt from Federalist #15?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00018539999999999876,
+        "judge_score": 1,
+        "accumulated_cost": 0.0178728
+    },
+    {
+        "question": "Which is true of the origins of Minoan civilization?",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00018390000000000073,
+        "judge_score": 1,
+        "accumulated_cost": 0.0206766
+    },
+    {
+        "question": "This question refers to the following information.\n\"The Government of the German Reich and The Government of the Union of Soviet Socialist Republics desirous of strengthening the cause of peace between Germany and the U.S.S.R., and proceeding from the fundamental provisions of the Neutrality Agreement concluded in April, 1926 between Germany and the U.S.S.R., have reached the following Agreement:\nArticle I. Both High Contracting Parties obligate themselves to desist from any act of violence, any aggressive action, and any attack on each other, either individually or jointly with other Powers.\nArticle II. Should one of the High Contracting Parties become the object of belligerent action by a third Power, the other High Contracting Party shall in no manner lend its support to this third Power.\nArticle III. The Governments of the two High Contracting Parties shall in the future maintain continual contact with one another for the purpose of consultation in order to exchange information on problems affecting their common interests.\nArticle IV. Should disputes or conflicts arise between the High Contracting Parties shall participate in any grouping of Powers whatsoever that is directly or indirectly aimed at the other party.\nArticle V. Should disputes or conflicts arise between the High Contracting Parties over problems of one kind or another, both parties shall settle these disputes or conflicts exclusively through friendly exchange of opinion or, if necessary, through the establishment of arbitration commissions.\"\nMolotov-Ribbentrop Pact, 1939\nThe agreement described in the text is most similar to the",
+        "prediction": "D",
+        "expected_output": "J",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00022950000000000054,
+        "judge_score": 0,
+        "accumulated_cost": 0.027099900000000003
+    },
+    {
+        "question": "This question refers to the following information.\nRead the following governmental regulation.\nPress Law\nSo long as this decree shall remain in force no publication which appears in the form of daily issues, or as a serial not exceeding twenty sheets of printed matter, shall go to press in any state of the union without the previous knowledge and approval of the state officials. Writings which do not belong to one of the above-mentioned classes shall be treated according to the laws now in force, or which may be enacted, in the individual states of the union. . . . Each state of the union is responsible, not only to the state against which the offense is directly committed, but to the whole Confederation, for every publication appearing under its supervision in which the honor or security of other states is infringed or their constitution or administration attacked. . . .\n—Carlsbad Resolutions adopted by the Germanic States, 1819\nThe Carlsbad Resolutions were another of Metternich's schemes, like the Concert of Europe, which aimed to accomplish which of the following?",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.0001583999999999995,
+        "judge_score": 1,
+        "accumulated_cost": 0.02010915
+    },
+    {
+        "question": "This question refers to the following information.\n\"It's come! It's posted at the district mayor's office,\" a passerby shouted at me as he ran. I reached the Rue Drout in one leap. … I read the message at a glance. … \"The First Day of Mobilization Will Be Sunday, August 2 [1914].\" … It was an announcement to a million and a half Frenchmen. … War! … Dead tired but exhilarated, I got back to [my newspaper's office] and burst into the office of Georges Clemenceau, our chief. \"What is Paris saying?\" he asked me. \"It's singing, sir!\" \"It will be all right then[,\" Clemenceau replied].\nRoland Doregelès, After 50 Years, c. 1965\nFrom the passage, one may infer that Doregelès recalled that",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00015060000000000073,
+        "judge_score": 1,
+        "accumulated_cost": 0.0204927
+    },
+    {
+        "question": "Clovis points are NOT found in:",
+        "prediction": "A",
+        "expected_output": "D",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00017369999999999886,
+        "judge_score": 0,
+        "accumulated_cost": 0.027863699999999998
+    },
+    {
+        "question": "This question refers to the following information.\n\"The Italian nation has been at last united in our own days, and we all rejoiced in its union. Yet we may be allowed to doubt whether the union was not a little too speedy and a little too thorough. It is surely carrying unity too far to wipe out all traces of the independent being, for most purposes to wipe out the very name, of such a land as Sicily. It jars on our feelings to find that, while Ireland at least forms part of the royal style of its sovereign, Sicily is no longer even a geographical expression. The island realm of Roger has sunk to be seven provinces of the kingdom on the mainland. And there is another result of Italian unity, a result in which we may rejoice without drawbacks, but which still has somewhat of sadness about it as finally ending that great phase of the history of Europe with which we have throughout been dealing. Never were ties with the past so fully snapped as when the army of Italy entered liberated Rome. Of all novelties in European history the greatest was when Rome became the centre of a dominion with acknowledged metes and bounds, the head in short of a local Italian kingdom. \"Rome the capital of Italy\" was a formula which might well gladden our hearts; but it was a formula which formally swept away the œcumenical position, the œcumenical traditions, of Rome&….\nBut the kingdom of Italy is not an appendage to Rome; Rome is the head of the kingdom. The whole is greater than its part; Rome, by her own free will and by the free will of Italy, has become less than Italy. By becoming the willing head of an Italian kingdom she has formally cast aside her Imperial traditions as they were not cast aside when brute force made her the head of a French department.\"\nEdward A. Freeman, British historian and politician, The Chief Periods of European History, 1885\nAccording to the author, Italy's connections to its history and traditions were most \"fully snapped\" when",
+        "prediction": "E",
+        "expected_output": "B",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.0001969500000000013,
+        "judge_score": 0,
+        "accumulated_cost": 0.02127555
+    },
+    {
+        "question": "This question refers to the following information.\n\"MAHATMA GANDHI'S MESSAGE.\nREMAIN NON-VIOLENT\nThe following message was sent by Mahatma Gandhi from Waltair:—\nMaulana Mohamed AH was arrested at Waltair under sections 107 and 108 to be called upon to give security, to be of good behaviour for one year. The place and date of trial is unknown.\nThe Begum Saheba and Mr. Hayat were permitted to see him after arrest.\nHe and I were going to address a meeting outside the station. He was arrested. I continued going to the meeting and addressed them. There is no cause for sorrow, but every cause for congratulation. There should be no hartal. Perfect peace and calmness should be observed. I regard the arrest as a prelude to Swaraj and the redress of the Khilafat and the Punjab wrongs, if we can remain non-violent. Retain Hindu-Muslim Unity despite the madness of some Moplahs, and fulfil the Swadeshi programme.\nI hope every Indian, man or woman, will completely boycott foreign cloth and take up spinning or weaving during every spare minute.\nBy striving like the Maulana, be insistent on religious and national rights.\nLet us earn imprisonment. I am conscious of the Maulana's innocence and I am sure the imprisonment of the innocent will enable the nation to reach the cherished goal.\"\nMohandas Gandhi, The Pilgrims' March, 1921\nWhich of the following historical developments most assisted the ultimate success of the boycott mentioned in the fifth paragraph?",
+        "prediction": "A",
+        "expected_output": "D",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00022619999999999932,
+        "judge_score": 0,
+        "accumulated_cost": 0.024930300000000002
+    },
+    {
+        "question": "This question refers to the following information.\nAn Act to place certain restrictions on Immigration and to provide for the removal from the Commonwealth of Prohibited Immigrants.\n…\n3. The immigration into the Commonwealth of the persons described in any of the following paragraphs in this section (hereinafter called \"prohibited immigrants\") is prohibited, namely\n(a) Any person who when asked to do so by an officer fails to write out at dictation and sign in the presence of the officer a passage of fifty words in length in a European language directed by the officer;\n(b) Any person in the opinion of the Minister or of an officer to become a charge upon the public or upon any public or charitable organisation;\n…\n(g) Any persons under a contract or agreement to perform manual labour within the Commonwealth: Provided that this paragraph shall not apply to workmen exempted by the Minister for special skill required by Australia…\nImmigration Restriction Act of 1901 (Australia)\nWhereas in the opinion of the Government of the United States the coming of Chinese laborers to this country endangers the good order of certain localities within the territory thereof;\nTherefore,\nBe it enacted by the Senate and House of Representatives of the United States of America in Congress assembled, That from and after the expiration of ninety days next after the passage of this act, the coming of Chinese laborers to the United States be suspended; and during such suspension it shall not be lawful for any Chinese laborer to come, or having so come after the expiration of said ninety days to remain within the United States.\nSEC. 2. That the master of every vessel who shall knowingly bring within the United States on such vessel, and land or permit to be landed, any Chinese laborer, from any foreign port or place, shall be deemed guilty of a misdemeanor, and on conviction thereof shall be punished by a fine of not more than five hundred dollars for each and every such Chinese laborer so brought, and may be also imprisoned for a term not exceeding one year….\nChinese Exclusion Act of 1882 (United States)\nWhich of the following economic activities did the most to drive the rising levels of immigration that led to the enactment of the law described in the second passage?",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.0002136000000000013,
+        "judge_score": 1,
+        "accumulated_cost": 0.0236787
+    },
+    {
+        "question": "This question refers to the following information.\nWhile some theorists in the Middle Ages argued that the jihad was a defensive war… most authorities held that the obligation of jihad did not lapse until all the world was brought under the sway of Islam. The Bahr [al-Fava'id, or \"Sea of Precious Virtues,\" written in the 1150s or 1160s] insists that the first duty of a Muslim ruler is to prosecute the jihad and bring about the victory of Islam, and if he does not do so and he makes peace with the infidel, that ruler would be better dead than alive, for he would be corrupting the world.\nRobert Irwin, \"Islam and the Crusades,\" 1995\nIt is strange how the Christians round Mount Lebanon, when they see any Muslim hermits, bring them food and treat them kindly, saying that these men are dedicated to the Great and Glorious God and that they should therefore share with them. Likewise, not one Christian merchant was stopped or hindered in Muslim territories.\nIbn Jubayr, Muslim scholar, traveling to Mecca and Jerusalem, ca. 1185\nThe first passage tends to support which of the following traditional historical assumptions?",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.0001870500000000011,
+        "judge_score": 1,
+        "accumulated_cost": 0.025230000000000002
+    },
+    {
+        "question": "What occupation date do most archaeologists agree on for Australia?",
+        "prediction": "A",
+        "expected_output": "H",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00011264999999999886,
+        "judge_score": 0,
+        "accumulated_cost": 0.02504295
+    },
+    {
+        "question": "This question refers to the following information.\n\"When we were kids the United States was the wealthiest and strongest country in the world; the only one with the atom bomb, the least scarred by modern war, an initiator of the United Nations that we thought would distribute Western influence throughout the world. Freedom and equality for each individual, government of, by, and for the people—these American values we found good, principles by which we could live as men. Many of us began maturing in complacency.\n\"As we grew, however, our comfort was penetrated by events too troubling to dismiss. First, the permeating and victimizing fact of human degradation, symbolized by the Southern struggle against racial bigotry, compelled most of us from silence to activism. Second, the enclosing fact of the Cold War, symbolized by the presence of the Bomb, brought awareness that we ourselves, and our friends, and millions of abstract 'others' we knew more directly because of our common peril, might die at any time. . . .\"\n—Port Huron Statement, 1962\nThrough the remainder of the 1960s, the growth of the organization that published the Port Huron Statement can best be understood in the context of",
+        "prediction": "D",
+        "expected_output": "B",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00023279999999999829,
+        "judge_score": 0,
+        "accumulated_cost": 0.0273327
+    },
+    {
+        "question": "Why is the timing of monumental construction at Ceibal significant?",
+        "prediction": "C",
+        "expected_output": "A",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00016754999999999895,
+        "judge_score": 0,
+        "accumulated_cost": 0.02769
+    },
+    {
+        "question": "The commoners of the rural Aztec villages of Capilco and Cuexcomate:",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00029715000000000297,
+        "judge_score": 1,
+        "accumulated_cost": 0.04135485
+    },
+    {
+        "question": "This question refers to the following information.\n\"At least one of the [world's] societies would have to somehow enormously increase its productivity [in order to achieve global hegemony]. That quantum jump would have to be made before the various scientific, technological, agricultural, and industrial revolutions on which our post-quantum-leap world rests. It could only be accomplished by exploiting the ecosystems, mineral resources, and human assets of whole continents outside the lands of the society making the jump. Western Europe did just that by means of its brutality and guns and, more important, by geographical and ecological luck.\"\nCopyright © 2015 Cambridge University Press.\nAlfred Crosby, historian, Ecological Imperialism, 2004\nCrosby's argument in the passage is most likely a response to which of the following developments of the period 1450–1750 C.E.?",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00017744999999999914,
+        "judge_score": 1,
+        "accumulated_cost": 0.03141075
+    },
+    {
+        "question": "Which culture, previously-known as the temple-mound builders, based their subsistence primarily on maize and squash agriculture?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00012720000000000092,
+        "judge_score": 1,
+        "accumulated_cost": 0.02808465
+    },
+    {
+        "question": "This question refers to the following information.\nOn Being Brought from Africa to America\n'Twas mercy brought me from my Pagan land,\nTaught my benighted soul to understand\nThat there's a God, that there's a Saviour too;\nOnce I redemption neither sought nor knew.\nSome view our sable race with scornful eye,\n\"Their colour is a diabolic die.\"\nRemember, Christians, Negroes, black as Cain,\nMay be refin'd, and join th' angelic train.\n—Phillis Wheatley, Poems on Various Subjects, Religious and Moral, 1773\nThe point of Wheatley's poem can best be compared to which of the following?",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00030825000000000297,
+        "judge_score": 1,
+        "accumulated_cost": 0.03975704999999998
+    },
+    {
+        "question": "Inca architecture is noted for its:",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00012119999999999839,
+        "judge_score": 1,
+        "accumulated_cost": 0.028779299999999997
+    },
+    {
+        "question": "What do anthropologists NOT need to know to determine when people entered the Americas from Siberia?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00010994999999999755,
+        "judge_score": 1,
+        "accumulated_cost": 0.032231249999999996
+    },
+    {
+        "question": "This question refers to the following information.\nNow if divorce is your wish, I cannot blame you. For the waiting has been long. And I do not know whether the Creator will grant relief immediately so that I can come home, or whether matters will take time, for I cannot come home with nothing. Now the matter is in your hand. If you wish to end our marriage, accept this bill of repudiation, and you are free. May God inspire you with the right decision.\nLetter from a Jewish trader in India to his wife in Cairo, ca. 1200\nWhich of the following is the most probable cause of the marital strain evident in the passage above?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00017774999999999735,
+        "judge_score": 1,
+        "accumulated_cost": 0.03378554999999999
+    },
+    {
+        "question": "A defendant worked as a patent attorney in a law firm. Late one evening, she left the office and walked outside to her car. While in the parking lot, she noticed a gold watch lying on the ground. When the defendant picked it up, she immediately identified the watch as belonging to one of the other lawyers in her law firm. She took it home with her, intending to return it the next day. The following morning, however, the defendant decided to keep the watch, and did so. The defendant has committed",
+        "prediction": "E",
+        "expected_output": "D",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00014909999999999923,
+        "judge_score": 0,
+        "accumulated_cost": 0.03360779999999999
+    },
+    {
+        "question": "A motorcycle collector and his friend had known each other for years. The collector sent a letter to the friend that said, \"I am willing to sell you my oldest motorcycle for $4,000.\" The friend sent the collector an email saying, \"I accept your offer.\" The collector owned three motorcycles: a 1985 model, a 1987 model, and a 1992 model. The friend did not know about the 1985 model, which was the one the collector intended to sell. The collector was unaware that the friend intended to buy the 1987 model. When the collector tendered the 1985 model, the friend refused to accept it. Is the friend likely to prevail in a breach of contract suit against the collector?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00021104999999999735,
+        "judge_score": 1,
+        "accumulated_cost": 0.03566339999999999
+    },
+    {
+        "question": "A landlord was the owner of a two-story dwelling house and leased it completely furnished to a tenant for a 10-year period. Toward the end of the seventh year of the term, a violent storm blew off several of the roof shingles. The tenant noticed a leak through the roof where the shingles had blown off, but didn't make any repairs. A month later, a severe rain storm occurred and water leaked through the roof, causing damage to the valuable parquet floors in the two rooms below. In a subsequent proceeding by the landlord against the tenant to recover for the damage to the parquet floors resulting from the leak, liability would most likely be imposed upon",
+        "prediction": "G",
+        "expected_output": "C",
+        "extracted_output": "G",
+        "score": 0.0,
+        "cost": 0.00016830000000000317,
+        "judge_score": 0,
+        "accumulated_cost": 0.03432029999999999
+    },
+    {
+        "question": "There is a voting law that is going to be reviewed by the court. If the law is upheld, what must be true?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00014789999999999942,
+        "judge_score": 1,
+        "accumulated_cost": 0.038236199999999984
+    },
+    {
+        "question": "A plumbing company hired a worker to work at various construction sites. The worker used his own truck to travel between the company's warehouse and the construction sites, but the company fitted the truck with a rack for carrying plumbing pipes. The company paid the worker for traveling between the warehouse and the construction sites, but not for his drive to and from work. Because the worker was required to haul pipes on his truck while driving between the warehouse and the construction sites, the company asked the worker, before hiring him, whether he had a valid driver's license. The worker represented that he did, although in fact his license had been suspended because he had been convicted of recklessly causing motor vehicle collisions. The company made no effort to verify the worker's representation. While driving to work one morning in his truck, the worker carelessly caused a collision in which a woman was injured. In her subsequent action against the plumbing company, based on a theory of negligent hiring, is the woman likely to prevail?",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00022275000000000073,
+        "judge_score": 0,
+        "accumulated_cost": 0.04065779999999999
+    },
+    {
+        "question": "The president of a pharmaceutical firm received a report from his testing bureau that a manufactured lot of the firmÕs anticancer prescription medication was well below strength. Concerned about being able to fulfill contractual commitments, the president instructed his staff to deliver the defective lot. A cancer patient who had been maintained on the drug died shortly after beginning to take the defective pills. Medical evidence established that the patient would have lived longer had the drug been at full strength, but would have died before long in any event. The president was convicted of murder. On appeal, he argues that his conviction should be reversed. Should the conviction be reversed?",
+        "prediction": "H",
+        "expected_output": "E",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.00021254999999999885,
+        "judge_score": 0,
+        "accumulated_cost": 0.038088299999999985
+    },
+    {
+        "question": "A woman was married to a very wealthy man who had a generous life insurance policy. Deciding that she had had enough of married life, and desiring to spend more time with her boyfriend, she began to plan an early and unexpected demise for her husband. The woman devised a scheme whereby she would contaminate her husband's guacamole with a poisonous substance called strychnine. To facilitate her plan, she enlisted the help of her boyfriend. At first, the boyfriend adamantly refused to go along with her scheme, but when the woman threatened to break off their relationship, he reluctantly agreed. The boyfriend, a pre-med student, got the strychnine from the pharmacy by telling them that he was using it for an experiment with rats. The boyfriend then gave the strychnine to the woman, who sprinkled it in her husband's guacamole. The husband died from the poisoning. A statute in the jurisdiction provides: \"Any intentional and premeditated killing or one occurring during the perpetration of a felony, is murder in the first degree. Murder in the second degree is murder with intent to cause serious bodily harm. Manslaughter is an unlawful killing due to recklessness. \" Assault with intent to kill or to cause serious physical injury is a felony in the jurisdiction. There are no separate felonies relating to adulterating food or poisoning. The most serious crime for which the boyfriend can properly be convicted is",
+        "prediction": "F",
+        "expected_output": "A",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.0001774500000000026,
+        "judge_score": 0,
+        "accumulated_cost": 0.039934499999999984
+    },
+    {
+        "question": "A rancher was the owner of a parcel of land in fee simple. The rancher left the parcel in 1977 to move to the city. A man took possession of the land in 1978 as an adverse possessor and remained on the land from 1978 to 1988; he then left the property to care for his sick mother for one year, returning the following year, 1990. Meanwhile, during the man's possession, the rancher devised the parcel to his son in 1994. The man remained on the property until2010. Assume that the statutory period for adverse possession in this state is 20 years. Upon the rancher's death in 2010, his son, as his sole heir, brings an ejectment suit to recover possession of the property from the man. In his action, the son will most probably",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.0002243999999999996,
+        "judge_score": 0,
+        "accumulated_cost": 0.042899249999999986
+    },
+    {
+        "question": "A family had been traveling cross-country on a camping trip when they decided to pull into Yellowstone National Park. During their stay at Yellowstone, the family camped out in a secluded area of the campgrounds surrounded by tall pine trees. Numerous signs had been posted throughout the campgrounds warning campers of the extremely dry conditions prevailing in the forest area due to a summerlong drought. On the morning of their departure, the family cooked breakfast over an open campfire. After breakfast, the family began to pack their gear into the van when the father instructed his 12-year-old son to put out the campfire. The son fetched two pails of water from a nearby pond and tossed the water over the campfire. Believing that he had extinguished the fire, the son joined his family in the van, and they drove away. Unbeknownst to the son and his family, the campfire was still smoldering when they left. Shortly thereafter, a wind gust blew the flames from the fire to some nearby brush. Due to the extremely dry conditions, the brush quickly ignited, starting a raging forest fire. The forest rangers dispatched a firefighting team, which included two helicopters equipped to fight the fire. While these helicopters were fighting the blaze from above, the smoke ¢ surrounding one of the helicopters became so intense that the pilot lost all visibility. At the same time, an operator of a small private plane saw the blaze and recklessly descended into the smoke. In the pilot's attempt to veer out of the intense smoke, his helicopter collided with the operator's low- flying plane, causing the aircrafts to crash. Both the pilot and the operator were killed in the resulting explosion. In a wrongful death action brought by the pilot's estate against the son and the father, the judgment should be for",
+        "prediction": "B",
+        "expected_output": "I",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0002607000000000026,
+        "judge_score": 0,
+        "accumulated_cost": 0.04375289999999999
+    },
+    {
+        "question": "A defendant is on trial for possession of heroin. During the prosecution's case-in-chief, a police officer testifies that he watched another officer seize a bag of white powder from the defendant and seal it in an envelope, which both officers initialed and dated and then placed in the police property room. The prosecutor then calls a chemist to testify that she obtained, intact from the property room, the dated, sealed envelope with the initials of both police officers, whose handwriting she recognized police officers, whose handwriting she recognized from previous experience, and that testing disclosed that the powder therein was heroin. The defendant argues that the prosecutor has not sufficiently authenticated the powder tested by the chemist as the powder that was seized from the defendant. Is the chemist's testimony admissible?",
+        "prediction": "I",
+        "expected_output": "E",
+        "extracted_output": "I",
+        "score": 0.0,
+        "cost": 0.00020579999999999904,
+        "judge_score": 0,
+        "accumulated_cost": 0.04436984999999999
+    },
+    {
+        "question": "A defendant was arrested and charged with burglarizing a pharmacy. The break-in allegedly occurred late one evening after the store had closed for business. The defendant was identified as the perpetrator of the crime by a film that was recorded during the burglary from a hidden camera. When the defendant was apprehended, he denied involvement in the crime and told the arresting officers that he had been out of town when the burglary occurred. Prior to trial, the defendant's court appointed attorney filed a motion requesting discovery of the videotape film that was recorded during the perpetration of the crime. The trial judge granted the request and ordered the prosecution to send a duplicate copy of the videotape to the defendant's attorney. Following the judge's ruling, the prosecuting attorney, pursuant to state law, then filed a discovery motion specifically asking the defendant whether he planned to raise an alibi defense. The prosecuting attorney also sought discovery of the identity of such an alibi witness. Assume that the judge requires the defendant to respond as to whether the defendant intends to raise an alibi defense. May the judge also require the defendant to disclose the identity of the alibi witness?",
+        "prediction": "C",
+        "expected_output": "D",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.0002021999999999996,
+        "judge_score": 0,
+        "accumulated_cost": 0.04258904999999999
+    },
+    {
+        "question": "An owner entered into a written contract with a landscaper whereby the landscaper promised to landscape the exterior of the owner's house for the sum of $5,000. According to their agreement, the owner was to pay the money to the landscaper's son. The landscaper intended to have the $5,000 given to his son as a graduation present. After the landscaper completed the job, the landscaper requested that the owner pay the $5,000 to him instead of to his son. The owner paid the landscaper. The next day, the son learned of the contract between the landscaper and the owner, as well as the payment to his father. In an action by the son against the owner for $5,000, the plaintiff will most likely ",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00020040000000000335,
+        "judge_score": 1,
+        "accumulated_cost": 0.04349219999999999
+    },
+    {
+        "question": "A developer, owner of several hundred acres in a rural part of the county, drafted a general development plan for the area. The duly recorded plan imposed elaborate limitations and restrictions upon the land in the plan, which was to be developed as a residential district. The restrictions were to extend to all persons acquiring any of the lots and to their heirs, assigns, and lessees. It was further provided that all subsequent owners would be charged with due notice of the restrictions. Among those restrictions in the general plan were the following:(22) A franchise right is created in a strip of land 10 feet in width along the rear of each lot for the use of public utility companies with right of ingress and egress. (23) No house or structure of any kind shall be built on the aforementioned strip of land running through the said blocks. The franchise right created for public utilitycompanies would most likely be an example of a(an)",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00016155000000000336,
+        "judge_score": 1,
+        "accumulated_cost": 0.04528244999999999
+    },
+    {
+        "question": "Which of the following quotations best describes the central thesis of difference feminism?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00023490000000000316,
+        "judge_score": 1,
+        "accumulated_cost": 0.049168799999999985
+    },
+    {
+        "question": "A woman had spent many years converting her back yard to an authentic Japanese-style garden. Her garden had become a showplace for the neighborhood, and various civic groups and organizations frequently visited the woman's property to enjoy the beauty of the yard. Recently, the woman had read about a particular cymbidium that was native to Japan. Desiring to have one of these cymbidiums planted in her garden, she contacted a number of plant distributors, only to discover that this particular cymbidium had not yet been imported to the United States. She contacted a plant distributor, who she knew had ties to Japan, and asked if it would be possible to acquire one of these cymbidiums from Japan. After checking with local and Japanese authorities, the distributor determined that he could indeed acquire the plant for the woman. The parties then signed a contract that stated the distributor would acquire the cymbidium from a nursery in Japan, have it shipped to the United States and have it planted in the woman's garden for the price of $5,000. The distributor promised that the plant would be in place within six months, and the woman promised to pay $1,000 at the time of the execution of the contract and$4,000 when the cymbidium was planted in her garden. The woman then handed a check for $1,000 to the distributor. Two weeks later, agricultural officials discovered that a special type of beetle that attacked citrus plants had adapted to using cymbidiums for nesting purposes. The female beetle would lay eggs among the roots of the cymbidiums, and it would sometimes take up to one year for the eggs to hatch. Fearing for the safety of the citrus crops in the United States, the United States government adopted a ban on the importation of all cymbidiums grown in foreign countries. As a result, the distributor was not able to acquire the cymbidium for the woman. Which of the following best states the legal relationship at this point between the distributor the woman?",
+        "prediction": "C",
+        "expected_output": "F",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00022454999999999697,
+        "judge_score": 0,
+        "accumulated_cost": 0.04667024999999998
+    },
+    {
+        "question": "A 12-year-old girl and her friends were playing catch with a baseball in the middle of a field of grass in the park. Near the edge of the field, a woman was sitting in a beach chair and reading a book. The girl threw the ball too far, and it went over her friends' heads and flew toward the woman. Although the woman did not see the ball coming, it hit the straw hat that the woman was wearing, knocking it from her head. Although the woman was not touched by the ball, she was startled by the ball hitting her hat, and she fell from her chair and broke her arm. If the woman initiates a suit against the girl to recover damages for her broken arm, the woman will",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00020579999999999904,
+        "judge_score": 0,
+        "accumulated_cost": 0.04760789999999998
+    },
+    {
+        "question": "A person owned property next to a highway. After raking leaves on his property into a large pile, the landowner loaded the leaves into several large metal barrels so that he could burn the leaves. Before starting the fire, the landowner telephoned the local weather bureau to determine which direction the wind would be blowing. Because a highway was located on the southern edge of his property, he was aware that it would be unsafe to burn the leaves if the wind was blowing in that direction. The weather bureau, however, indicated that the wind would be gusting in a northerly direction. Shortly after the landowner set the leaves on fire, the wind current unexpectedly shifted and started gusting in a southerly direction. As a consequence, the smoke and ashes blew over the highway, resulting in poor visibility. Moments later, a motorist was driving his automobile on the highway in a westerly direction. The posted speed limit was 45 m. p. h. , although the driver was traveling about 55 m. p. h. The driver could not see the highway clearly and crashed his vehicle into a median strip. If the driver asserts a claim against the landowner, the most likely result is",
+        "prediction": "C",
+        "expected_output": "J",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00019439999999999735,
+        "judge_score": 0,
+        "accumulated_cost": 0.044564249999999986
+    },
+    {
+        "question": "At 10:00p. m. onNovember 14, a driver was operating his automobile along Main Street. As the driver was approaching the intersection of Main Street and First Avenue, a motorist, who was driving straight through a red light, suddenly appeared before him. Trying to avoid the motorist, the driver veered his car onto the sidewalk. The car landed in a deep hole in the sidewalk. This hole had been dug by a construction company, which had been repairing a water main break earlier in the day. The construction company had been hired by the local municipal water department. Although the' construction company had erected a warning sign advising pedestrians about the hole, there was no fence or barrier surrounding it. When the driver's car fell into the hole, it ruptured the water main, engulfing the car with water. Within a short time, the driver, unable to escape, drowned in his car, which rapidly filled with water. In a wrongful death action by the driver's estate against the municipal water department, the estate will most probably",
+        "prediction": "J",
+        "expected_output": "I",
+        "extracted_output": "J",
+        "score": 0.0,
+        "cost": 0.0002544000000000001,
+        "judge_score": 0,
+        "accumulated_cost": 0.0050395499999999985
+    },
+    {
+        "question": "A college student and her boyfriend lived together in a one-bedroom apartment in Los Angeles. They were engaged to be married when they purchased an undeveloped parcel of land on a hillside overlooking the Pacific. The deed, which was properly executed and recorded, named the student and the boyfriend as grantees, \"not as tenants in common but as joint tenants with right of survivorship. \"Thereafter, the boyfriend, who was experiencing financial difficulties, offered to sell the property to his co-worker. Without the student's knowledge, the boyfriend executed a deed that purported to convey the hillside property to the co-worker in fee simple. The boyfriend signed his name and forged the student's name. He then delivered the deed of conveyance to the co-worker, who paid the boyfriend $150,000, which was the fair market value of the property. The co-worker immediately recorded the deed received from the boyfriend. The common law joint tenancy is unmodified by statute. Title to the property in question is now in",
+        "prediction": "C",
+        "expected_output": "G",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00019769999999999987,
+        "judge_score": 0,
+        "accumulated_cost": 0.003386399999999999
+    },
+    {
+        "question": "On May 10, 1955, a rancher, owner of a 300-acre cattle ranch in Texas, conveyed a 20-acre strip across the property as follows:\"To the railroad, its successors and assigns, to have and to hold so long as the same shall be used for railroad purposes. \"In 1972, the rancher made the followingconveyance:\"To my daughter and her husband and their heirs, as much of the 300-acre cattle ranch as is not described in my deed to the railroad dated May, 10, 1955. \"The following year, the rancher, a widower, died intestate, survived by the daughter and a son. In 2000, the railroad decided to discontinue operating its trains over the strip conveyed in 1955. By 2004, the growth of a nearby town had made the 300-acre cattle ranch valuable as a potential site for homes or for an industrial park. However, as of January 1, 2005, the governing body of the county (in which the ranch sits) took appropriate action, in accordance with Texas statutes, to zone the 300-acre cattle ranch as single-family residential property with a minimum lot size of one acre. The ordinance provided that the exclusion of ranching operations and industrial development was necessary to protect the health of county residents by limiting the extent of waste disposal and preventing pollution of air and the nearby river, the county's major water supply. The state's power authority has now taken appropriate action to condemn half of the 300-acre cattle ranch, which will be flooded as a result of construction of a dam for a proposed hydroelectric facility. The 150 acres taken includes the 20-acre strip described in the deed to the railroad. Is the railroad entitled to any compensation from the state's power authority?",
+        "prediction": "F",
+        "expected_output": "C",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.00026099999999999995,
+        "judge_score": 0,
+        "accumulated_cost": 0.004785149999999998
+    },
+    {
+        "question": "The media-themes model of media influence claims that:",
+        "prediction": "D",
+        "expected_output": "J",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00012284999999999998,
+        "judge_score": 0,
+        "accumulated_cost": 0.00043019999999999994
+    },
+    {
+        "question": "Which of the following is typically associated with having a vasectomy?",
+        "prediction": "H",
+        "expected_output": "F",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.00013755000000000017,
+        "judge_score": 0,
+        "accumulated_cost": 0.0035239499999999992
+    },
+    {
+        "question": "When a gas turns into a liquid, the process is called",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.0001253999999999999,
+        "judge_score": 1,
+        "accumulated_cost": 0.0016603499999999997
+    },
+    {
+        "question": "Simmons gives her child a gift of publicly traded stock with a basis of $40,000 and a fair market value of $30,000. No gift tax is paid. The child subsequently sells the stock for $36,000. What is the child’s recognized gain or loss, if any?",
+        "prediction": "H",
+        "expected_output": "A",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.0001592999999999998,
+        "judge_score": 0,
+        "accumulated_cost": 0.003188699999999999
+    },
+    {
+        "question": "The two principles that deal with questions of values are:",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00010199999999999999,
+        "judge_score": 1,
+        "accumulated_cost": 0.0005321999999999999
+    },
+    {
+        "question": "The 'new man' of the 1980s was alleged to be:",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00013904999999999994,
+        "judge_score": 1,
+        "accumulated_cost": 0.0019115999999999996
+    },
+    {
+        "question": "According to Esman (1972), which publics are related to the organisation through shared industrial interests?",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00025965000000000016,
+        "judge_score": 1,
+        "accumulated_cost": 0.006677849999999998
+    },
+    {
+        "question": "Who was not one of the Cartwright sons on the TV series 'Bonanza'?",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 8.624999999999998e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.00030734999999999996
+    },
+    {
+        "question": "Which one of the following items is an example of nonmaterial culture?",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00011355000000000002,
+        "judge_score": 1,
+        "accumulated_cost": 0.0014092499999999997
+    },
+    {
+        "question": "Which of the following sexual variations is probably the most dangerous?",
+        "prediction": "H",
+        "expected_output": "F",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.00017580000000000026,
+        "judge_score": 0,
+        "accumulated_cost": 0.005215349999999999
+    },
+    {
+        "question": "How many centimetres must the cervix dilute to before a baby can be born?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 8.969999999999985e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.003924449999999999
+    },
+    {
+        "question": "A company recently moved to a new building. The old building is being actively marketed for sale, and the company expects to complete the sale in four months. Each of the following statements is correct regarding the old building, except:",
+        "prediction": "B",
+        "expected_output": "E",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0002305499999999995,
+        "judge_score": 0,
+        "accumulated_cost": 0.012735900000000003
+    },
+    {
+        "question": "A major car accident occurs. One man stops his car and starts helping people. After seeing him stop, others also stop and start helping. Which of the following theories best explains the scenario?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.0001238999999999997,
+        "judge_score": 1,
+        "accumulated_cost": 0.005639249999999998
+    },
+    {
+        "question": "An increase in the real interest rate in the United States relative to its trading partners will most likely result in which of the following?",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00015975000000000017,
+        "judge_score": 1,
+        "accumulated_cost": 0.007581599999999998
+    },
+    {
+        "question": "Which of the following degrees can be awarded by the local chapter of the FFA? I. Greenhand FFA Degree II. Chapter FFA Degree III. State FFA Degree IV. American FFA Degree",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00012675000000000013,
+        "judge_score": 1,
+        "accumulated_cost": 0.006294149999999998
+    },
+    {
+        "question": "Which of the following statements should be included in a practitioner’s report on the application of agreed-upon procedures?",
+        "prediction": "D",
+        "expected_output": "I",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00013455000000000064,
+        "judge_score": 0,
+        "accumulated_cost": 0.010866450000000001
+    },
+    {
+        "question": "Which traditional news criterion would you expect to be most important in public relations messages distributed through the mass media?",
+        "prediction": "D",
+        "expected_output": "E",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00010064999999999987,
+        "judge_score": 0,
+        "accumulated_cost": 0.005974649999999998
+    },
+    {
+        "question": "An investment will pay out $10 p.a. forever. What is that investment worth if the market discount rate is 5%?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.0001047000000000001,
+        "judge_score": 1,
+        "accumulated_cost": 0.007150349999999998
+    },
+    {
+        "question": "The birth of an urban industrial workforce in Europe contributed to the start of the",
+        "prediction": "B",
+        "expected_output": "C",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00010320000000000034,
+        "judge_score": 0,
+        "accumulated_cost": 0.007799549999999999
+    },
+    {
+        "question": "Which of the following is an example of a concurrent power?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00011475000000000027,
+        "judge_score": 1,
+        "accumulated_cost": 0.0076963499999999985
+    },
+    {
+        "question": " According to the Humanity formulation of Kant's principle, we must treat persons",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 8.744999999999933e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.00988455
+    },
+    {
+        "question": " Select the best translation into predicate logic: No artifacts are people.",
+        "prediction": "F",
+        "expected_output": "F",
+        "extracted_output": "F",
+        "score": 1.0,
+        "cost": 0.00012225000000000083,
+        "judge_score": 1,
+        "accumulated_cost": 0.011123850000000003
+    },
+    {
+        "question": " What does \"Svetambara\" mean?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00011730000000000074,
+        "judge_score": 1,
+        "accumulated_cost": 0.012853200000000004
+    },
+    {
+        "question": " Construct a complete truth table for the following argument. Then, using the truth table, determine whether the argument is valid or invalid. If the argument is invalid, choose an option which presents a counterexample. (There may be other counterexamples as well.)\n~X ⊃ Y\nY ⊃ Z\n~Z / ~X",
+        "prediction": "F",
+        "expected_output": "H",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.00021300000000000138,
+        "judge_score": 0,
+        "accumulated_cost": 0.015889950000000007
+    },
+    {
+        "question": " Christopher Heath Wellman defends the position that",
+        "prediction": "F",
+        "expected_output": "A",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.00015089999999999895,
+        "judge_score": 0,
+        "accumulated_cost": 0.016167000000000004
+    },
+    {
+        "question": "Sacred literature originated with which of the following jina?",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00011864999999999966,
+        "judge_score": 1,
+        "accumulated_cost": 0.014952300000000005
+    },
+    {
+        "question": " Ashford argues that worries about causing dependency on aid agencies among those in extreme poverty does not mean that we should",
+        "prediction": "B",
+        "expected_output": "I",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0001470000000000013,
+        "judge_score": 0,
+        "accumulated_cost": 0.016837200000000004
+    },
+    {
+        "question": "Parfit claims that the magnitude of pains:",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00012614999999999849,
+        "judge_score": 1,
+        "accumulated_cost": 0.016016100000000005
+    },
+    {
+        "question": "When faced with the complaint that utilitarianism is a doctrine worthy of swine, Mill responds that pleasures differ in:",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00010425000000000018,
+        "judge_score": 1,
+        "accumulated_cost": 0.014833650000000006
+    },
+    {
+        "question": "Use indirect truth tables to determine whether the following argument is valid. If the argument is invalid, choose an option which presents a counterexample. (There may be other counterexamples as well.)\n(T · ~U) ⊃ ~W\n~W ⊃ X\n~Z ⊃ W\n~(X · Z) / T ⊃ U",
+        "prediction": "B",
+        "expected_output": "A",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0002503499999999999,
+        "judge_score": 0,
+        "accumulated_cost": 0.023234849999999998
+    },
+    {
+        "question": "Which are the synoptic Gospels?",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00010125000000000065,
+        "judge_score": 1,
+        "accumulated_cost": 0.015573900000000005
+    },
+    {
+        "question": " Which of the following is not one of the four main excuses for terrorism that Michael Walzer discusses?",
+        "prediction": "D",
+        "expected_output": "A",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00016125000000000167,
+        "judge_score": 0,
+        "accumulated_cost": 0.0195831
+    },
+    {
+        "question": "Soft determinism entails that _____.",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00012915000000000149,
+        "judge_score": 1,
+        "accumulated_cost": 0.023807850000000002
+    },
+    {
+        "question": "Men are better drivers than women are. The proof of this is that men are more capable than women of managing cars on the road.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00011639999999999914,
+        "judge_score": 1,
+        "accumulated_cost": 0.016690200000000002
+    },
+    {
+        "question": "Which term is usually associated with women in Hindu traditions?",
+        "prediction": "E",
+        "expected_output": "H",
+        "extracted_output": "E",
+        "score": 0.0,
+        "cost": 0.00013619999999999952,
+        "judge_score": 0,
+        "accumulated_cost": 0.0203421
+    },
+    {
+        "question": " How many times a day is the Fatihah recited?",
+        "prediction": "A",
+        "expected_output": "C",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00014429999999999998,
+        "judge_score": 0,
+        "accumulated_cost": 0.02161575
+    },
+    {
+        "question": "When someone responds to your argument with a sarcastic statement such as, \"Yeah, right. Like that's ever going to happen,\" that person may have committed which fallacy?",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.0001303500000000013,
+        "judge_score": 1,
+        "accumulated_cost": 0.0226812
+    },
+    {
+        "question": " Carens defends a form of",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00013020000000000045,
+        "judge_score": 1,
+        "accumulated_cost": 0.024213900000000003
+    },
+    {
+        "question": "John S. Knight, Detroit Free Press (3 July 1970): ...Capitalism is the economic system in which the means of production and distribution are privately owned and operated for profit. The alternative system is called socialism, the theory of the ownership and operation of the means of production by society, with all members sharing in the work and the products.",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00012405000000000055,
+        "judge_score": 1,
+        "accumulated_cost": 0.024448950000000004
+    },
+    {
+        "question": " Use the following key to translate the given formula of PL to natural, English sentences.\nA: Marina reads a Percy Jackson book.\nB: Izzy plays Minecraft.\nC: Emily stops working.\nD: Russell makes dinner.\nE: Ashleigh stops by.\n(~A ∨ ~B) ⊃ C",
+        "prediction": "I",
+        "expected_output": "G",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00018974999999999895,
+        "judge_score": 0,
+        "accumulated_cost": 0.02752245
+    },
+    {
+        "question": "A $200-cm^3$ glass flask is filled to the brim with mercury at 20°C How much mercury overflows when the temperature of the system is raised to 100°C. The coefficient of linear expansion of the glass is $0.40 \\times 10^{-5} K^{-1}. (Unit: cm^3)",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.0003532499999999994,
+        "judge_score": 1,
+        "accumulated_cost": 0.0329982
+    },
+    {
+        "question": "During the time an aircraft produces a sonic boom the aircraft is",
+        "prediction": "H",
+        "expected_output": "D",
+        "extracted_output": "H",
+        "score": 0.0,
+        "cost": 0.0001861499999999995,
+        "judge_score": 0,
+        "accumulated_cost": 0.03042885
+    },
+    {
+        "question": "Acyclindercontaining gas at 27°C is divided into two parts of equal volume, each of 100 cm^3, and at equal pressure, by a piston of cross-sectional area 15 cm^2 . The gas is one part is raised in temperature to 100°C; the other volume is maintained at the original temperature. The piston and walls are perfect insulators. How far will the piston move during the change in temperature?",
+        "prediction": "A",
+        "expected_output": "E",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0003217500000000026,
+        "judge_score": 0,
+        "accumulated_cost": 0.03680969999999999
+    },
+    {
+        "question": "An electron is released from rest in a uniform electric field of magnitude $2.00 \\times 10^4 \\mathrm{~N} / \\mathrm{C}$. Calculate the acceleration of the electron. (Ignore gravitation.)",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00026520000000000016,
+        "judge_score": 1,
+        "accumulated_cost": 0.03015705
+    },
+    {
+        "question": "Calculate the de Broglie Wavelength of a tennis ball of mass 57 g traveling 25 m/s in meters.",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00017700000000000007,
+        "judge_score": 1,
+        "accumulated_cost": 0.0266919
+    },
+    {
+        "question": "When an element ejects a beta particle, the atomic number of that element",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00010440000000000102,
+        "judge_score": 1,
+        "accumulated_cost": 0.026029200000000002
+    },
+    {
+        "question": "Use the principle of conservation of mechanical energy to find the velocity with which a body must be projected vertically upward, in the absence of air resistance, to rise to a height above the earth's surface equal to the earth's radius, R.",
+        "prediction": "A",
+        "expected_output": "I",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.00028335000000000166,
+        "judge_score": 0,
+        "accumulated_cost": 0.042001949999999996
+    },
+    {
+        "question": "An object 4 cm in diameter is placed 167 mm from a converging lens of 5diopters. Calculate the position of the image from the lens and its size. Is the image real or virtual?",
+        "prediction": "B",
+        "expected_output": "I",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0002284499999999981,
+        "judge_score": 0,
+        "accumulated_cost": 0.03604274999999999
+    },
+    {
+        "question": "A nonrelativistic particle with a charge twice that of an electron moves through a uniform magnetic field. The field has a strength of π/4 tesla and is perpendicular to the velocity of the particle. What is the particle’s mass if it has a cyclotron frequency of 1,600 hertz?",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00033060000000000034,
+        "judge_score": 1,
+        "accumulated_cost": 0.04576214999999999
+    },
+    {
+        "question": "A system consisting of $82.5 \\mathrm{~g}$ of liquid water at $300 . \\mathrm{K}$ is heated using an immersion heater at a constant pressure of 1.00 bar. If a current of $1.75 \\mathrm{~A}$ passes through the $25.0 \\mathrm{ohm}$ resistor for 100 .s, what is the final temperature of the water?",
+        "prediction": "B",
+        "expected_output": "A",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00020144999999999885,
+        "judge_score": 0,
+        "accumulated_cost": 0.03490829999999999
+    },
+    {
+        "question": "The radiation from an x-ray tube operated at 50 kV is diffracted by a cubic KC1 crystal of molecular mass 74.6 and density 1.99 × 10^3 kg\\textbulletm^-3. Calculate (a) the short- wavelength limit of the spectrum from the tube, and (b) the glancing angle for first-order reflection from the princi-pal planes of the crystal for that wavelength.",
+        "prediction": "B",
+        "expected_output": "B",
+        "extracted_output": "B",
+        "score": 1.0,
+        "cost": 0.00039254999999999846,
+        "judge_score": 1,
+        "accumulated_cost": 0.043291799999999984
+    },
+    {
+        "question": "As more lamps are connected to a series circuit, the current in the power source",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 8.564999999999962e-05,
+        "judge_score": 1,
+        "accumulated_cost": 0.0302427
+    },
+    {
+        "question": "Which of the following statements about bosons and/or fermions is true?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00025814999999999866,
+        "judge_score": 1,
+        "accumulated_cost": 0.037875749999999986
+    },
+    {
+        "question": "In an early model of the hydrogen atom (the Bohr model), the electron orbits the proton in uniformly circular motion. The radius of the circle is restricted (quantized) to certain values given by where $a_0=52.92 \\mathrm{pm}$. What is the speed of the electron if it orbits in the smallest allowed orbit?",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.0002354999999999996,
+        "judge_score": 1,
+        "accumulated_cost": 0.040169999999999983
+    },
+    {
+        "question": "How much work is required to turn an electric dipole $180^{\\circ}$ in a uniform electric field of magnitude $E=46.0 \\mathrm{~N} / \\mathrm{C}$ if the dipole moment has a magnitude of $p=3.02 \\times$ $10^{-25} \\mathrm{C} \\cdot \\mathrm{m}$ and the initial angle is $64^{\\circ} ?$\n",
+        "prediction": "C",
+        "expected_output": "I",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00030435000000000184,
+        "judge_score": 0,
+        "accumulated_cost": 0.044994449999999984
+    },
+    {
+        "question": "A bungee cord is 30.0 m long and, when stretched a distance x, it exerts a restoring force of magnitude kx. Your father-in-law (mass 95.0 kg) stands on a platform 45.0 m above the ground, and one end of the cord is tied securely to his ankle and the other end to the platform. You have promised him that when he steps off the platform he will fall a maximum distance of only 41.0 m before the cord stops him. You had several bungee cords to select from, and you tested them by stretching them out, tying one end to a tree, and pulling on the other end with a force of 380.0 N. When you do this, what distance (in m) will the bungee cord that you should select have stretched?",
+        "prediction": "G",
+        "expected_output": "B",
+        "extracted_output": "G",
+        "score": 0.0,
+        "cost": 0.000425250000000002,
+        "judge_score": 0,
+        "accumulated_cost": 0.04866959999999998
+    },
+    {
+        "question": "Water stands 12.0 m deep in a storage tank whose top is open to the atmosphere. What are the gauge pressures at the bottom of the tank? (Unit: 10 ^ 5 Pa)",
+        "prediction": "G",
+        "expected_output": "G",
+        "extracted_output": "G",
+        "score": 1.0,
+        "cost": 0.00016424999999999773,
+        "judge_score": 1,
+        "accumulated_cost": 0.03635024999999999
+    },
+    {
+        "question": "A plate of crystal quartz cut with its faces perpendicular to the optic axis is found to exactly annul the rotation of the plane of polarization of sodium light produced by a 10 cm length of a 20% solution of maltose. Calculate the thickness of the quartz plate. [\\delta] for maltose =144°. (Specific rotation is defined as the rotation produced by a 10 cm column of liquid with a 1 gram/cubic centimeter active substance.)",
+        "prediction": "B",
+        "expected_output": "E",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.00036945000000000033,
+        "judge_score": 0,
+        "accumulated_cost": 0.04740209999999998
+    },
+    {
+        "question": "Point charges of $+6.0 \\mu \\mathrm{C}$ and $-4.0 \\mu \\mathrm{C}$ are placed on an $x$ axis, at $x=8.0 \\mathrm{~m}$ and $x=16 \\mathrm{~m}$, respectively. What charge must be placed at $x=24 \\mathrm{~m}$ so that any charge placed at the origin would experience no electrostatic force?\n",
+        "prediction": "C",
+        "expected_output": "I",
+        "extracted_output": "C",
+        "score": 0.0,
+        "cost": 0.00037469999999999865,
+        "judge_score": 0,
+        "accumulated_cost": 0.04798259999999998
+    },
+    {
+        "question": "Malus' law: $I=I_0*cos^2($\\theta$)$. Where I is the intensity of polarized light that has passed through the polarizer, I_0 is the intensity of polarized light before the polarizer, and $\\theta$ is the angle between the polarized light and the polarizer. Unpolarized light passes through a polarizer. It then passes through another polarizer at angle 40 degree to the first, and then another at angle 15 degree to the second. What percentage of the original intensity was the light coming out of the second polarizer?",
+        "prediction": "F",
+        "expected_output": "G",
+        "extracted_output": "F",
+        "score": 0.0,
+        "cost": 0.00047309999999999713,
+        "judge_score": 0,
+        "accumulated_cost": 0.04964189999999998
+    },
+    {
+        "question": "Which of the following is not a basic somatosensation?",
+        "prediction": "B",
+        "expected_output": "A",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0001330500000000026,
+        "judge_score": 0,
+        "accumulated_cost": 0.040303049999999986
+    },
+    {
+        "question": "A child with an insecure/anxious-avoidant pattern of attachment:",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00015285000000000298,
+        "judge_score": 1,
+        "accumulated_cost": 0.04081064999999999
+    },
+    {
+        "question": "Discuss the three basic goals of psychology.",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00011594999999999661,
+        "judge_score": 1,
+        "accumulated_cost": 0.03944879999999998
+    },
+    {
+        "question": "TYPE II ERROR is the failure to reject a false null hypothesis. The Power is the probability of NOT making a Type II error and is effected by several factors. Which factor out of the following ones that have influence on the power is incorrectly defined?",
+        "prediction": "C",
+        "expected_output": "C",
+        "extracted_output": "C",
+        "score": 1.0,
+        "cost": 0.00023775000000000185,
+        "judge_score": 1,
+        "accumulated_cost": 0.04630124999999999
+    },
+    {
+        "question": "Discuss the meaning of the term significant difference.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.00014909999999999923,
+        "judge_score": 1,
+        "accumulated_cost": 0.04543154999999999
+    },
+    {
+        "question": "Define the motive to avoid success according to Horner. How did she go about studying this motive in women?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.00012645000000000017,
+        "judge_score": 1,
+        "accumulated_cost": 0.045120899999999985
+    },
+    {
+        "question": "Research reveals that the most critical factor in Type A behavior associated with heart disease is",
+        "prediction": "B",
+        "expected_output": "G",
+        "extracted_output": "B",
+        "score": 0.0,
+        "cost": 0.0001258499999999968,
+        "judge_score": 0,
+        "accumulated_cost": 0.04469009999999998
+    },
+    {
+        "question": "\"Samuel S., age 43, says, \"\"Even though I've just been given a bonus at work, I feel like I’m about to be fired.” As defined by Aaron Beck, Samuel is exhibiting which of the following cognitive distortions?\"",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00011144999999999905,
+        "judge_score": 1,
+        "accumulated_cost": 0.04416404999999999
+    },
+    {
+        "question": "The mother of a 31-year-old client that you have been seeing for six months calls to check on her son's progress. She says that she is very concerned about her son and wants to know if there is anything she can do to help him. As an ethical psychologist, you:",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00014444999999999736,
+        "judge_score": 1,
+        "accumulated_cost": 0.046445699999999986
+    },
+    {
+        "question": "What factors within the individual are the basis for being able to either withstand conflict or develop neuroses?",
+        "prediction": "D",
+        "expected_output": "J",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.00012494999999999997,
+        "judge_score": 0,
+        "accumulated_cost": 0.0007760999999999998
+    },
+    {
+        "question": "Objects that absorb light appear",
+        "prediction": "J",
+        "expected_output": "C",
+        "extracted_output": "J",
+        "score": 0.0,
+        "cost": 0.00011894999999999994,
+        "judge_score": 0,
+        "accumulated_cost": 0.0006511499999999999
+    },
+    {
+        "question": "If twosubculturalgroups have different mean IQ's (e.g., Blacks and whites) can it be concluded from that evidence that heredity is the most important and influential determinant of intelligence ?",
+        "prediction": "D",
+        "expected_output": "E",
+        "extracted_output": "D",
+        "score": 0.0,
+        "cost": 0.0001566,
+        "judge_score": 0,
+        "accumulated_cost": 0.0020681999999999996
+    },
+    {
+        "question": "A family had eight children. The ages were 9, 11, 8, 15, 14, 12, 17, 14. (a) Find the measures of central tendency for the data. (b) Find the range of the data.",
+        "prediction": "I",
+        "expected_output": "I",
+        "extracted_output": "I",
+        "score": 1.0,
+        "cost": 0.0003124500000000006,
+        "judge_score": 1,
+        "accumulated_cost": 0.0107319
+    },
+    {
+        "question": "With respect to the relationship between achievement and anxiety in schoolchildren, it appears that",
+        "prediction": "A",
+        "expected_output": "C",
+        "extracted_output": "A",
+        "score": 0.0,
+        "cost": 0.0001182,
+        "judge_score": 0,
+        "accumulated_cost": 0.00022109999999999998
+    },
+    {
+        "question": "Which of the following is NOT true about the difference between traditional research and program evaluation?",
+        "prediction": "A",
+        "expected_output": "A",
+        "extracted_output": "A",
+        "score": 1.0,
+        "cost": 0.0002065499999999998,
+        "judge_score": 1,
+        "accumulated_cost": 0.0045241499999999985
+    },
+    {
+        "question": "A 16-month-old child who calls her pet cat “kitty” sees a dog for the first time and calls it “kitty.” In terms of Piaget’s theory of cognitive development, the child is displaying:",
+        "prediction": "H",
+        "expected_output": "H",
+        "extracted_output": "H",
+        "score": 1.0,
+        "cost": 0.00011879999999999996,
+        "judge_score": 1,
+        "accumulated_cost": 0.0008948999999999998
+    },
+    {
+        "question": "In terms of Hofstede’s (1980) five cultural dimensions, the United States scores at the top of the scale on:",
+        "prediction": "E",
+        "expected_output": "E",
+        "extracted_output": "E",
+        "score": 1.0,
+        "cost": 0.00015914999999999983,
+        "judge_score": 1,
+        "accumulated_cost": 0.0030293999999999994
+    },
+    {
+        "question": "Functionally, receptors in the retina of the eye differ most from receptors in the cochlea of the ear in the",
+        "prediction": "J",
+        "expected_output": "J",
+        "extracted_output": "J",
+        "score": 1.0,
+        "cost": 0.00012675000000000002,
+        "judge_score": 1,
+        "accumulated_cost": 0.0010216499999999998
+    },
+    {
+        "question": "According to Erikson, those who look back at the end of their lives with regrets and the feeling that their lives have lacked fulfillment evidence unsuccessful resolution of the challenge of",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00010289999999999998,
+        "judge_score": 1,
+        "accumulated_cost": 0.00010289999999999998
+    },
+    {
+        "question": "Discuss Fiedler's contingency model of leadership.",
+        "prediction": "D",
+        "expected_output": "D",
+        "extracted_output": "D",
+        "score": 1.0,
+        "cost": 0.00013919999999999991,
+        "judge_score": 1,
+        "accumulated_cost": 0.0011608499999999997
+    }
+]

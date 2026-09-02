@@ -4,16 +4,18 @@ This repository contains the reproducibility layer for comparing AFlow, MaAS,
 DAAO, G-Designer, CARD, FlowBank, and MasRouter on shared datasets and one local
 Qwen3-8B serving protocol.
 
-It is a source repository, not an experiment dump. Author repositories are
-checked out at exact commits from `upstreams.lock.json` and transformed by the
-reviewable installers under `shims/`. Model weights, virtual environments,
-caches, logs, checkpoints, and result trees are intentionally excluded.
+It is a source repository, not an experiment dump. The adapted author
+repositories are vendored under `third_party/` and marked with their exact
+commits from `upstreams.lock.json`. Model weights, virtual environments, caches,
+logs, checkpoints, and result trees are intentionally excluded.
 
 ## Start here
 
 1. Read `MIGRATION.md` for a new-server restore.
 2. Read `REPRODUCTION_CHANGES.md` for method and protocol modifications.
-3. Run `python3 scripts/bootstrap_upstreams.py` to clone and patch author code.
+3. Run `python3 scripts/bootstrap_upstreams.py --check` to verify the vendored
+   author code. The script only downloads a pinned upstream when a vendored
+   directory is absent.
 4. Run `pipeline.py` so static checks and the complete 45-cell smoke gate pass
    before any full experiment.
 

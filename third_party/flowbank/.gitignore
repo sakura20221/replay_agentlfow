@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments / secrets
+DiverseFlow/config/config.yaml      # user's filled-in LLM keys (keep config.example.yaml)
+DiverseFlow/config/config2.yaml
+.env
+
+# Large / regenerated selector data (the compact selector_data.npz IS committed)
+data/**/selector_data.csv
+data/**/router_data.csv
+data/**/*_readable.json
+
+# Experiment outputs from re-running training (the 4 reported runs ARE committed).
+# Ignore newly-generated runs to avoid accidentally committing large artifacts.
+experiments/**/wandb/
+wandb/
+
+# Demo / scratch datasets produced by build_selector_data.py
+data/*_demo/
+data/*_full/
+experiments/*_demo/
+experiments/*_full/
+
+# OS / editor
+.DS_Store
+.vscode/
+*.swp

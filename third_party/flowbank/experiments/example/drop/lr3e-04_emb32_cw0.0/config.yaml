@@ -1,0 +1,23 @@
+batch_size: 32
+benchmark: drop
+cost_weight: 0.0
+edge_dim: 3
+embedding_dim: 32
+learning_rate: 0.0003
+llm_description_path: data/example/drop/workflow_descriptions.json
+llm_embedding_path: data/example/drop/workflow_embeddings.pkl
+llm_num: 2
+loss_type: bce
+model_path: experiments/example/drop/lr3e-04_emb32_cw0.0/best_model.pth
+num_task: 1
+saved_selector_data_path: data/example/drop/selector_data.npz
+seed: 1881
+split_ratio:
+- 0.2
+- 0.0
+- 0.8
+test_predictions_path: experiments/example/drop/lr3e-04_emb32_cw0.0/test_predictions.json
+train_epoch: 500
+train_log_path: experiments/example/drop/lr3e-04_emb32_cw0.0/training_log.csv
+train_mask_rate: 0.5
+weight_decay: 0.0001

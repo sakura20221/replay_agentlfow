@@ -1,0 +1,17 @@
+{
+  "W1": {
+    "feature": "Three-way diverse-prompt ensemble (no code verification). Custom operator generates 3 independent solutions under different instruction styles \u2014 SOLVE_PROMPT (general), ANALYTICAL_SOLVE_PROMPT (deductive analysis), VERBOSE_SOLVE_PROMPT (verbose explanation) \u2014 then ScEnsemble selects the most-consistent answer via majority voting. Four LLM calls total. Lighter than W2/W3 (no Programmer verification). Suited to AMC problems where re-framing the question via different prompt styles surfaces the right reasoning path more reliably than a single fixed prompt."
+  },
+  "W2": {
+    "feature": "Three-way analytical Custom ensemble with code verification. Generates 3 independent analytical solutions using a Custom operator with a focused analytical prompt, ensembles them via ScEnsemble majority voting, then verifies the best solution with a Programmer operator that executes Python code. Effective for AMC problems that benefit from diverse analytical reasoning plus computational validation."
+  },
+  "W3": {
+    "feature": "Three-way diverse-prompting ensemble with code verification. Generates 3 solutions using different prompt strategies (logical reasoning, thorough explanation, concise structure), ensembles via ScEnsemble, then verifies the chosen solution with a Programmer operator. Effective for AMC problems where varied reasoning approaches increase coverage of the solution space and code execution catches arithmetic slips."
+  },
+  "W4": {
+    "feature": "Classify-then-solve conditional routing workflow. First classifies the problem into a category (geometry, combinatorics, number theory, or algebra) via a Custom operator with a classifier prompt, then routes the query to a domain-specialist Custom call whose prompt is tailored for that category. Two LLM calls total \u2014 the cheapest WF in the AMC pool. Effective when domain-specific reasoning strategies significantly outperform generic prompting; weak when the classifier mis-routes."
+  },
+  "W5": {
+    "feature": "ScoreFlow query-level workflow generator. Unlike fixed-graph workflows that apply one static computation graph to every query, ScoreFlow synthesizes a custom workflow on-the-fly for each individual query at inference time. An optimizer LLM inspects the query and produces a tailored graph before execution. The exposed cost includes both the generated workflow's runtime cost and ScoreFlow's own generation overhead. Provides genuine per-query adaptability that cannot be replicated by any single fixed graph."
+  }
+}

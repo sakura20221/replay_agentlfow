@@ -1,0 +1,14 @@
+# Full Example: https://github.com/geekan/MetaGPT/blob/main/config/config2.example.yaml
+# Reflected Code: https://github.com/geekan/MetaGPT/blob/main/metagpt/config2.py
+# Config Docs: https://docs.deepwisdom.ai/main/en/guide/get_started/configuration.html
+llm:
+  api_type: "openai"  # or azure / ollama / groq etc.
+  model: "gpt-4o-mini"  #  gpt-3.5-turbo or gpt-4-turbo
+  base_url: ""  # or forward url / other llm url
+  api_key: ""
+models:
+  gpt-4o-mini:
+    api_type: "openai"  # or azure / ollama / groq etc.
+    model: "gpt-4o-mini"  #  gpt-3.5-turbo or gpt-4-turbo
+    base_url: ""  # or forward url / other llm url
+    api_key: ""

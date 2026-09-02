@@ -5,23 +5,25 @@
 - orchestration, proxy, scorer, collectors, and audits;
 - all five shim installers and their source templates;
 - frozen dataset splits and provenance manifest;
-- exact author-repository commits in `upstreams.lock.json`;
+- complete adapted author-repository source under `third_party/`, with exact
+  source commits recorded in `upstreams.lock.json` and marker files;
 - the current reproduction protocol and modification boundaries.
 
 Git does not contain generated results, transcripts, checkpoints, model weights,
-Python environments, package caches, or the author repositories themselves.
+Python environments, package caches, or nested upstream Git histories.
 
 ## Restore order
 
 ```bash
 git clone <private-repository-url> agent_wf
 cd agent_wf
-python3 scripts/bootstrap_upstreams.py
+python3 scripts/bootstrap_upstreams.py --check
 ```
 
-The bootstrap command fetches each exact commit, applies every shim, then runs
-each installer's assertions. It refuses to overwrite a pre-existing non-Git,
-wrong-remote, or wrong-commit directory.
+The adapted author source is already present after `git clone`. The bootstrap
+command verifies each vendored source marker, applies the reviewable installers,
+and runs their assertions. If a vendored directory is absent, it fetches the
+exact commit from `upstreams.lock.json` and reconstructs it first.
 
 Create the required Python environments next. The experiment uses separate
 environments named `tools`, `maas`, `gdesigner`, `pyg`, and `vllm` under
