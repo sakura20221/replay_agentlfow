@@ -80,7 +80,7 @@ class SharedBenchmark(BaseBenchmark):
         row = getattr(self, "_current_row", None) or {}
         return shared_bench.score(self.SHARED_DATASET, row, prediction)
 
-    async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, str, float, float]:
+    async def evaluate_problem(self, problem: dict, graph: Callable) -> Tuple[str, str, str, str, float, float]:
         name = self.SHARED_DATASET
         self._current_row = problem
         input_text = shared_bench.question_text(name, problem)
@@ -94,14 +94,14 @@ class SharedBenchmark(BaseBenchmark):
             uni_score, _extracted = shared_bench.score(name, problem, output)
             if uni_score < MISMATCH_THRESHOLD:
                 self.log_mismatch(input_text, expected_output, output, output)
-            return input_text, output, expected_output, uni_score, cost
+            return str(problem.get("uid", "")), input_text, output, expected_output, uni_score, cost
         except Exception as exc:  # noqa: BLE001 - one bad sample must not kill a round
-            return input_text, str(exc), expected_output, 0.0, 0.0
+            return str(problem.get("uid", "")), input_text, str(exc), expected_output, 0.0, 0.0
 
     def get_result_columns(self) -> List[str]:
         # Matches the author classes' column set (see benchmarks/math.py) so
         # save_results and the per-problem cost computation keep working.
-        return ["question", "prediction", "expected_output", "score", "cost"]
+        return ["uid", "question", "prediction", "expected_output", "score", "cost"]
 
 
 def _make(class_name: str, dataset: str, question_type: str) -> type:

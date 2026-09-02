@@ -54,7 +54,11 @@ def math_variants(gold: str) -> list[tuple[str, str]]:
         as_fraction = Fraction(plain).limit_denominator(10000)
         out.append(("as fraction", f"\\frac{{{as_fraction.numerator}}}{{{as_fraction.denominator}}}"))
     if "\\sqrt" in plain:
-        out.append(("sqrt() form", plain.replace("\\sqrt{", "sqrt(").replace("}", ")")))
+        # Replace only radical braces. A global right-brace replacement also
+        # corrupts unrelated fractions and does not produce an equivalent form.
+        variant = re.sub(r"\\sqrt\s*\{([^{}]+)\}", r"sqrt(\1)", plain)
+        if variant != plain and "\\sqrt" not in variant:
+            out.append(("sqrt() form", variant))
     if re.fullmatch(r"-?\d{1,3}(,\d{3})+", plain):
         out.append(("no separators", plain.replace(",", "")))
     return out

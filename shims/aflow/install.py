@@ -496,8 +496,7 @@ def write_mbpp_public_tests() -> None:
     out_path = REPO / "data" / "datasets" / "shared_mbpp_public_test.jsonl"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     written = 0
-    seen: set[str] = set()
-    collisions: list[str] = []
+    entry_counts: dict[str, int] = {}
     with out_path.open("w", encoding="utf-8") as handle:
         for name in ("mbpp.jsonl", "mbpp_search.jsonl"):
             source = DATA / name
@@ -513,23 +512,19 @@ def write_mbpp_public_tests() -> None:
                     tests = row.get("test_list") or []
                     if not entry or not tests:
                         continue
-                    if entry in seen:
-                        # First-wins. The operator's signature is
-                        # test(problem, solution, entry_point) -- there is no
-                        # task_id -- so two MBPP problems sharing a function name
-                        # are indistinguishable to it. Counted and reported rather
-                        # than hidden: the authors' own file has the same ambiguity
-                        # (427 entries for 974 tasks). Final scoring is unaffected;
-                        # only the workflow's own self-check can be misled.
-                        collisions.append(entry)
-                        continue
-                    seen.add(entry)
+                    entry_counts[entry] = entry_counts.get(entry, 0) + 1
                     renamed = [_re.sub(rf"\b{_re.escape(entry)}\b", "candidate", t) for t in tests]
-                    handle.write(json.dumps({"entry_point": entry, "test": renamed},
+                    task = (f"{row.get('prompt', '')}\n\n"
+                            "Your code must pass these tests:\n" + "\n".join(tests))
+                    handle.write(json.dumps({"entry_point": entry,
+                                             "prompt": row.get("prompt", ""),
+                                             "task": task,
+                                             "test": renamed},
                                             ensure_ascii=False) + "\n")
                     written += 1
     report(written > 0, f"MBPP public tests -> {out_path.relative_to(ROOT)} "
-           f"({written} entries, {len(collisions)} name collisions skipped)")
+           f"({written} items, "
+           f"{sum(n - 1 for n in entry_counts.values() if n > 1)} shared names)")
 
     code_path = REPO / "scripts" / "utils" / "code.py"
     text = code_path.read_text(encoding="utf-8")
@@ -544,6 +539,90 @@ def write_mbpp_public_tests() -> None:
     code_path.write_text(text, encoding="utf-8")
     report("SHARED_MBPP" in code_path.read_text(encoding="utf-8"),
            "code.py registers SHARED_MBPP")
+
+
+def patch_mbpp_test_identity() -> None:
+    """Disambiguate public tests by function name plus the current task text."""
+    code_path = REPO / "scripts" / "utils" / "code.py"
+    text = code_path.read_text(encoding="utf-8")
+    old_sig = ("def extract_test_cases_from_jsonl(entry_point: str, "
+               "dataset: Union[CodeDataset, str] = CodeDataset.HUMAN_EVAL):")
+    new_sig = old_sig[:-2] + ", problem: str = None):"
+    if old_sig in text:
+        text = text.replace(old_sig, new_sig, 1)
+    old_lookup = '''    with open(file_path, "r") as file:
+        for line in file:
+            data = json.loads(line)
+            if data.get(key) == entry_point:
+                return data.get("test")
+
+    return None'''
+    new_lookup = '''    matches = []
+    task_matches = []
+    prompt_matches = []
+    with open(file_path, "r") as file:
+        for line in file:
+            data = json.loads(line)
+            if data.get(key) != entry_point:
+                continue
+            task = str(data.get("task") or "")
+            prompt = str(data.get("prompt") or "")
+            if problem is not None and task and str(problem).startswith(task):
+                task_matches.append(data.get("test"))
+            if problem is not None and prompt and str(problem).startswith(prompt):
+                prompt_matches.append(data.get("test"))
+            matches.append(data.get("test"))
+
+    if len(task_matches) == 1:
+        return task_matches[0]
+    if len(prompt_matches) == 1:
+        return prompt_matches[0]
+    return matches[0] if len(matches) == 1 else None'''
+    if old_lookup in text:
+        text = text.replace(old_lookup, new_lookup, 1)
+    old_task_lookup = '''    matches = []
+    with open(file_path, "r") as file:
+        for line in file:
+            data = json.loads(line)
+            if data.get(key) != entry_point:
+                continue
+            prompt = str(data.get("prompt") or "")
+            if problem is not None and prompt and str(problem).startswith(prompt):
+                return data.get("test")
+            matches.append(data.get("test"))
+
+    return matches[0] if len(matches) == 1 else None'''
+    if old_task_lookup in text:
+        text = text.replace(old_task_lookup, new_lookup, 1)
+    code_path.write_text(text, encoding="utf-8")
+
+    changed = 0
+    workspace = REPO / "workspace" / "SHARED_MBPP" / "workflows"
+    for path in workspace.rglob("*.py"):
+        body = path.read_text(encoding="utf-8")
+        updated = body.replace(
+            "def exec_code(self, solution, entry_point):",
+            "def exec_code(self, problem, solution, entry_point):",
+        )
+        updated = re.sub(
+            r'extract_test_cases_from_jsonl\(entry_point(?:, dataset=[^)]+)?\)',
+            'extract_test_cases_from_jsonl(entry_point, dataset="SHARED_MBPP", problem=problem)',
+            updated,
+        )
+        updated = updated.replace(
+            "self.exec_code(solution, entry_point)",
+            "self.exec_code(problem, solution, entry_point)",
+        )
+        if updated != body:
+            path.write_text(updated, encoding="utf-8")
+            changed += 1
+    final = code_path.read_text(encoding="utf-8")
+    report("problem: str = None" in final and "len(task_matches) == 1" in final,
+           "MBPP public-test lookup accepts task identity")
+    operators = list(workspace.rglob("operator.py"))
+    report(bool(operators) and all('dataset="SHARED_MBPP", problem=problem' in
+                                  p.read_text(encoding="utf-8") for p in operators),
+           f"shared MBPP Test operators use task-aware lookup ({changed} file(s) updated)")
 
 
 # Same fix as shims/maas_family/install.py, and the same source: FlowBank's own
@@ -754,6 +833,13 @@ def check() -> None:
         with amc.open(encoding="utf-8") as handle:
             row = json.loads(handle.readline())
         report("question" in row, "AMC has the 'question' field AFlow reads")
+    code_lookup = (REPO / "scripts" / "utils" / "code.py").read_text(encoding="utf-8")
+    mbpp_ops = list((REPO / "workspace" / "SHARED_MBPP" / "workflows").rglob("operator.py"))
+    report("problem: str = None" in code_lookup and "len(task_matches) == 1" in code_lookup,
+           "MBPP public tests are disambiguated by task text")
+    report(bool(mbpp_ops) and all('dataset="SHARED_MBPP", problem=problem' in
+                                  path.read_text(encoding="utf-8") for path in mbpp_ops),
+           "shared MBPP operators use the shared, task-aware test lookup")
 
 
 MBPP_DAEMON_MARKER = "# --- shared-layer shim (agent_wf_v2) --- mbpp daemon guard v1"
@@ -814,6 +900,7 @@ def main() -> None:
         seed_workspaces()
         document_operator_constructors()
         write_mbpp_public_tests()
+        patch_mbpp_test_identity()
         patch_scensemble_labels()
         patch_prompt_definition_rule()
         patch_retry_budget()

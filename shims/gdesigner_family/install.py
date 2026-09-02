@@ -548,7 +548,7 @@ def patch_result_file_arg(repo: Path, label: str) -> None:
            f"{label}: --result_file honoured")
 
 
-BATCH_PLAN = """    # --- shared-layer shim: a bigger batch for the evaluation phase only ---
+BATCH_PLAN = """    # --- shared-layer shim: explicit search/evaluation boundary ---
     # batch_size is a gradient hyperparameter and is left at the author's value for
     # the training batches. After the switch at --num_iterations the runner sets
     # optimized_spatial/temporal to False, and the optimiser step is guarded by
@@ -561,13 +561,21 @@ BATCH_PLAN = """    # --- shared-layer shim: a bigger batch for the evaluation p
     # questions, and there are 16 such jobs. The evaluation split is what dominates
     # that -- 1120 of the 1372 -- and it is precisely the part with no gradient.
     _eval_bs = args.eval_batch_size or args.batch_size
+    _train_items = args.train_items or args.num_iterations * args.batch_size
+    _search_items = args.search_items or _train_items
+    if not (0 < _train_items <= _search_items <= len(dataset)):
+        raise ValueError("expected 0 < train_items <= search_items <= dataset size")
     _batch_plan = []
     _cursor = 0
-    for _ in range(args.num_iterations):
-        if _cursor + args.batch_size > len(dataset):
-            break
-        _batch_plan.append((_cursor, _cursor + args.batch_size))
-        _cursor += args.batch_size
+    while _cursor < _train_items:
+        _end = min(_cursor + args.batch_size, _train_items)
+        _batch_plan.append((_cursor, _end))
+        _cursor = _end
+    if len(_batch_plan) != args.num_iterations:
+        raise ValueError("num_iterations must equal ceil(train_items / batch_size)")
+    # A control run may keep the author's smaller update budget. Skip the search
+    # items it did not train on and begin inference at the real held-out boundary.
+    _cursor = _search_items
     while _cursor < len(dataset):
         _end = min(_cursor + _eval_bs, len(dataset))
         if _end - _cursor < 1:
@@ -575,8 +583,9 @@ BATCH_PLAN = """    # --- shared-layer shim: a bigger batch for the evaluation p
         _batch_plan.append((_cursor, _end))
         _cursor = _end
     num_batches = len(_batch_plan)
-    print(f"[shim] {args.num_iterations} training batch(es) of {args.batch_size} "
-          f"then {num_batches - args.num_iterations} evaluation batch(es) of {_eval_bs}")
+    print(f"[shim] {args.num_iterations} training batch(es), {_train_items} item(s); "
+          f"evaluation starts at item {_search_items} in "
+          f"{num_batches - args.num_iterations} batch(es) of up to {_eval_bs}")
 """
 
 
@@ -620,10 +629,20 @@ def patch_eval_batch_size(repo: Path, label: str) -> None:
                      "evaluation, where no gradient is taken (0 = same as --batch_size)')",
             1,
         )
+    if anchor and "--train_items" not in text:
+        text = text.replace(
+            anchor,
+            anchor + "\n    parser.add_argument('--train_items', type=int, default=0,\n"
+                     "                        help='number of search items used for gradient updates')\n"
+                     "    parser.add_argument('--search_items', type=int, default=0,\n"
+                     "                        help='index where the held-out split starts')",
+            1,
+        )
     path.write_text(text, encoding="utf-8")
     final = path.read_text(encoding="utf-8")
-    report("_batch_plan" in final and "--eval_batch_size" in final,
-           f"{label}: evaluation phase batches independently of batch_size")
+    report("_batch_plan" in final and "--eval_batch_size" in final
+           and "--train_items" in final and "--search_items" in final,
+           f"{label}: train budget and held-out boundary planned independently")
 
 
 def patch_dangling_import(repo: Path, package: str) -> None:

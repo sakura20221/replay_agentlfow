@@ -13,14 +13,14 @@ exercising the real code paths at toy scale and auditing what actually flowed.
     stage 3  smoke audit  contamination scan + collect must reach every cell +
                           correct-but-zero on the smoke's own per-item files
     stage 4  clean+seed   remove smoke artefacts, verify clean again
-    stage 5  full sweep   drop+math+mmlu_pro wave, then mbpp wave (resumable)
-    stage 6  stop         finishers (aflow_test / flowbank_pipeline) stay manual:
-                          aflow_test must re-grade rounds before choosing one
+    stage 5  full sweep   drop+math+mmlu_pro wave, then mbpp+amc (resumable)
+    stage 6  stop         FlowBank's portfolio/selector finisher stays manual
 
 A stage that fails stops the pipeline with its log; a re-run resumes at the first
-gate that has not passed (gate files under logs/pipeline/). Grading-side changes
-never re-enter this pipeline: collect.py re-grades stored predictions, so a scorer
-fix is applied by re-collecting, not by re-running.
+gate that has not passed (gate files under logs/pipeline/<runs>__<tag>/). A change
+to prompts, data, sampling, or a scorer used during search is a new protocol and
+must use a new runs directory and tag. Re-collection alone is valid only when the
+search-time reward and selected artifact cannot have changed.
 
     tmux: envs/tools/bin/python pipeline.py --runs runs_v5 --tag v5
 """
@@ -29,6 +29,8 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import re
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -81,12 +83,15 @@ def fail(stage: str, detail: str) -> None:
     sys.exit(1)
 
 
-def clean_and_seed(label: str) -> None:
-    code, out = sh(f"envs/tools/bin/python separate_runs.py --label {label} --apply",
+def clean_and_seed(label: str, run_dirs: tuple[str, ...]) -> None:
+    run_args = " ".join(f"--runs-dir {shlex.quote(path)}" for path in run_dirs)
+    code, out = sh(f"envs/tools/bin/python separate_runs.py --label {shlex.quote(label)} "
+                   f"--apply {run_args}",
                    timeout=1200)
-    # "nothing to move" is a legitimate clean state, not a failure.
-    if code != 0 and "live job" in out:
-        fail(label, "live jobs detected; stop them first")
+    if code != 0:
+        detail = next((line for line in reversed(out.splitlines()) if line.strip()),
+                      "separate_runs.py failed without output")
+        fail(label, detail)
     for env, shim in INSTALLERS:
         code, out = sh(f"envs/{env}/bin/python {shim}", timeout=900)
         if code != 0 or "[FAIL" in out:
@@ -102,6 +107,7 @@ def preflight(stage: str) -> None:
 
 
 def main() -> None:
+    global GATES
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--runs", default="runs_v5")
@@ -109,13 +115,17 @@ def main() -> None:
     parser.add_argument("--jobs", type=int, default=16)
     parser.add_argument("--smoke-timeout", type=int, default=3600)
     args = parser.parse_args()
+    gate_key = re.sub(r"[^A-Za-z0-9_.-]+", "_",
+                      f"{Path(args.runs).name}__{args.tag}")
+    archive_stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    GATES = ROOT / "logs" / "pipeline" / gate_key
     GATES.mkdir(parents=True, exist_ok=True)
     runs = str(ROOT / args.runs)
     smoke_runs = str(ROOT / (args.runs + "_smoke"))
 
     @gate("0_clean")
     def stage0() -> None:
-        clean_and_seed("pipeline_pre_clean")
+        clean_and_seed(f"pipeline_{gate_key}_pre_{archive_stamp}", (runs, smoke_runs))
 
     @gate("1_preflight")
     def stage1() -> None:
@@ -126,7 +136,7 @@ def main() -> None:
         code, out = sh(
             f"SWEEP_RUNS={smoke_runs} SWEEP_TAG=smoke "
             f"envs/tools/bin/python sweep.py --smoke --repeats 1 --jobs {args.jobs} "
-            f"--timeout {args.smoke_timeout} --datasets drop math mmlu_pro mbpp",
+            f"--timeout {args.smoke_timeout} --datasets drop math mmlu_pro mbpp amc",
             timeout=args.smoke_timeout * 4)
         (GATES / "2_smoke.report").write_text(out)
         failed = [l for l in out.splitlines() if "FAILED" in l]
@@ -141,13 +151,14 @@ def main() -> None:
         code, out = sh("envs/tools/bin/python audits/live_contamination.py --json",
                        timeout=600)
         findings = json.loads(out).get("findings", []) if out.startswith("{") else None
-        if findings is None:
+        if code != 0 or findings is None:
             problems.append("contamination scan unreadable")
         elif findings:
             problems.append(f"contaminated: {findings[:2]}")
         # Grading health on the smoke's own per-item files.
         code, out = sh("envs/maas/bin/python audits/correct_but_zero.py "
-                       "--tag smoke --datasets drop math mmlu_pro mbpp", timeout=1200)
+                       "--tag smoke --datasets drop math mmlu_pro mbpp amc "
+                       "--fail-on-suspect", timeout=1200)
         (GATES / "3_smoke_audit.report").write_text(out)
         if code != 0:
             problems.append("correct_but_zero crashed")
@@ -158,7 +169,9 @@ def main() -> None:
         (GATES / "3_smoke_collect.report").write_text(out)
         missing = [l for l in out.splitlines()
                    if "no result file" in l or "none carried" in l]
-        if missing:
+        if code != 0:
+            problems.append("smoke collection crashed")
+        elif missing:
             problems.append(f"collect cannot reach {len(missing)} cell(s): "
                             f"{missing[0].split()[0]}...")
         if problems:
@@ -166,7 +179,7 @@ def main() -> None:
 
     @gate("4_clean_again")
     def stage4() -> None:
-        clean_and_seed("pipeline_post_smoke")
+        clean_and_seed(f"pipeline_{gate_key}_post_{archive_stamp}", (runs, smoke_runs))
         preflight("4_clean_again")
 
     @gate("5_full_sweep")
@@ -176,7 +189,8 @@ def main() -> None:
         sh(f"tmux new-session -d -s sml_watch -c {ROOT} "
            f"'SWEEP_RUNS={runs} envs/tools/bin/python watchdog.py --interval 600 "
            f">> logs/watchdog_pipeline.log 2>&1'")
-        for wave, datasets in (("wave1", "drop math mmlu_pro"), ("wave2", "mbpp")):
+        for wave, datasets in (("wave1", "drop math mmlu_pro"),
+                               ("wave2", "mbpp amc")):
             log(f"stage 5 {wave}: {datasets}")
             code, out = sh(
                 f"SWEEP_RUNS={runs} SWEEP_TAG={args.tag} "
@@ -195,10 +209,9 @@ def main() -> None:
     stage3()
     stage4()
     stage5()
-    log("all gates passed. Finishers are manual on purpose:")
-    log("  1. aflow_test.py -- re-grade rounds (audits/regrade_rounds.py) BEFORE it picks one")
-    log("  2. flowbank_pipeline.py stages 2a-3e")
-    log(f"  3. SWEEP_RUNS={runs} envs/maas/bin/python collect.py")
+    log("all gates passed. AFlow held-out evaluation ran inside the sweep.")
+    log("Remaining finisher: flowbank_pipeline.py stages 2a-3e for every dataset.")
+    log(f"Then collect: SWEEP_RUNS={runs} envs/maas/bin/python collect.py")
 
 
 if __name__ == "__main__":

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Move an earlier protocol's artefacts aside so a new run cannot mix with them.
 
-Adding the answer-format instruction changed what every model was shown, and the
-tiered extractors changed how replies are graded. Numbers from before those
-changes therefore answer a different question and must not appear in the same
-table as new ones. Two mechanisms keep them apart:
+Any change to prompts, data, sampling, or search-time grading creates a different
+protocol. Results from two protocols must not appear in the same table. Two
+mechanisms keep them apart:
 
 * this script, which relocates every artefact the seven methods write, so the new
   run starts from empty directories;
@@ -109,7 +108,7 @@ def size_of(path: Path) -> int:
     return total
 
 
-def targets() -> list[Path]:
+def targets(extra_run_dirs: list[str] | None = None) -> list[Path]:
     found: list[Path] = []
     for pattern in ARTEFACTS:
         if any(ch in pattern for ch in "*?["):
@@ -118,7 +117,17 @@ def targets() -> list[Path]:
             path = ROOT / pattern
             if path.exists():
                 found.append(path)
-    return found
+    for value in extra_run_dirs or []:
+        path = Path(value)
+        if not path.is_absolute():
+            path = ROOT / path
+        path = path.resolve()
+        if path == ROOT or ROOT.resolve() not in path.parents:
+            raise SystemExit(f"refusing run directory outside the repository: {path}")
+        if path.exists():
+            found.append(path)
+    # A caller may explicitly pass the default `runs`, which is already listed.
+    return list(dict.fromkeys(found))
 
 
 def human(n: int) -> str:
@@ -133,10 +142,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--apply", action="store_true", help="actually move (default: dry run)")
-    parser.add_argument("--label", default=f"pre_icl_{time.strftime('%Y%m%d_%H%M')}",
+    parser.add_argument("--label", default=f"protocol_{time.strftime('%Y%m%d_%H%M')}",
                         help="archive subdirectory name")
     parser.add_argument("--force", action="store_true",
                         help="move even though a job looks live (do not use)")
+    parser.add_argument("--runs-dir", action="append", default=[],
+                        help="additional run directory used by the current pipeline")
     args = parser.parse_args()
 
     live = running_jobs()
@@ -147,7 +158,7 @@ def main() -> None:
         raise SystemExit("stop the sweep first, or pass --force if these are unrelated")
 
     destination = ARCHIVE / args.label
-    found = targets()
+    found = targets(args.runs_dir)
     if not found:
         print("  nothing to archive: all artefact locations are already empty")
         return
@@ -167,11 +178,9 @@ def main() -> None:
 
     if args.apply:
         (destination / "WHY.txt").write_text(
-            "Artefacts from the protocol in force before the answer-format instruction\n"
-            "and the tiered extractors were added. Scores here were produced from\n"
-            "different model inputs and different grading, so they must not be placed\n"
-            "in the same table as later runs. Kept because the run is still the only\n"
-            "evidence for the measured per-method budgets and failure modes.\n"
+            "Artefacts from a previous experiment protocol. They are isolated because\n"
+            "different prompts, data, sampling, or search-time grading cannot share a\n"
+            "result table. Kept for audit and measured-budget evidence.\n"
             f"\narchived {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
             encoding="utf-8")
         print(f"  wrote {destination / 'WHY.txt'}")

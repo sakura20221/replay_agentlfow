@@ -6,10 +6,10 @@ If each repo kept its own evaluator, differences between methods would partly
 reflect differences in answer extraction and grading, which is exactly the
 confound this bake-off exists to remove.
 
-Scoring is not reimplemented: for MATH, AMC, MBPP and DROP it delegates to
-AFlow's published benchmark classes unmodified, so "one grading standard" holds
-at the level of the actual code path. MMLU-Pro has no AFlow evaluator and is
-implemented here, following the same contract.
+The MATH/AMC and MBPP paths retain AFlow's published evaluators as their base,
+with shared extraction and benchmark-contract fixes around them. DROP uses the
+official token-F1 definition because AFlow's simplified copy differs from the
+published metric. MMLU-Pro has no AFlow evaluator and is implemented here.
 """
 
 from __future__ import annotations
@@ -316,15 +316,19 @@ ANSWER_FORMAT = {
         "  \\boxed{{42}}"
     ),
     "mbpp": (
-        "Return exactly one self-contained Python function in a single code "
-        "block, with no explanation after it.\n"
+        "Return self-contained Python code in a single code block. It must "
+        "define the requested entry-point function and may include any helper "
+        "functions or classes it needs. Include no explanation after the code.\n"
         "Format example (format only, unrelated to this problem):\n"
+        "```python\n"
         "def example_name(x):\n"
-        "    return x"
+        "    return x\n"
+        "```"
     ),
     "drop": (
         "Your reply MUST end with a line of the form 'Answer: <answer>', where "
-        "<answer> is the shortest exact span from the passage and nothing else "
+        "<answer> is the concise answer (a span, number, date, or list as "
+        "appropriate) and nothing else "
         "follows it.\n"
         "Format example (format only, unrelated to this passage):\n"
         "  ... reasoning ...\n"
@@ -345,10 +349,10 @@ REQUIRE_ANSWER_FORMAT = os.getenv("BENCH_REQUIRE_ANSWER_FORMAT", "1") not in {"0
 def protocol_fingerprint() -> dict[str, str]:
     """What the model was shown, and how the reply was graded.
 
-    Two separate hashes because they invalidate different things. A change to the
-    *prompt* changes the model's input, so an old run and a new one are answering
-    different questions and their scores must never share a table. A change to the
-    *scorer* only changes grading, which can be re-applied to stored predictions.
+    The common prompt, complete scorer source, and all method-adaptation sources
+    are hashed separately. The broad source hash is deliberate: a role-prompt or
+    orchestration change in one shim is just as protocol-relevant as changing the
+    common answer-format suffix.
 
     Written into every job directory by sweep.py and checked by collect.py, so a
     leftover artefact from an earlier protocol is reported rather than silently
@@ -359,22 +363,46 @@ def protocol_fingerprint() -> dict[str, str]:
         {"answer_format": ANSWER_FORMAT, "required": REQUIRE_ANSWER_FORMAT},
         sort_keys=True, ensure_ascii=False,
     )
-    scorer_material = json.dumps(
-        {
-            "span_tiers": [(name, pattern.pattern) for name, pattern in _SPAN_TIERS],
-            "math_fallbacks": [(name, pattern.pattern) for name, pattern in _MATH_FALLBACKS],
-            "short_span": _SHORT_SPAN,
-            "math_short_tail": _MATH_SHORT_TAIL,
-            "latex_cosmetic": [(p.pattern, r) for p, r in _LATEX_COSMETIC],
-            "mbpp_uniform_indent": _MBPP_UNIFORM_DEDENT_VERSION,
-            "mbpp_test_setup": _MBPP_TEST_SETUP_VERSION,
-        },
-        sort_keys=True, ensure_ascii=False,
+    scorer_material = Path(__file__).read_bytes()
+    adapter_paths = [
+        ROOT / "sweep.py",
+        ROOT / "flowbank_pipeline.py",
+        ROOT / "aflow_test.py",
+        ROOT / "vllm_proxy.py",
+        ROOT / "launch_vllm.sh",
+        ROOT / "upstreams.lock.json",
+    ]
+    adapter_paths.extend(
+        path for path in sorted((ROOT / "shims").rglob("*"))
+        if path.is_file() and path.suffix in {".py", ".json", ".yaml", ".yml"}
     )
+    adapter_hash = hashlib.sha256()
+    for path in adapter_paths:
+        relative = path.relative_to(ROOT).as_posix().encode("utf-8")
+        adapter_hash.update(len(relative).to_bytes(4, "big"))
+        adapter_hash.update(relative)
+        contents = path.read_bytes()
+        adapter_hash.update(len(contents).to_bytes(8, "big"))
+        adapter_hash.update(contents)
     return {
         "prompt": hashlib.sha256(prompt_material.encode("utf-8")).hexdigest()[:16],
-        "scorer": hashlib.sha256(scorer_material.encode("utf-8")).hexdigest()[:16],
+        "scorer": hashlib.sha256(scorer_material).hexdigest()[:16],
+        "adapter": adapter_hash.hexdigest()[:16],
     }
+
+
+def data_fingerprint(name: str) -> str:
+    """Hash the exact search and evaluation bytes used by one dataset cell."""
+    if name not in DATASETS:
+        raise KeyError(name)
+    digest = hashlib.sha256()
+    for suffix in ("_search.jsonl", ".jsonl"):
+        path = DATA_DIR / f"{name}{suffix}"
+        contents = path.read_bytes()
+        digest.update(path.name.encode("utf-8"))
+        digest.update(len(contents).to_bytes(8, "big"))
+        digest.update(contents)
+    return digest.hexdigest()[:16]
 
 
 def question_text(name: str, row: dict) -> str:
@@ -888,6 +916,47 @@ _OUTER_PARENS = re.compile(r"^\((.+)\)$")
 
 
 _BASE_SUFFIX = re.compile(r"^(.*?)_\{?(\d+)\}?$")
+_PLAIN_SQRT_ALLOWED = re.compile(r"[A-Za-z0-9_+*/().^{}\[\]\\\s-]+")
+
+
+def _plain_sqrt_to_latex(text: str) -> str | None:
+    """Mechanically convert a narrow, balanced plain ``sqrt(...)`` form.
+
+    This never evaluates model text. Prose, code, existing LaTeX, unsupported
+    characters and malformed parentheses are rejected and remain untouched.
+    """
+    if ("sqrt(" not in text or r"\sqrt(" in text
+            or not _PLAIN_SQRT_ALLOWED.fullmatch(text)):
+        return None
+
+    def convert(value: str) -> str | None:
+        output: list[str] = []
+        cursor = 0
+        while cursor < len(value):
+            start = value.find("sqrt(", cursor)
+            if start < 0:
+                output.append(value[cursor:])
+                break
+            output.append(value[cursor:start])
+            depth = 1
+            end = start + len("sqrt(")
+            while end < len(value) and depth:
+                if value[end] == "(":
+                    depth += 1
+                elif value[end] == ")":
+                    depth -= 1
+                end += 1
+            if depth:
+                return None
+            inner = convert(value[start + len("sqrt("):end - 1])
+            if inner is None or not inner.strip():
+                return None
+            output.append(r"\sqrt{" + inner + "}")
+            cursor = end
+        return "".join(output)
+
+    converted = convert(text)
+    return converted if converted != text else None
 
 
 def _drop_onesided_base_suffix(a: str, b: str) -> tuple[str, str]:
@@ -926,6 +995,8 @@ def _sympy_equal_direct(a: str, b: str) -> bool:
     # string-level tiers above already handle their legitimate variants.
     if any(ch in a or ch in b for ch in ",;_=<>"):
         return False
+    a = _plain_sqrt_to_latex(a) or a
+    b = _plain_sqrt_to_latex(b) or b
     try:
         from sympy import N, simplify
         from sympy.parsing.latex import parse_latex
@@ -1242,7 +1313,6 @@ def score(name: str, row: dict, prediction: str) -> tuple[float, str]:
         # punctuation, so passing the joined string would fuse "57|57" into the
         # single token "5757" and score a correct answer as 0. AFlow itself
         # splits in evaluate_problem and keeps the best candidate.
-        scorer = _aflow_scorer("drop")
         span = _extract_drop_span(prediction)
         counts = _extraction_stats["drop"]
         counts["scored"] += 1

@@ -46,6 +46,23 @@ def run(label: str, command: list[str], must_contain: str | None = None,
 def main() -> None:
     print("### preflight: static gates, no GPU spend ###\n")
 
+    # 0. Frozen inputs and runtime prompts. These checks need no model server and
+    # catch identity/boundary errors before any benchmark process is launched.
+    run("frozen split identity, hashes and boundaries",
+        [sys.executable, "scripts/verify_data.py"])
+    run("train-then-eval concatenations",
+        [sys.executable, "make_train_then_eval.py", "--check"])
+    run("runtime prompt contamination (all methods/datasets)",
+        [sys.executable, "audits/scan_prompt_contamination.py"])
+    run("FlowBank UID aggregation regression",
+        [sys.executable, "audits/test_flowbank_uid_aggregation.py"])
+    run("complete sweep matrix and boundary regression",
+        [sys.executable, "audits/test_sweep_matrix.py"])
+    run("protocol isolation and resume regression",
+        [sys.executable, "audits/test_protocol_isolation.py"])
+    run("collector strictness regression",
+        [sys.executable, "audits/test_collector_strictness.py"])
+
     # 1. Serving side: both vLLM instances up, at the window the proxy assumes.
     for port in (8001, 8002):
         try:
@@ -76,18 +93,13 @@ def main() -> None:
         report(proc.returncode == 0 and not bad, f"{shim} --check",
                bad[0].strip() if bad else "")
 
-    # 3. The scorer must give its own gold answers full marks. mbpp is allowed its
-    #    one declared exception (the reference solution built on `class Node`,
-    #    which the author sanitizer strips for every method equally).
+    # 3. The scorer must give every frozen gold answer full marks.
     python = str(ROOT / "envs/maas/bin/python")
-    for dataset in ("math", "amc", "drop", "mmlu_pro"):
+    run("MBPP public-test identity lookup",
+        [python, "audits/test_mbpp_public_lookup.py"])
+    for dataset in ("math", "amc", "mbpp", "drop", "mmlu_pro"):
         run(f"gold roundtrip: {dataset}",
             [python, "audits/test_gold_roundtrip.py", "--dataset", dataset], "[OK]")
-    proc = subprocess.run([python, "audits/test_gold_roundtrip.py", "--dataset", "mbpp"],
-                          capture_output=True, text=True, cwd=ROOT, timeout=900)
-    ok = "2 did not score" in proc.stdout or "[OK]" in proc.stdout
-    report(ok, "gold roundtrip: mbpp (<=1 declared item)",
-           "" if ok else proc.stdout.strip().splitlines()[-1][:120])
 
     # 4. LaTeX equivalence must work in every env that ever grades maths.
     for env in ("maas", "gdesigner", "pyg"):

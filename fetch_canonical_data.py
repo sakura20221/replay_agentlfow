@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Materialise the five benchmarks from canonical upstream splits.
+"""Materialise benchmarks whose frozen files come from canonical upstream data.
 
-Why not reuse FlowBank's shipped jsonl: an audit of those files showed
-non-standard slicing that is not documented anywhere in the repo --
-`math_test.jsonl` is Level-5 only and covers just 4 of MATH's 7 subject types,
-and only 60% of `mbpp_test.jsonl` falls inside MBPP's official test range
-(some ids come from the canonical few-shot prompt region). Those splits are not
-comparable to any published number and cannot be defended in review, so every
-method here is fed upstream splits instead.
+MATH and AMC intentionally use the AFlow/FlowBank shipped splits for published
+comparison and are therefore not rebuilt here. MBPP, DROP and MMLU-Pro use the
+upstream datasets named below. Existing manifest entries are preserved.
 
 Every subsample is a fixed-seed, documented operation, and a manifest with row
 counts plus a content hash is written next to the data so a reviewer can verify
@@ -27,6 +23,7 @@ os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 from datasets import load_dataset  # noqa: E402
+from shared.data_utils import mbpp_entry_point, write_manifest
 
 OUT = Path(__file__).resolve().parent / "shared" / "data"
 SEED = 20260821
@@ -37,60 +34,15 @@ MMLU_PRO_PER_CATEGORY = 80
 def write(name: str, rows: list[dict]) -> dict:
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"{name}.jsonl"
-    digest = hashlib.sha256()
     with path.open("w", encoding="utf-8") as handle:
         for row in rows:
             line = json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
             handle.write(line + "\n")
-            digest.update(line.encode("utf-8"))
-    return {"file": path.name, "n": len(rows), "sha256": digest.hexdigest()[:16]}
-
-
-def build_math() -> tuple[list[dict], dict]:
-    """HuggingFaceH4/MATH-500: the standard 500-problem MATH test set."""
-    ds = load_dataset("HuggingFaceH4/MATH-500", split="test")
-    rows = [
-        {
-            "uid": f"math/{row.get('unique_id') or i}",
-            "problem": row["problem"],
-            "answer": row["answer"],
-            "solution": row.get("solution", ""),
-            "level": row.get("level"),
-            "type": row.get("subject") or row.get("type"),
-        }
-        for i, row in enumerate(ds)
-    ]
-    meta = {
-        "source": "HuggingFaceH4/MATH-500 [test]",
-        "sampling": "none (full canonical split)",
-        "levels": dict(Counter(str(r["level"]) for r in rows)),
-        "types": dict(Counter(str(r["type"]) for r in rows)),
+    return {
+        "file": path.name,
+        "n": len(rows),
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest()[:16],
     }
-    return rows, meta
-
-
-def build_amc() -> tuple[list[dict], dict]:
-    """AI-MO/aimo-validation-amc: the largest canonical AMC set (n=83).
-
-    No larger canonical AMC split exists, so this benchmark is inherently a
-    low-power secondary signal: one item moves the score by ~1.2 points.
-    """
-    ds = load_dataset("AI-MO/aimo-validation-amc", split="train")
-    rows = [
-        {
-            "uid": f"amc/{row.get('id', i)}",
-            "problem": row["problem"],
-            "answer": str(row["answer"]),
-            "url": row.get("url", ""),
-        }
-        for i, row in enumerate(ds)
-    ]
-    meta = {
-        "source": "AI-MO/aimo-validation-amc [train]",
-        "sampling": "none (full canonical split)",
-        "caveat": f"n={len(rows)}; 1 item = {100 / max(len(rows), 1):.2f} points. Secondary signal only.",
-    }
-    return rows, meta
 
 
 def build_mbpp() -> tuple[list[dict], dict]:
@@ -99,7 +51,7 @@ def build_mbpp() -> tuple[list[dict], dict]:
     rows = []
     for row in ds:
         tests = list(row["test_list"])
-        entry_point = row["code"].split("def ", 1)[1].split("(", 1)[0].strip() if "def " in row["code"] else ""
+        entry_point = mbpp_entry_point(row["code"], tests)
         rows.append(
             {
                 "uid": f"mbpp/{row['task_id']}",
@@ -178,30 +130,34 @@ def build_mmlu_pro() -> tuple[list[dict], dict]:
     return rows, meta
 
 
-# math and amc were re-based on the AFlow/FlowBank shipped splits on 2026-08-24;
-# re-running their original builders would silently clobber the adopted files,
-# so they are parked out of BUILDERS (build_math / build_amc kept for the record).
 BUILDERS = {
     "mbpp": build_mbpp,
     "drop": build_drop,
     "mmlu_pro": build_mmlu_pro,
 }
+EXPECTED_ROWS = {"mbpp": 500, "drop": DROP_N, "mmlu_pro": 14 * MMLU_PRO_PER_CATEGORY}
 
 
 def main() -> None:
-    manifest = {"seed": SEED, "datasets": {}}
+    manifest_path = OUT / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["seed"] = SEED
+    manifest.setdefault("datasets", {})
     for name, builder in BUILDERS.items():
         print(f"[{name}] fetching ...", flush=True)
         rows, meta = builder()
+        if len(rows) != EXPECTED_ROWS[name]:
+            raise RuntimeError(
+                f"{name}: upstream produced {len(rows)} rows; expected {EXPECTED_ROWS[name]}")
         info = write(name, rows)
         manifest["datasets"][name] = {**info, **meta}
         print(f"[{name}] n={info['n']} sha={info['sha256']}", flush=True)
 
     total = sum(entry["n"] for entry in manifest["datasets"].values())
     manifest["total_items"] = total
-    (OUT / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_manifest(manifest_path, manifest)
     print(f"\ntotal evaluation items = {total}")
-    print(f"manifest -> {OUT / 'manifest.json'}")
+    print(f"manifest -> {manifest_path}")
 
 
 if __name__ == "__main__":

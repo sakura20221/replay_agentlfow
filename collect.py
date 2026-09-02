@@ -8,8 +8,8 @@ registry rather than one parser. Two rules apply throughout:
    training and evaluation in one process over one concatenated file and print a
    running accuracy, so the figure on screen mixes the two phases at the moment it
    was printed. Their per-item records are re-scored here, keeping only items that
-   belong to the evaluation split -- matched by question text against
-   shared/data, not by assuming a record offset.
+   belong to the evaluation split -- matched by stable item uid against
+   shared/data, not by question text or by assuming a record offset.
 
 2. **Say "pending" or "unavailable", never guess.** A missing number is a phase
    that has not finished or an extractor that does not apply; inventing one is how
@@ -167,16 +167,16 @@ def regrade(dataset: str, record: dict) -> float:
     gold, every one of them mis-graded -- while the collector cheerfully reported
     the note "recomputed".
 
-    Grading is a pure function of (reply, gold) and both are in the record, so this
-    is exact and costs no GPU. Falls back to the stored verdict only when the reply
-    is missing, and says so via the returned value being the stored one.
+    Grading is a pure function of (reply, gold) and both must be in every current
+    record. Missing inputs or a grading exception are collection failures; using
+    the stored verdict would silently mix scorer versions.
     """
     import bench as shared_bench
 
     reply = record.get("Response")
     gold = record.get("Answer")
     if reply is None or gold is None:
-        return float(record.get("Solved") or 0.0)
+        raise ValueError("stored item lacks Response or Answer; cannot re-grade")
     # The G-Designer family stores the reply as the repr of a one-element list,
     # e.g. "['Answer: Yangshao']". Left as-is the extractor drags the closing
     # bracket and quote into the span.
@@ -192,66 +192,48 @@ def regrade(dataset: str, record: dict) -> float:
         text = str(text[0]) if text else ""
     row = _grading_row(dataset, str(gold))
     if row is None:
-        # An mbpp record whose gold matches no dataset row cannot be re-executed;
-        # the stored verdict is the only grade there is.
-        return float(record.get("Solved") or 0.0)
-    try:
-        value, _extracted = shared_bench.score(dataset, row, str(text))
-        return float(value)
-    except Exception:  # noqa: BLE001 - a grading crash must not lose the cell
-        return float(record.get("Solved") or 0.0)
+        raise ValueError("stored MBPP gold matches no frozen dataset row")
+    value, _extracted = shared_bench.score(dataset, row, str(text))
+    return float(value)
 
 
-def protocol_mismatch(job: Path) -> str | None:
-    """Whether this job ran under the prompt/scorer the code now implements.
+def protocol_mismatch(job: Path, method: str, dataset: str) -> str | None:
+    """Whether this job ran under the complete protocol now implemented.
 
-    A score produced under a different answer-format instruction answers a
-    different question, so it cannot share a table with a current one. Returning
-    a reason here turns that from an invisible average into a visible refusal.
+    Different prompts, search-time grading, data, sampling, or method adapters
+    can all change the selected artifact. Returning a reason turns an otherwise
+    invisible mixed-protocol average into a visible refusal.
     """
     import bench as shared_bench
 
     stamp = job / "protocol.json"
-    current = shared_bench.protocol_fingerprint()
+    from vllm_proxy import sampling_protocol
+
+    current = {
+        **shared_bench.protocol_fingerprint(),
+        "data": shared_bench.data_fingerprint(dataset),
+        "sampling": sampling_protocol(),
+        "method": method,
+        "dataset": dataset,
+        "run_tag": RUN_TAG,
+        "repeat": 1,
+    }
     if not stamp.exists():
         return "no protocol.json: predates protocol stamping, cannot be shown to match"
     try:
         recorded = json.loads(stamp.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return "protocol.json unreadable"
-    if recorded.get("prompt") != current["prompt"]:
-        return (f"prompt protocol {recorded.get('prompt')} != current {current['prompt']}: "
-                f"the model saw different text, scores are not comparable")
-    # A scorer change is NOT a refusal.
-    #
-    # The two hashes invalidate different things, which is why they are separate.
-    # A different prompt means the model answered a different question and no
-    # amount of recomputation fixes that. A different scorer only changes grading,
-    # and grading is a pure function of (stored reply, gold) -- which is exactly
-    # what this collector recomputes for every cell. Refusing here made a scorer
-    # fix look like it had invalidated the whole sweep: after the DROP extractor
-    # was corrected, all 26 started jobs reported "regrade before reporting" while
-    # the regrade was already happening one function below.
-    #
-    # It is still surfaced, because the number being shown is no longer the one the
-    # run wrote, and a reader comparing against an older table needs to know that.
-    if recorded.get("scorer") != current["scorer"]:
-        return None
+    mismatches = [key for key, value in current.items()
+                  if recorded.get(key) != value]
+    if mismatches:
+        detail = ", ".join(
+            f"{key}={recorded.get(key)!r} (current {current[key]!r})"
+            for key in mismatches
+        )
+        return (f"protocol mismatch: {detail}. Search rewards or model inputs may "
+                "differ; re-grading final replies cannot prove equivalence")
     return None
-
-
-def scorer_changed(job: Path) -> bool:
-    """Whether this job's stored scores were written by a different scorer."""
-    import bench as shared_bench
-
-    stamp = job / "protocol.json"
-    if not stamp.exists():
-        return False
-    try:
-        recorded = json.loads(stamp.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return False
-    return recorded.get("scorer") != shared_bench.protocol_fingerprint()["scorer"]
 
 
 def _find_result_file(method: str, dataset: str) -> Path | None:
@@ -316,6 +298,11 @@ def from_item_records(job: Path, method: str, dataset: str) -> dict:
                 "note": f"REFUSING: {total} distinct eval uids but the split has "
                         f"{expected}; {result_file.name} is not from one run"}
     coverage = total / expected
+    finished = (job / "status").exists() and (job / "status").read_text().strip() == "ok"
+    if finished and RUN_TAG != "smoke" and total != expected:
+        raise ValueError(f"finished result covers {total}/{expected} evaluation items")
+    if finished and RUN_TAG != "smoke" and unidentified:
+        raise ValueError(f"finished result contains {unidentified} item(s) without uid")
     note = (f"recomputed over {total}/{expected} eval items "
             f"({len(records)} records total, {result_file.name})")
     if coverage < 0.98:
@@ -386,7 +373,11 @@ def from_maas_csv(method: str, dataset: str, job: Path | None = None) -> dict | 
     coverage = items / expected_items if expected_items else 1.0
     note = f"re-graded over {items}/{expected_items} eval items ({path.name})"
     if unmatched:
-        note += f"; {unmatched} row(s) matched no dataset row"
+        raise ValueError(f"{unmatched} stored row(s) matched no frozen dataset row")
+    finished = job is not None and (job / "status").exists() \
+        and (job / "status").read_text().strip() == "ok"
+    if finished and RUN_TAG != "smoke" and items != expected_items:
+        raise ValueError(f"finished result covers {items}/{expected_items} evaluation items")
     if coverage < 0.98:
         note = f"PARTIAL {coverage:.0%} -- " + note
     return {"score": total / items, "n": items, "coverage": round(coverage, 4),
@@ -394,10 +385,12 @@ def from_maas_csv(method: str, dataset: str, job: Path | None = None) -> dict | 
 
 
 def from_log_average(job: Path, method: str, dataset: str) -> dict:
-    """MaAS / DAAO: re-grade the per-item file; fall back to the logged average."""
+    """MaAS / DAAO: re-grade per-item output; logs are progress only."""
     regraded = from_maas_csv(method, dataset, job)
     if regraded is not None:
         return regraded
+    if (job / "status").exists() and (job / "status").read_text().strip() == "ok":
+        raise ValueError("finished job has no re-gradeable per-item CSV")
     log = job / "test.log"
     if not log.exists():
         return {"score": None, "note": "test phase has not run"}
@@ -469,6 +462,9 @@ def from_masrouter_items(job: Path, dataset: str) -> dict | None:
         return None
     expected = len(eval_uids(dataset))
     coverage = items / expected if expected else 1.0
+    finished = (job / "status").exists() and (job / "status").read_text().strip() == "ok"
+    if finished and RUN_TAG != "smoke" and items != expected:
+        raise ValueError(f"finished result covers {items}/{expected} evaluation items")
     note = f"re-graded over {items}/{expected} eval items (scored_items dump)"
     if coverage < 0.98:
         note = f"PARTIAL {coverage:.0%} -- " + note
@@ -477,10 +473,12 @@ def from_masrouter_items(job: Path, dataset: str) -> dict | None:
 
 
 def from_masrouter(job: Path, method: str, dataset: str) -> dict:
-    """MasRouter: re-grade from the per-item dump; fall back to the log's mean."""
+    """MasRouter: re-grade per-item output; logs are progress only."""
     regraded = from_masrouter_items(job, dataset)
     if regraded is not None:
         return regraded
+    if (job / "status").exists() and (job / "status").read_text().strip() == "ok":
+        raise ValueError("finished job has no re-gradeable per-item dump")
     log = job / "search.log"
     if not log.exists():
         return {"score": None, "note": "job has not started"}
@@ -508,18 +506,14 @@ def from_masrouter(job: Path, method: str, dataset: str) -> dict:
 
     expected = len(shared_bench.load(dataset))
     coverage = evaluated / expected if expected else 0.0
-    # "Finish testing" is the runner's own completion banner. Without checking it
-    # the note said "running mean" forever, and a finished job read as a stalled
-    # one -- that misread cost half an hour of stall-hunting on a job that had
-    # exited cleanly. 992/1000 with the banner present is not partial coverage:
-    # the author's test loop batches by int(len/batch_size), so the final partial
-    # batch (8 items here) is never evaluated, by their design.
+    # "Finish testing" is the runner's own completion banner. The shared runner
+    # uses ceiling division for both loops, so a finished current-protocol run
+    # must retain the final partial batch and reach the full evaluation split.
+    # Older runs that predate that fix remain visibly partial.
     finished = "Finish testing" in tail
     state = "FINAL" if finished else "running"
-    note = (f"{state} mean over {evaluated}/{expected} items ({len(hits)} batches"
-            + (", author's batching skips the last partial batch)" if finished
-               else ")"))
-    if coverage < 0.98 and not finished:
+    note = f"{state} mean over {evaluated}/{expected} items ({len(hits)} batches)"
+    if coverage < 0.98:
         note = f"PARTIAL {coverage:.0%} -- " + note
     return {"score": float(hits[-1]), "n": evaluated,
             "coverage": round(coverage, 4), "note": note}
@@ -576,6 +570,9 @@ def from_flowbank(job: Path, method: str, dataset: str) -> dict:
         return {"score": None, "note": "stages 2-3 not run yet (flowbank_pipeline.py)"}
     summary = json.loads(runs[-1].read_text(encoding="utf-8"))["summary"]
     n = int(summary.get("num_queries") or 0)
+    expected = len(eval_uids(dataset))
+    if n != expected:
+        raise ValueError(f"FlowBank selector covers {n}/{expected} evaluation items")
     oracle = summary.get("result_golden")
     single = summary.get("best_performed_workflow_score")
     extras = []
@@ -633,13 +630,14 @@ def main() -> None:
     parser.add_argument("--json", help="also write the table here")
     parser.add_argument("--ignore-protocol", action="store_true",
                         help="report jobs whose protocol stamp does not match the current "
-                             "prompt/scorer. Only for inspecting an older run in isolation -- "
+                             "source/data/sampling protocol. Only for inspecting an older run in isolation -- "
                              "such numbers must not be placed in the same table as current ones.")
     args = parser.parse_args()
 
     table: dict[str, dict] = {}
     fingerprint = __import__("bench").protocol_fingerprint()
-    print(f"  tag={RUN_TAG}  runs={RUNS}  prompt={fingerprint['prompt']} scorer={fingerprint['scorer']}")
+    print(f"  tag={RUN_TAG}  runs={RUNS}  prompt={fingerprint['prompt']} "
+          f"scorer={fingerprint['scorer']} adapter={fingerprint['adapter']}")
     print(f"  {'method':<26}{'dataset':<10}{'held-out':>10}{'n':>7}{'tokens':>12}   note")
     for method in EXTRACTORS:
         for dataset in DATASETS:
@@ -647,7 +645,7 @@ def main() -> None:
             if not job.exists():
                 continue
             status = (job / "status").read_text(encoding="utf-8").strip() if (job / "status").exists() else "running"
-            stale = protocol_mismatch(job)
+            stale = protocol_mismatch(job, method, dataset)
             if stale and not args.ignore_protocol:
                 found = {"score": None, "note": f"STALE PROTOCOL: {stale}"}
             else:

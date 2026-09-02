@@ -350,7 +350,7 @@ def _shim_code_dataset() -> str:
     serves several datasets, so the answer cannot be baked in at install time.
     """
     marker = (_shim_os.getenv("SHIM_DATASET", "") or " ".join(_shim_sys.argv)).upper()
-    return "MBPP" if "MBPP" in marker else "HumanEval"
+    return "SHARED_MBPP" if "MBPP" in marker else "HumanEval"
 
 
 def _shim_on_mmlu_pro() -> bool:
@@ -430,6 +430,13 @@ def patch_mbpp_test_dataset(pkg: Path) -> None:
     patched = already = 0
     for path in sorted(base.glob("*/*/template/operator.py")):
         text = path.read_text(encoding="utf-8")
+        upgraded = text.replace(
+            'return "MBPP" if "MBPP" in marker else "HumanEval"',
+            'return "SHARED_MBPP" if "MBPP" in marker else "HumanEval"',
+        )
+        if upgraded != text:
+            path.write_text(upgraded, encoding="utf-8")
+            text = upgraded
         # The condition is about the *call site*, not about the helper existing.
         # Testing for "_shim_code_dataset()" skipped all sixteen files the moment
         # the ScEnsemble block (which defines that helper) was re-appended, leaving
@@ -450,76 +457,153 @@ def patch_mbpp_test_dataset(pkg: Path) -> None:
 
 
 def write_mbpp_public_tests(pkg: Path) -> None:
-    """Complete the MBPP public-test lookup the `Test` operator depends on.
-
-    `extract_test_cases_from_jsonl(entry_point)` returns None for a function name
-    it cannot find, and the Test operator iterates the result without checking:
-
-        test_cases = extract_test_cases_from_jsonl(entry_point, dataset="MBPP")
-        for test_case in test_cases:          # TypeError when None
-
-    The authors' file carries 427 names, which covered their own MBPP subset. It
-    covers 34% of our search split, so two thirds of the items raised instead of
-    being scored: 225 samples discarded in daao/mbpp and -- MaAS ships no file at
-    all -- 106 in maas/mbpp, against 0 in aflow/flowbank, which already had this
-    fix. That is a 70% training-signal loss for two methods and none for the other
-    two, i.e. a harness artefact, not a method difference.
-
-    Extends rather than replaces: the authors' entries stay, ours fill the gaps, and
-    the file keeps the path and schema their code already reads, so no code is
-    patched. Only the workflow's own self-check consults this file -- final grading
-    goes through shared/bench.py against `test_list` -- so a wrong entry here cannot
-    change a score, it can only mislead a workflow about its own output.
-    """
+    """Write one task-aware public-test record per shared MBPP item."""
     import re as _re
 
     data_dir = pkg / "ext" / "maas" / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
-    target = data_dir / "mbpp_public_test.jsonl"
-
-    existing: dict[str, dict] = {}
-    if target.exists():
-        for line in target.read_text(encoding="utf-8").splitlines():
-            if line.strip():
-                row = json.loads(line)
-                existing[row.get("entry_point")] = row
-    author_count = len(existing)
-
-    added = collisions = 0
-    for name in ("mbpp.jsonl", "mbpp_search.jsonl"):
-        source = DATA / name
-        if not source.exists():
-            report(False, f"missing shared split {name}")
-            continue
-        with source.open(encoding="utf-8") as handle:
-            for line in handle:
-                if not line.strip():
-                    continue
-                row = json.loads(line)
-                entry, tests = row.get("entry_point"), row.get("test_list") or []
-                if not entry or not tests:
-                    continue
-                if entry in existing:
-                    # First wins. The operator is called as test(problem, solution,
-                    # entry_point) with no task_id, so two MBPP problems sharing a
-                    # function name are indistinguishable to it -- the authors' own
-                    # file has the same ambiguity.
-                    collisions += 1
-                    continue
-                existing[entry] = {
-                    "entry_point": entry,
-                    # The tests are written against `candidate`, which is the name
-                    # the operator binds the generated function to.
-                    "test": [_re.sub(rf"\b{_re.escape(entry)}\b", "candidate", t) for t in tests],
-                }
-                added += 1
-
+    target = data_dir / "shared_mbpp_public_test.jsonl"
+    written = 0
+    entry_counts: dict[str, int] = {}
     with target.open("w", encoding="utf-8") as handle:
-        for row in existing.values():
-            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
-    report(added > 0 or author_count > 0,
+        for name in ("mbpp.jsonl", "mbpp_search.jsonl"):
+            source = DATA / name
+            if not source.exists():
+                report(False, f"missing shared split {name}")
+                continue
+            with source.open(encoding="utf-8") as source_handle:
+                for line in source_handle:
+                    if not line.strip():
+                        continue
+                    row = json.loads(line)
+                    entry, tests = row.get("entry_point"), row.get("test_list") or []
+                    if not entry or not tests:
+                        continue
+                    entry_counts[entry] = entry_counts.get(entry, 0) + 1
+                    renamed = [
+                        _re.sub(rf"\b{_re.escape(entry)}\b", "candidate", test)
+                        for test in tests
+                    ]
+                    task = (f"{row.get('prompt', '')}\n\n"
+                            "Your code must pass these tests:\n" + "\n".join(tests))
+                    handle.write(json.dumps({
+                        "uid": row.get("uid", ""),
+                        "entry_point": entry,
+                        "prompt": row.get("prompt", ""),
+                        "task": task,
+                        "test": renamed,
+                    }, ensure_ascii=False) + "\n")
+                    written += 1
+    report(written > 0,
            f"MBPP public tests -> {target.relative_to(ROOT)} "
-           f"({author_count} from the authors + {added} added, {collisions} name collisions)")
+           f"({written} items, "
+           f"{sum(n - 1 for n in entry_counts.values() if n > 1)} shared names)")
+
+
+def patch_mbpp_test_identity(pkg: Path) -> None:
+    """Resolve shared MBPP tests by entry point and the current task text."""
+    utils_path = pkg / "ext" / "maas" / "scripts" / "utils.py"
+    text = utils_path.read_text(encoding="utf-8")
+    old_sig = (
+        "def extract_test_cases_from_jsonl(entry_point: str, "
+        "dataset: CodeDataset = CodeDataset.HUMAN_EVAL):"
+    )
+    new_sig = old_sig[:-2] + ", problem: str = None):"
+    if old_sig in text:
+        text = text.replace(old_sig, new_sig, 1)
+
+    shared_branch = '''    if dataset == "SHARED_MBPP":
+        file_path = "{package}/ext/maas/data/shared_mbpp_public_test.jsonl"
+        hardcoded_cases = {{}}
+    elif dataset == CodeDataset.HUMAN_EVAL.value:'''.format(package=pkg.name)
+    author_branch = "    if dataset == CodeDataset.HUMAN_EVAL.value:"
+    if author_branch in text and 'dataset == "SHARED_MBPP"' not in text:
+        text = text.replace(author_branch, shared_branch, 1)
+
+    text = text.replace(
+        "    if entry_point in hardcoded_cases:\n"
+        "        return hardcoded_cases[entry_point]",
+        "    if problem is None and entry_point in hardcoded_cases:\n"
+        "        return hardcoded_cases[entry_point]",
+        1,
+    )
+    old_lookup = '''    with open(file_path, "r") as file:
+        for line in file:
+            data = json.loads(line)
+            if data.get("entry_point") == entry_point:
+                return data.get("test")
+
+    return None'''
+    new_lookup = '''    matches = []
+    task_matches = []
+    prompt_matches = []
+    with open(file_path, "r") as file:
+        for line in file:
+            data = json.loads(line)
+            if data.get("entry_point") != entry_point:
+                continue
+            task = str(data.get("task") or "")
+            prompt = str(data.get("prompt") or "")
+            if problem is not None and task and str(problem).startswith(task):
+                task_matches.append(data.get("test"))
+            if problem is not None and prompt and str(problem).startswith(prompt):
+                prompt_matches.append(data.get("test"))
+            matches.append(data.get("test"))
+
+    if len(task_matches) == 1:
+        return task_matches[0]
+    if len(prompt_matches) == 1:
+        return prompt_matches[0]
+    return matches[0] if len(matches) == 1 else None'''
+    if old_lookup in text:
+        text = text.replace(old_lookup, new_lookup, 1)
+    old_task_lookup = '''    matches = []
+    with open(file_path, "r") as file:
+        for line in file:
+            data = json.loads(line)
+            if data.get("entry_point") != entry_point:
+                continue
+            prompt = str(data.get("prompt") or "")
+            if problem is not None and prompt and str(problem).startswith(prompt):
+                return data.get("test")
+            matches.append(data.get("test"))
+
+    return matches[0] if len(matches) == 1 else None'''
+    if old_task_lookup in text:
+        text = text.replace(old_task_lookup, new_lookup, 1)
+    utils_path.write_text(text, encoding="utf-8")
+    verify_syntax(utils_path)
+
+    base = pkg / "ext" / "maas" / "scripts" / "optimized"
+    touched = 0
+    for path in sorted(base.glob("*/*/template/operator.py")):
+        body = path.read_text(encoding="utf-8")
+        updated = body.replace(
+            "def exec_code(self, solution, entry_point):",
+            "def exec_code(self, problem, solution, entry_point):",
+        )
+        updated = updated.replace(
+            "extract_test_cases_from_jsonl(entry_point, dataset=_shim_code_dataset())",
+            "extract_test_cases_from_jsonl(entry_point, dataset=_shim_code_dataset(), problem=problem)",
+        )
+        updated = updated.replace(
+            "self.exec_code(solution, entry_point)",
+            "self.exec_code(problem, solution, entry_point)",
+        )
+        if updated != body:
+            path.write_text(updated, encoding="utf-8")
+            verify_syntax(path)
+            touched += 1
+
+    final = utils_path.read_text(encoding="utf-8")
+    report('dataset == "SHARED_MBPP"' in final and "len(task_matches) == 1" in final,
+           "MBPP public-test lookup accepts task identity")
+    code_templates = [p for p in base.glob("*/*/template/operator.py")
+                      if "class Test" in p.read_text(encoding="utf-8")]
+    report(bool(code_templates) and all("problem=problem" in
+                                       p.read_text(encoding="utf-8")
+                                       for p in code_templates),
+           f"MBPP Test operators pass task identity ({touched} file(s) updated)")
 
 
 def patch_scensemble_labels(pkg: Path) -> None:
@@ -575,16 +659,16 @@ def patch_scensemble_labels(pkg: Path) -> None:
 #     imported, which is why editing them changes nothing. So the two datasets we
 #     added were being told to "solve the given mathematical problem" and to
 #     "present the final answer enclosed in \boxed{}", while the task text asks for
-#     a passage span or an option letter. Only task identity is rebound here:
+#     a passage short answer or an option letter. Only task identity is rebound here:
 #     which task this is, what the answer should look like, and the worked example.
 #     Roles keep their shape, the numbered guidelines keep their count and order,
 #     the output-format machinery, debate structure, SC_ENSEMBLE_PROMPT and
 #     SELFREFINE_PROMPT are untouched, and MATH/AMC see the author's text verbatim
 #     apart from repair (1).
-PROMPT_ADAPT_MARKER = "# --- shared-layer shim (agent_wf_v2) --- prompt task adaptation v3"
+PROMPT_ADAPT_MARKER = "# --- shared-layer shim (agent_wf_v2) --- prompt task adaptation v4"
 PROMPT_ADAPT_BLOCK = r'''
 
-# --- shared-layer shim (agent_wf_v2) --- prompt task adaptation v3
+# --- shared-layer shim (agent_wf_v2) --- prompt task adaptation v4
 # See shims/maas_family/install.py for why this is appended rather than edited in.
 # Every override below is a raw string: the mis-escaped LaTeX repaired just above
 # is exactly the bug that non-raw prompt literals cause.
@@ -644,8 +728,8 @@ Please answer the given reading comprehension question about the passage step by
 2. Outline the approach and identify the parts of the passage that bear on it.
 3. Provide the detailed derivation, quoting the figures, dates or names the passage gives.
 4. Explain each step of your reasoning.
-5. Present the final answer on a last line of the form 'Answer: <answer>', where <answer> is the shortest exact span from the passage.
-6. Ensure the answer is copied from the passage rather than paraphrased.
+5. Present the final answer on a last line of the form 'Answer: <answer>', where <answer> is the concise answer (a span, number, date, or list as appropriate).
+6. Quote the passage exactly when the question asks for a textual span.
 
 Your solution should be thorough, faithful to the passage, and easy to understand.
 """
@@ -657,8 +741,8 @@ Given the reading comprehension question, its passage and the output from the co
 2. Explain the approach and which parts of the passage were used.
 3. Show the step-by-step derivation, quoting the figures the passage gives.
 4. Interpret the code output and incorporate it into your explanation.
-5. Provide a final answer on a last line of the form 'Answer: <answer>', where <answer> is the shortest exact span from the passage.
-6. Ensure the answer is copied from the passage rather than paraphrased.
+5. Provide a final answer on a last line of the form 'Answer: <answer>', where <answer> is the concise answer (a span, number, date, or list as appropriate).
+6. Quote the passage exactly when the question asks for a textual span.
 
 Your response should be comprehensive, faithful to the passage, and easy to follow.
 """
@@ -671,7 +755,7 @@ Provide a comprehensive, step-by-step answer to the given reading comprehension 
 4. Clear explanations for each step, including the reasoning behind it.
 5. All figures and dates quoted exactly as the passage gives them.
 6. Visual aids or diagrams if applicable (described in text).
-7. A final answer clearly marked on a last line of the form 'Answer: <answer>', where <answer> is the shortest exact span from the passage.
+7. A final answer clearly marked on a last line of the form 'Answer: <answer>', where <answer> is the concise answer (a span, number, date, or list as appropriate).
 8. A brief explanation of the significance of the result, if relevant.
 
 Ensure your answer is rigorous, easy to follow, and faithful to the passage.
@@ -686,15 +770,15 @@ You are a highly skilled reading comprehension analyst tasked with answering a q
 4. Work the answer out step-by-step, showing all your work clearly.
 5. Double-check your reading and any arithmetic at each step.
 6. Provide a clear and concise final answer.
-7. Verify your answer against the passage, checking that the wording appears there.
+7. Verify your answer against the passage and any arithmetic against the stated figures.
 
 Format your answer as follows:
-- Quote spans exactly as the passage writes them.
+- Quote textual spans exactly as the passage writes them.
 - Show each step of your reasoning clearly.
 - Clearly state your final answer at the end of your solution.
 - Express numerical answers as precise values (avoid rounding unless specified).
-- Ensure that your final answer is the shortest exact span that answers the question, without any units or additional text.
-- Do not include any explanatory text with your final answer, just the span itself.
+- Ensure that your final answer is concise: a span, number, date, or list as appropriate.
+- Do not include any explanatory text on the final answer line.
 
 For example, if the final answer is 57, your response should end with just:
 Answer: 57
@@ -1100,10 +1184,11 @@ def check(pkg: Path, label: str) -> None:
     # MBPP public tests: assert coverage, not mere existence. The authors' file
     # exists and is 66% short of our split -- that is what silently discarded 225
     # samples, so the check has to measure the overlap.
-    public = pkg / "ext" / "maas" / "data" / "mbpp_public_test.jsonl"
+    public = pkg / "ext" / "maas" / "data" / "shared_mbpp_public_test.jsonl"
     if public.exists():
-        names = {json.loads(l)["entry_point"] for l in
-                 public.read_text(encoding="utf-8").splitlines() if l.strip()}
+        identities = {(json.loads(l).get("entry_point"), json.loads(l).get("prompt"))
+                      for l in public.read_text(encoding="utf-8").splitlines()
+                      if l.strip()}
         missing = 0
         total = 0
         for split in ("mbpp.jsonl", "mbpp_search.jsonl"):
@@ -1114,11 +1199,12 @@ def check(pkg: Path, label: str) -> None:
                 if not line.strip():
                     continue
                 total += 1
-                if json.loads(line).get("entry_point") not in names:
+                row = json.loads(line)
+                if (row.get("entry_point"), row.get("prompt")) not in identities:
                     missing += 1
         report(missing == 0,
                f"MBPP public tests cover every item ({total - missing}/{total}; "
-               f"{len(names)} names on file)")
+               f"{len(identities)} identities on file)")
     else:
         report(False, "mbpp_public_test.jsonl missing: the Test operator will raise")
 
@@ -1135,6 +1221,16 @@ def check(pkg: Path, label: str) -> None:
            f"Test operator benchmark chosen at runtime "
            f"({len(templates) - len(hardcoded)}/{len(templates)} template(s))"
            + ("" if not hardcoded else f"; still hardcoded: {[p.parts[-4] for p in hardcoded]}"))
+    utils_text = (pkg / "ext" / "maas" / "scripts" / "utils.py").read_text(
+        encoding="utf-8")
+    code_templates = [p for p in templates
+                      if "class Test" in p.read_text(encoding="utf-8")]
+    report('dataset == "SHARED_MBPP"' in utils_text and "len(task_matches) == 1" in utils_text,
+           "MBPP public tests are disambiguated by task text")
+    report(bool(code_templates) and all("problem=problem" in
+                                       p.read_text(encoding="utf-8")
+                                       for p in code_templates),
+           "MBPP Test operators pass task identity")
 
     data_dir = pkg / "ext" / "maas" / "data"
     for key in DATASETS:
@@ -1225,7 +1321,7 @@ def check_prompt_wording(pkg: Path) -> None:
     report("mathematical problem" not in drop["GENERATE_SOLUTION_PROMPT"]
            and "Answer: <answer>" in drop["GENERATE_SOLUTION_PROMPT"]
            and "\\boxed" not in drop["GENERATE_SOLUTION_PROMPT"],
-           "DROP asks for a passage span, not a boxed maths answer")
+           "DROP asks for a passage answer, not a boxed maths answer")
     report("mathematical problem" not in mmlu["GENERATE_SOLUTION_PROMPT"]
            and "Answer: (X)" in mmlu["GENERATE_SOLUTION_PROMPT"]
            and "\\boxed" not in mmlu["GENERATE_SOLUTION_PROMPT"],
@@ -1314,6 +1410,7 @@ def main() -> None:
         # the same directory, and this writes a real file there.
         write_mbpp_public_tests(pkg)
         patch_mbpp_test_dataset(pkg)
+        patch_mbpp_test_identity(pkg)
         link_data(pkg)
         write_config(pkg.parent, label)
 

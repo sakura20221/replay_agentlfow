@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 """Build the search/training splits that workflow optimisers need.
 
-The evaluation splits produced by fetch_canonical_data.py must stay untouched,
-so the search sets come from each benchmark's own upstream *train* split rather
-than from a slice of the test set. Where no train split exists the fallback is
-stated explicitly rather than quietly carved out of the evaluation data.
-
-AMC is the one benchmark with no train split at all -- the canonical set is 83
-items and all of them are needed for evaluation -- so methods search on MATH and
-transfer to AMC. That is a declared protocol substitution, not a reproduction of
-any published AMC setup.
+The evaluation files stay untouched. MATH and AMC use the AFlow/FlowBank
+validation files frozen in this repository, so this script rebuilds only MBPP,
+DROP and MMLU-Pro. Content overlap with held-out data is excluded before
+sampling, not merely checked by row ID.
 """
 
 from __future__ import annotations
@@ -18,97 +13,43 @@ import hashlib
 import json
 import os
 import random
-from collections import Counter, defaultdict
+from collections import defaultdict
 from pathlib import Path
 
 os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 from datasets import load_dataset  # noqa: E402
+from shared.data_utils import mbpp_entry_point, normalized_task_text, write_manifest
 
 OUT = Path(__file__).resolve().parent / "shared" / "data"
 SEED = 20260821
 SEARCH_N = 256
 
-MATH_CONFIGS = (
-    "algebra",
-    "counting_and_probability",
-    "geometry",
-    "intermediate_algebra",
-    "number_theory",
-    "prealgebra",
-    "precalculus",
-)
-
-
 def write(name: str, rows: list[dict]) -> dict:
     path = OUT / f"{name}.jsonl"
-    digest = hashlib.sha256()
     with path.open("w", encoding="utf-8") as handle:
         for row in rows:
             line = json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
             handle.write(line + "\n")
-            digest.update(line.encode("utf-8"))
-    return {"file": path.name, "n": len(rows), "sha256": digest.hexdigest()[:16]}
-
-
-def _final_boxed(solution: str) -> str:
-    """Pull the answer out of a MATH-style solution's last \\boxed{...}."""
-    marker = "\\boxed"
-    index = solution.rfind(marker)
-    if index < 0:
-        return ""
-    tail = solution[index + len(marker):]
-    if not tail.startswith("{"):
-        return tail.strip().split("$")[0].strip()
-    depth = 0
-    for position, char in enumerate(tail):
-        if char == "{":
-            depth += 1
-        elif char == "}":
-            depth -= 1
-            if depth == 0:
-                return tail[1:position]
-    return ""
-
-
-def build_math_search() -> tuple[list[dict], dict]:
-    pool = []
-    for config in MATH_CONFIGS:
-        try:
-            ds = load_dataset("EleutherAI/hendrycks_math", config, split="train")
-        except Exception as exc:  # noqa: BLE001
-            print(f"  ! {config}: {type(exc).__name__}")
-            continue
-        for row in ds:
-            answer = _final_boxed(row.get("solution", ""))
-            if answer:
-                pool.append(
-                    {
-                        "problem": row["problem"],
-                        "answer": answer,
-                        "solution": row["solution"],
-                        "level": row.get("level"),
-                        "type": row.get("type") or config,
-                    }
-                )
-    rng = random.Random(SEED)
-    rng.shuffle(pool)
-    picked = pool[:SEARCH_N]
-    rows = [{"uid": f"math_search/{i}", **row} for i, row in enumerate(picked)]
-    return rows, {
-        "source": "EleutherAI/hendrycks_math [train, all 7 subjects]",
-        "sampling": f"uniform random {SEARCH_N} of {len(pool)}, seed={SEED}",
-        "levels": dict(Counter(str(r["level"]) for r in rows)),
+    return {
+        "file": path.name,
+        "n": len(rows),
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest()[:16],
     }
 
 
 def build_mbpp_search() -> tuple[list[dict], dict]:
+    with (OUT / "mbpp.jsonl").open(encoding="utf-8") as handle:
+        eval_text = {
+            normalized_task_text(json.loads(line)["prompt"])
+            for line in handle if line.strip()
+        }
     ds = load_dataset("google-research-datasets/mbpp", "full", split="train")
     rows = []
     for row in ds:
         tests = list(row["test_list"])
-        entry_point = row["code"].split("def ", 1)[1].split("(", 1)[0].strip() if "def " in row["code"] else ""
+        entry_point = mbpp_entry_point(row["code"], tests)
         rows.append(
             {
                 "uid": f"mbpp_search/{row['task_id']}",
@@ -117,15 +58,20 @@ def build_mbpp_search() -> tuple[list[dict], dict]:
                 "code": row["code"],
                 "entry_point": entry_point,
                 "test_list": tests,
+                "test_imports": list(row.get("test_setup_code", "") and
+                                     [row["test_setup_code"]] or []),
                 "test": "def check():\n" + "".join(f"    {t}\n" for t in tests),
             }
         )
     rng = random.Random(SEED)
     rng.shuffle(rows)
+    rows = [r for r in rows if normalized_task_text(r["prompt"]) not in eval_text]
     rows = rows[:SEARCH_N]
     return rows, {
         "source": "google-research-datasets/mbpp [full/train]",
-        "sampling": f"uniform random {min(SEARCH_N, len(rows))}, seed={SEED}",
+        "sampling": f"uniform random {min(SEARCH_N, len(rows))}, seed={SEED}; "
+                    "held-out content excluded before selection",
+        "content_overlap_with_eval": 0,
     }
 
 
@@ -167,12 +113,14 @@ def build_mmlu_pro_search() -> tuple[list[dict], dict]:
     # \x85, U+2028 and U+2029, which appear inside MMLU-Pro question text and
     # would cut a JSON record in half.
     with (OUT / "mmlu_pro.jsonl").open(encoding="utf-8") as handle:
-        eval_uids = {json.loads(line)["uid"] for line in handle if line.strip()}
+        eval_rows = [json.loads(line) for line in handle if line.strip()]
+    eval_uids = {row["uid"] for row in eval_rows}
+    eval_text = {normalized_task_text(row["question"]) for row in eval_rows}
     ds = load_dataset("TIGER-Lab/MMLU-Pro", split="test")
     by_category: dict[str, list[dict]] = defaultdict(list)
     for row in ds:
         uid = f"mmlu_pro/{row['question_id']}"
-        if uid in eval_uids:
+        if uid in eval_uids or normalized_task_text(row["question"]) in eval_text:
             continue
         by_category[row["category"]].append(row)
 
@@ -193,22 +141,24 @@ def build_mmlu_pro_search() -> tuple[list[dict], dict]:
                     "category": category,
                 }
             )
+    rng.shuffle(rows)
     overlap = {r["uid"].split("/", 1)[1] for r in rows} & {u.split("/", 1)[1] for u in eval_uids}
     return rows, {
         "source": "TIGER-Lab/MMLU-Pro [test, disjoint from evaluation subset]",
         "sampling": f"stratified {per_category} per category, seed={SEED}",
         "overlap_with_eval": len(overlap),
+        "content_overlap_with_eval": 0,
+        "order": "stratified per category, then globally shuffled with the same seed",
     }
 
 
-# math_search was re-based on the official L5 validate split on 2026-08-24 and
-# amc_search on FlowBank's shipped validate; their builders are parked so a
-# re-run cannot clobber the adopted files.
 BUILDERS = {
     "mbpp_search": build_mbpp_search,
     "drop_search": build_drop_search,
     "mmlu_pro_search": build_mmlu_pro_search,
 }
+EXPECTED_ROWS = {"mbpp_search": SEARCH_N, "drop_search": SEARCH_N,
+                 "mmlu_pro_search": 14 * (SEARCH_N // 14)}
 
 
 def main() -> None:
@@ -219,11 +169,14 @@ def main() -> None:
     for name, builder in BUILDERS.items():
         print(f"[{name}] building ...", flush=True)
         rows, meta = builder()
+        if len(rows) != EXPECTED_ROWS[name]:
+            raise RuntimeError(
+                f"{name}: upstream produced {len(rows)} rows; expected {EXPECTED_ROWS[name]}")
         info = write(name, rows)
         manifest["search_splits"][name] = {**info, **meta}
         print(f"[{name}] n={info['n']} sha={info['sha256']}", flush=True)
 
-    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_manifest(manifest_path, manifest)
     print(f"\nmanifest updated -> {manifest_path}")
 
 

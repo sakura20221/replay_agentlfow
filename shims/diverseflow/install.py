@@ -44,7 +44,7 @@ DATASETS = {
     "SHARED_MATH": ("math.jsonl", "math_search.jsonl", "MATH"),
     # AMC adopted verbatim from FlowBank's shipped split for comparability with
     # its published numbers (2026-08-24): search on its 165-item validate pool,
-    # evaluate on its 655-item test set.
+    # evaluate on its 648-item leakage-filtered test set.
     "SHARED_AMC": ("amc.jsonl", "amc_search.jsonl", "AMC"),
     "SHARED_MBPP": ("mbpp.jsonl", "mbpp_search.jsonl", "MBPP"),
     "SHARED_DROP": ("drop.jsonl", "drop_search.jsonl", "DROP"),
@@ -104,6 +104,10 @@ def install_files() -> None:
     target = REPO / "benchmarks" / "shared_benchmarks.py"
     shutil.copyfile(HERE / "shared_benchmarks.py", target)
     report(target.exists(), f"{target.relative_to(ROOT)}")
+    aggregate = FLOWBANK / "data_processing" / "aggregate_round_scores.py"
+    aggregate.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(HERE / "aggregate_round_scores.py", aggregate)
+    report(aggregate.exists(), f"{aggregate.relative_to(ROOT)}")
 
 
 def _native_config(text: str, dataset: str) -> tuple[str, list[str]] | None:
@@ -392,8 +396,7 @@ def write_mbpp_public_tests() -> None:
     out_path = FLOWBANK / "datasets" / "shared_mbpp_public_test.jsonl"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     written = 0
-    seen: set[str] = set()
-    collisions: list[str] = []
+    entry_counts: dict[str, int] = {}
     with out_path.open("w", encoding="utf-8") as handle:
         for name in ("mbpp.jsonl", "mbpp_search.jsonl"):
             source = DATA / name
@@ -409,23 +412,20 @@ def write_mbpp_public_tests() -> None:
                     tests = row.get("test_list") or []
                     if not entry or not tests:
                         continue
-                    if entry in seen:
-                        # First-wins. The operator's signature is
-                        # test(problem, solution, entry_point) -- there is no
-                        # task_id -- so two MBPP problems sharing a function name
-                        # are indistinguishable to it. Counted and reported rather
-                        # than hidden: the authors' own file has the same ambiguity
-                        # (427 entries for 974 tasks). Final scoring is unaffected;
-                        # only the workflow's own self-check can be misled.
-                        collisions.append(entry)
-                        continue
-                    seen.add(entry)
+                    entry_counts[entry] = entry_counts.get(entry, 0) + 1
                     renamed = [_re.sub(rf"\b{_re.escape(entry)}\b", "candidate", t) for t in tests]
-                    handle.write(json.dumps({"entry_point": entry, "test": renamed},
+                    task = (f"{row.get('prompt', '')}\n\n"
+                            "Your code must pass these tests:\n" + "\n".join(tests))
+                    handle.write(json.dumps({"uid": row.get("uid", ""),
+                                             "entry_point": entry,
+                                             "prompt": row.get("prompt", ""),
+                                             "task": task,
+                                             "test": renamed},
                                             ensure_ascii=False) + "\n")
                     written += 1
     report(written > 0, f"MBPP public tests -> {out_path.relative_to(ROOT)} "
-           f"({written} entries, {len(collisions)} name collisions skipped)")
+           f"({written} items, "
+           f"{sum(n - 1 for n in entry_counts.values() if n > 1)} shared names)")
 
     code_path = REPO / "scripts" / "utils" / "code.py"
     text = code_path.read_text(encoding="utf-8")
@@ -440,6 +440,111 @@ def write_mbpp_public_tests() -> None:
     code_path.write_text(text, encoding="utf-8")
     report("SHARED_MBPP" in code_path.read_text(encoding="utf-8"),
            "code.py registers SHARED_MBPP")
+
+
+def patch_mbpp_test_identity() -> None:
+    """Resolve MBPP public tests by entry point and current task text."""
+    code_path = REPO / "scripts" / "utils" / "code.py"
+    text = code_path.read_text(encoding="utf-8")
+    old_sig = (
+        "def extract_test_cases_from_jsonl(entry_point: str, "
+        "dataset: Union[CodeDataset, str, None] = None):"
+    )
+    new_sig = old_sig[:-2] + ", problem: str = None):"
+    if old_sig in text:
+        text = text.replace(old_sig, new_sig, 1)
+
+    text = text.replace(
+        "        if entry_point in hardcoded_cases:\n"
+        "            return hardcoded_cases[entry_point]",
+        "        if problem is None and entry_point in hardcoded_cases:\n"
+        "            return hardcoded_cases[entry_point]",
+        1,
+    )
+    old_lookup = '''        try:
+            with open(file_path, "r") as file:
+                for line in file:
+                    data = json.loads(line)
+                    if data.get("entry_point") == entry_point:
+                        return data.get("test")
+        except FileNotFoundError:
+            continue
+
+    return None'''
+    new_lookup = '''        matches = []
+        task_matches = []
+        prompt_matches = []
+        try:
+            with open(file_path, "r") as file:
+                for line in file:
+                    data = json.loads(line)
+                    if data.get("entry_point") != entry_point:
+                        continue
+                    task = str(data.get("task") or "")
+                    prompt = str(data.get("prompt") or "")
+                    if problem is not None and task and str(problem).startswith(task):
+                        task_matches.append(data.get("test"))
+                    if problem is not None and prompt and str(problem).startswith(prompt):
+                        prompt_matches.append(data.get("test"))
+                    matches.append(data.get("test"))
+        except FileNotFoundError:
+            continue
+        if len(task_matches) == 1:
+            return task_matches[0]
+        if len(prompt_matches) == 1:
+            return prompt_matches[0]
+        if len(matches) == 1:
+            return matches[0]
+
+    return None'''
+    if old_lookup in text:
+        text = text.replace(old_lookup, new_lookup, 1)
+    old_task_lookup = '''        matches = []
+        try:
+            with open(file_path, "r") as file:
+                for line in file:
+                    data = json.loads(line)
+                    if data.get("entry_point") != entry_point:
+                        continue
+                    prompt = str(data.get("prompt") or "")
+                    if problem is not None and prompt and str(problem).startswith(prompt):
+                        return data.get("test")
+                    matches.append(data.get("test"))
+        except FileNotFoundError:
+            continue
+        if len(matches) == 1:
+            return matches[0]
+
+    return None'''
+    if old_task_lookup in text:
+        text = text.replace(old_task_lookup, new_lookup, 1)
+    code_path.write_text(text, encoding="utf-8")
+
+    operators_path = REPO / "scripts" / "operators.py"
+    operators = operators_path.read_text(encoding="utf-8")
+    operators = operators.replace(
+        "def exec_code(self, solution, entry_point, timeout=30):",
+        "def exec_code(self, problem, solution, entry_point, timeout=30):",
+        1,
+    )
+    operators = operators.replace(
+        "extract_test_cases_from_jsonl(entry_point, dataset=self.dataset)",
+        "extract_test_cases_from_jsonl(entry_point, dataset=self.dataset, problem=problem)",
+        1,
+    )
+    operators = operators.replace(
+        "self.exec_code(solution, entry_point)",
+        "self.exec_code(problem, solution, entry_point)",
+    )
+    operators_path.write_text(operators, encoding="utf-8")
+
+    final_code = code_path.read_text(encoding="utf-8")
+    final_ops = operators_path.read_text(encoding="utf-8")
+    report("problem: str = None" in final_code and "len(task_matches) == 1" in final_code,
+           "MBPP public-test lookup accepts task identity")
+    report("dataset=self.dataset, problem=problem" in final_ops
+           and "self.exec_code(problem, solution, entry_point)" in final_ops,
+           "MBPP Test operator passes the current task to public-test lookup")
 
 
 # FlowBank's selector needs query embeddings, and build_selector_data.py offers
@@ -629,6 +734,16 @@ def check() -> None:
         and 'elif args.embedding_backend == "random":' in selector,
         "MiniLM selector dispatch is mutually exclusive",
     )
+    code_lookup = (REPO / "scripts" / "utils" / "code.py").read_text(encoding="utf-8")
+    operators = (REPO / "scripts" / "operators.py").read_text(encoding="utf-8")
+    report("problem: str = None" in code_lookup and "len(task_matches) == 1" in code_lookup,
+           "MBPP public tests are disambiguated by task text")
+    report("dataset=self.dataset, problem=problem" in operators,
+           "MBPP Test operator passes task identity")
+    aggregate = FLOWBANK / "data_processing" / "aggregate_round_scores.py"
+    report(aggregate.exists() and 'row.get("uid") or question' in
+           aggregate.read_text(encoding="utf-8"),
+           "round-score aggregation uses stable item IDs")
     for key, (_eval_file, _search_file, native) in DATASETS.items():
         report(f'"{key}"' in run_text, f"{key} registered")
         graph = REPO / "workspace" / key / "workflows" / "round_1" / "graph.py"
@@ -668,6 +783,7 @@ def main() -> None:
         seed_workspaces()
         document_operator_constructors()
         write_mbpp_public_tests()
+        patch_mbpp_test_identity()
         patch_embedding_backend()
         patch_indented_code()
         patch_namespace_override()

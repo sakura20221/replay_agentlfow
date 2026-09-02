@@ -6,7 +6,7 @@
 - all five shim installers and their source templates;
 - frozen dataset splits and provenance manifest;
 - exact author-repository commits in `upstreams.lock.json`;
-- the complete reproduction modification log.
+- the current reproduction protocol and modification boundaries.
 
 Git does not contain generated results, transcripts, checkpoints, model weights,
 Python environments, package caches, or the author repositories themselves.
@@ -56,12 +56,19 @@ scorer, sampling setting, shim, or dataset split.
 
 ## Data and result backup
 
-The committed data files are enough to recreate the exact task inputs. Old
-`logs/`, `runs_*`, `archive/`, and checkpoints are evidence rather than source;
+The frozen matrix has 35 primary cells (7 methods x 5 datasets), plus 10
+explicit G-Designer/CARD author-default control cells. Search/evaluation counts
+are MATH 119/486, AMC 165/648, MBPP 256/500, DROP 256/1000, and MMLU-Pro
+252/1120. The committed data files are enough to recreate the exact task inputs.
+Old `logs/`, `runs_*`, `archive/`, and checkpoints are evidence rather than source;
 copy them to object storage or a separate archival disk if they must be retained.
 Do not add them to this Git history.
 
 ## Security and publication
+
+On Linux/A800, all five gold-answer replay gates must pass, including MBPP
+1000/1000 wrapper checks. macOS can fail four MBPP checks because two reference
+tasks differ under the platform `libm`; do not loosen the Linux gate.
 
 No A800 password or remote credential belongs in this repository. Local API keys
 with the literal value `local` are non-secret placeholders for loopback vLLM.

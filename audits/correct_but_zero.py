@@ -17,7 +17,7 @@ gold "males" 是 "females" 的子串这种按用户裁决不算问题)。
   maas 系        optimized/KEY/*/round_*/0.*.csv    question/prediction/expected_output/score
   aflow          workspace/KEY/workflows*/round_*/0.*.csv   同上
   flowbank       workspace/KEY/workflows/round_*/0.*.jsonl  同上
-  masrouter      无逐题落盘(跑中日志只有 running mean),如实报告
+  masrouter      logs/scored_items_<dataset>.jsonl
 
     envs/maas/bin/python audits/correct_but_zero.py --since '2026-08-23 08:00'
 """
@@ -145,9 +145,12 @@ def main() -> None:
     parser.add_argument("--since", default=None,
                         help="只看这个时刻之后写的文件,挡住作者仓库自带的 2025 年产物")
     parser.add_argument("--show", type=int, default=6)
+    parser.add_argument("--fail-on-suspect", action="store_true",
+                        help="exit non-zero when any candidate needs manual review")
     args = parser.parse_args()
     floor = time.mktime(time.strptime(args.since, "%Y-%m-%d %H:%M")) if args.since else 0.0
 
+    suspect_total = 0
     for dataset in args.datasets:
         print(f"\n{'=' * 88}\n### {dataset}")
         cells: dict[str, dict] = collections.defaultdict(
@@ -202,6 +205,7 @@ def main() -> None:
                   f"{c['zero']:>7,}{len(c['suspect']):>10,}"
                   f"{c['fresh_sum'] / c['n']:>10.4f}{c['stored_sum'] / c['n']:>10.4f}")
         suspects = [(name, g, e) for name, c in cells.items() for g, e in c["suspect"]]
+        suspect_total += len(suspects)
         if suspects:
             print(f"\n  待人工裁决的「做对却 0 分」案例(前 {args.show} 条):")
             for name, gold, extracted in suspects[: args.show]:
@@ -209,6 +213,8 @@ def main() -> None:
         else:
             print("\n  没有「做对却 0 分」的案例")
     print()
+    if args.fail_on_suspect and suspect_total:
+        raise SystemExit(f"{suspect_total} correct-but-zero candidate(s) need review")
 
 
 if __name__ == "__main__":

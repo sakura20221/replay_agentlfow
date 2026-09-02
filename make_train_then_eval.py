@@ -21,8 +21,9 @@ wrong twice over: the test process started from a freshly initialised GCN, so it
 discarded everything the search learned, and it ran backward()/step() on the
 evaluation split.
 
-The boundary is exact by construction: 256 search items / batch_size 4 = 64
-batches, so --num_iterations 64 consumes the search split and nothing else.
+The boundary is dataset-specific. The runner accepts a smaller final training
+batch, so --num_iterations is ceil(search items / 4) and consumes every search
+item before evaluation starts.
 
     python make_train_then_eval.py            # writes into shared/data/
     python make_train_then_eval.py --check
@@ -35,10 +36,10 @@ import hashlib
 import json
 from pathlib import Path
 
+from shared.data_utils import write_manifest
+
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "shared" / "data"
-BATCH_SIZE = 4
-
 # dataset -> (search split, eval split). AMC uses FlowBank's shipped split
 # verbatim, adopted 2026-08-24 for comparability with its published numbers.
 PAIRS = {
@@ -69,25 +70,15 @@ def build(check: bool) -> int:
         search_rows, eval_rows = read(search_path), read(eval_path)
         target = DATA / f"{name}_train_then_eval.jsonl"
 
-        n_train_batches, remainder = divmod(len(search_rows), BATCH_SIZE)
-        if remainder:
-            # Trim to a whole number of batches so the switch cannot land inside
-            # a batch that mixes search and evaluation items.
-            search_rows = search_rows[: n_train_batches * BATCH_SIZE]
-
         if check:
             if not target.exists():
                 print(f"  [FAIL] {name}: {target.name} missing")
                 problems += 1
                 continue
             rows = read(target)
-            head_ok = [r.get("uid") for r in rows[: len(search_rows)]] == \
-                      [r.get("uid") for r in search_rows]
-            tail_ok = [r.get("uid") for r in rows[len(search_rows):]] == \
-                      [r.get("uid") for r in eval_rows]
-            ok = head_ok and tail_ok
+            ok = rows == search_rows + eval_rows
             print(f"  [{'ok' if ok else 'FAIL'}] {name}: {len(rows)} rows, "
-                  f"train batches={n_train_batches}, eval items={len(eval_rows)}")
+                  f"search items={len(search_rows)}, eval items={len(eval_rows)}")
             problems += 0 if ok else 1
             continue
 
@@ -96,10 +87,13 @@ def build(check: bool) -> int:
                 handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True,
                                         separators=(",", ":")) + "\n")
         digest = hashlib.sha256(target.read_bytes()).hexdigest()[:16]
-        dropped = len(eval_rows) % BATCH_SIZE
-        note = f", {dropped} eval item(s) fall in a partial final batch" if dropped else ""
         print(f"  [ok] {target.name}: {len(search_rows)} train + {len(eval_rows)} eval, "
-              f"--num_iterations {n_train_batches}, sha256={digest}{note}")
+              f"--search_items {len(search_rows)}, sha256={digest}")
+    if not check and not problems:
+        manifest_path = DATA / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        write_manifest(manifest_path, manifest)
+        print("  [ok] manifest file-integrity hashes refreshed")
     return problems
 
 

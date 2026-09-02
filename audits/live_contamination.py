@@ -56,8 +56,9 @@ TOLERATED = {
                       "count figures the passage states; that is the method's "
                       "operator, not a claim about the task",
     ("mmlu_pro", "code"): "same: the code operators are part of the workflow",
-    ("mmlu_pro", "maths"): "the authors' own Commonsense pool has a Scientist role "
-                           "mentioning maths, and MMLU-Pro genuinely includes maths",
+    ("mmlu_pro", "maths"): "G-Designer/CARD preserve the authors' MMLU ensemble's "
+                           "Mathematician specialist role; this is role diversity, "
+                           "not a statement that every item is a maths problem",
     # These three were flagged on the first run and each turned out to be the
     # detector matching something that is not prompt wording. Recorded rather than
     # deleted, so a future reader can see why they are not counted.
@@ -83,10 +84,6 @@ TOLERATED = {
                                  "line this whole audit exists to police. Observed "
                                  "effect: 99.4% of DROP replies still end 'Answer: "
                                  "<span>' with a real span",
-    ("drop", "boxed answer"): "MasRouter's final node keeps the authors' \\boxed "
-                              "output format; only the answer's description changed "
-                              "(span instead of maths). The span goes inside the box "
-                              "and the scorer has a boxed extraction tier",
 }
 
 

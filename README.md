@@ -14,10 +14,13 @@ caches, logs, checkpoints, and result trees are intentionally excluded.
 1. Read `MIGRATION.md` for a new-server restore.
 2. Read `REPRODUCTION_CHANGES.md` for method and protocol modifications.
 3. Run `python3 scripts/bootstrap_upstreams.py` to clone and patch author code.
-4. Run the static and smoke gates before any full experiment.
+4. Run `pipeline.py` so static checks and the complete 45-cell smoke gate pass
+   before any full experiment.
 
 The committed `shared/data/` files are the frozen search/evaluation splits.
 Their provenance and hashes are recorded in `shared/data/manifest.json`.
+Every job also records source, data, sampling, and identity fingerprints;
+collection refuses stale or mixed-protocol artifacts.
 
 This snapshot is suitable for a private Git repository. Public redistribution
 requires a separate license review of the included benchmark rows, especially

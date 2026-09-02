@@ -109,6 +109,16 @@ def derive_runner() -> None:
     text = re.sub(r'log_file = f"MATH_\{current_time\}\.txt"',
                   'log_file = f"{args.shared_dataset}_{current_time}.txt"', text, count=1)
 
+    # 6b. Keep the last partial batch in both training and evaluation. The
+    # author's int(N / batch_size) silently drops every remainder; slicing in
+    # dataloader already handles a smaller final batch correctly.
+    text = substitute(
+        text,
+        r"num_batches = int\(len\((train_dataset|test_dataset)\)/args\.batch_size\)",
+        r"num_batches = (len(\1) + args.batch_size - 1) // args.batch_size",
+        "complete batch coverage", expected=2,
+    )
+
     # 7. the final decision node's prompt follows the dataset.
     #
     # This is the graded call: FinalRefer produces the answer that gets scored. The
@@ -176,19 +186,17 @@ FINAL_NODE_MMLU_PRO = {
 }
 
 # Same provenance, restated for a task whose answer is a span rather than a letter.
-# Written even though the sweep does not currently run masrouter on DROP, so the
-# cell is runnable without a prompt that asks for a boxed maths expression.
+# The sweep runs MasRouter on DROP, so this prevents the final node from using a
+# maths or multiple-choice answer contract on a passage span.
 FINAL_NODE_DROP = {
     "system": "You are the top decision-maker and are good at analyzing and "
               "summarizing other people's opinions, finding errors and giving final answers.",
-    "user": "\nExactly one span of the passage answers the question.\n"
-            "You must choose the span that answers the question.\n"
-            "Your response must be the shortest exact span from the passage, "
-            "copied rather than paraphrased.\n"
+    "user": "\nThe answer may be a passage span, number, date, or short list.\n"
+            "You must give the concise answer supported by the passage.\n"
             "I will give you some other people's answers and analysis.\n"
-            "The last line of the reply should contain only one sentence"
-            "(the answer is \\boxed{X}.) and nothing else.\n"
-            "For example, The answer is the answer is \\boxed{57}.",
+            "The last line of the reply must contain only one line of the form "
+            "Answer: <answer> and nothing else.\n"
+            "For example, Answer: 57",
 }
 
 
@@ -209,12 +217,18 @@ FINAL_NODE_DROP = {
 # structure MasRouter learns over is the authors'.
 DROP_ROLE_EDITS = [
     ("Please analyze step by step and choose the correct answer.",
-     "Please analyze step by step and quote the shortest exact span from the "
-     "passage that answers the question."),
+     "Please analyze step by step and give the concise answer supported by the passage."),
     ("You will be given a complex math problem .",
      "You will be given a reading comprehension question about a passage ."),
     ("You will be given a complex math problem.",
      "You will be given a reading comprehension question about a passage."),
+]
+
+MMLU_PRO_ROLE_EDITS = [
+    ("You will be given a complex math problem .",
+     "You will be given a multiple-choice question ."),
+    ("You will be given a complex math problem.",
+     "You will be given a multiple-choice question."),
 ]
 
 # Appended to encoder_roles: prefer a dataset-specific pool when one exists.
@@ -237,34 +251,39 @@ ROLE_VARIANT_BLOCK = '''
 '''
 
 
-def write_drop_roles() -> None:
-    """Derive Roles/Commonsense_drop/ from the authors' Commonsense pool."""
+def write_dataset_role_pools() -> None:
+    """Derive dataset-worded role pools from the authors' Commonsense pool."""
     base = REPO / "MAR" / "Roles"
     source = base / "Commonsense"
     if not source.exists():
         report(False, "MAR/Roles/Commonsense missing")
         return
-    target = base / "Commonsense_drop"
-    target.mkdir(parents=True, exist_ok=True)
-    edited = copied = 0
-    for path in sorted(source.glob("*.json")):
-        profile = json.loads(path.read_text(encoding="utf-8"))
-        changed = False
-        for field in ("Description", "PostDescription"):
-            value = profile.get(field)
-            if not isinstance(value, str):
-                continue
-            for before, after in DROP_ROLE_EDITS:
-                if before in value:
-                    value = value.replace(before, after)
-                    changed = True
-            profile[field] = value
-        (target / path.name).write_text(
-            json.dumps(profile, indent=4, ensure_ascii=False) + "\n", encoding="utf-8")
-        edited += 1 if changed else 0
-        copied += 1
-    report(copied == len(list(source.glob("*.json"))) and edited > 0,
-           f"DROP role pool derived ({copied} roles copied, {edited} reworded)")
+    source_paths = sorted(source.glob("*.json"))
+    for dataset, edits in (("drop", DROP_ROLE_EDITS),
+                           ("mmlu_pro", MMLU_PRO_ROLE_EDITS)):
+        target = base / f"Commonsense_{dataset}"
+        target.mkdir(parents=True, exist_ok=True)
+        edited = copied = 0
+        for path in source_paths:
+            profile = json.loads(path.read_text(encoding="utf-8"))
+            changed = False
+            for field in ("Description", "PostDescription"):
+                value = profile.get(field)
+                if not isinstance(value, str):
+                    continue
+                for before, after in edits:
+                    if before in value:
+                        value = value.replace(before, after)
+                        changed = True
+                profile[field] = value
+            (target / path.name).write_text(
+                json.dumps(profile, indent=4, ensure_ascii=False) + "\n",
+                encoding="utf-8")
+            edited += 1 if changed else 0
+            copied += 1
+        report(copied == len(source_paths) and edited > 0,
+               f"{dataset} role pool derived "
+               f"({copied} roles copied, {edited} reworded)")
 
 
 def patch_role_variants() -> None:
@@ -484,15 +503,19 @@ def patch_max_batches() -> None:
                  "                             '(shim: for smoke runs; None = full epoch)')\n",
         1,
     )
-    old = "    num_batches = int(len(train_dataset)/args.batch_size)\n"
-    if old not in text:
+    anchors = (
+        "    num_batches = (len(train_dataset) + args.batch_size - 1) // args.batch_size\n",
+        "    num_batches = int(len(train_dataset)/args.batch_size)\n",
+    )
+    anchor_line = next((line for line in anchors if line in text), None)
+    if anchor_line is None:
         report(False, "runner num_batches anchor missing")
         return
     text = text.replace(
-        old,
-        old + "    if args.max_batches is not None:\n"
-              "        num_batches = min(num_batches, args.max_batches)\n"
-              "        logger.info(f'shim: capping each epoch at {num_batches} batch(es)')\n",
+        anchor_line,
+        anchor_line + "    if args.max_batches is not None:\n"
+                      "        num_batches = min(num_batches, args.max_batches)\n"
+                      "        logger.info(f'shim: capping each epoch at {num_batches} batch(es)')\n",
         1,
     )
     path.write_text(text, encoding="utf-8")
@@ -660,7 +683,6 @@ CONCURRENT_QUERIES = """        # --- shared-layer shim: run a batch's queries i
             g = Graph(domain=task['Name'], llm_names=llm_names, agent_names=role_names,
                       decision_method="FinalRefer", prompt_file=prompt_file,
                       reasoning_name=collab["Name"], **kwargs)
-            self.g = g
             return g.run(inputs={"query": query}, num_rounds=kwargs["num_rounds"])[0][0]
 
         _items = list(zip(queries, selected_tasks, selected_llms,
@@ -680,6 +702,12 @@ def patch_concurrent_queries() -> None:
     # patched file reported FAIL on every re-run, and the failure was cosmetic
     # noise sitting next to real ones.
     if CONCURRENT_QUERIES.splitlines()[0].strip() in text:
+        # An older version stored each thread-local Graph on self.g. Concurrent
+        # workers then raced to overwrite it even though no code ever read it.
+        # Remove that stale assignment when upgrading an already-patched tree.
+        upgraded = text.replace("            self.g = g\n", "")
+        if upgraded != text:
+            path.write_text(upgraded, encoding="utf-8")
         report(True, "batch already dispatched concurrently")
         return
     start = text.find("        final_result = []\n        costs = []\n")
@@ -711,16 +739,18 @@ def check() -> None:
         report(not derived, f"derived final-node prompts present"
                             + ("" if not derived else f" (missing: {derived})"))
         roles = REPO / "MAR" / "Roles"
-        drop_pool = sorted((roles / "Commonsense_drop").glob("*.json"))
         author_pool = sorted((roles / "Commonsense").glob("*.json"))
-        report(len(drop_pool) == len(author_pool) and drop_pool,
-               f"DROP role pool has the authors' role set "
-               f"({len(drop_pool)}/{len(author_pool)} roles)")
-        stale = [p.name for p in drop_pool
-                 if "choose the correct answer" in p.read_text(encoding="utf-8")
-                 or "complex math problem" in p.read_text(encoding="utf-8")]
-        report(not stale, "DROP roles carry no multiple-choice or maths wording"
-                          + ("" if not stale else f" (still: {stale})"))
+        for dataset in ("drop", "mmlu_pro"):
+            pool = sorted((roles / f"Commonsense_{dataset}").glob("*.json"))
+            report(len(pool) == len(author_pool) and pool,
+                   f"{dataset} role pool has the authors' role set "
+                   f"({len(pool)}/{len(author_pool)} roles)")
+            stale = [p.name for p in pool
+                     if "complex math problem" in p.read_text(encoding="utf-8")
+                     or (dataset == "drop" and "choose the correct answer" in
+                         p.read_text(encoding="utf-8"))]
+            report(not stale, f"{dataset} roles carry no wrong-task wording"
+                              + ("" if not stale else f" (still: {stale})"))
         report(ROLE_VARIANT_MARKER in (REPO / "MAR" / "MasRouter" / "mas_router.py")
                .read_text(encoding="utf-8"),
                "encoder_roles prefers the dataset pool")
@@ -734,11 +764,23 @@ def check() -> None:
         if math_file.exists():
             report("boxed" in math_file.read_text(encoding="utf-8"),
                    "authors' math.json unmodified")
+        drop_final = base / "shared_drop.json"
+        if drop_final.exists():
+            drop_text = drop_final.read_text(encoding="utf-8")
+            report("Answer: <answer>" in drop_text and "\\\\boxed" not in drop_text,
+                   "DROP final node uses the shared span-answer contract")
     if runner.exists():
         text = runner.read_text(encoding="utf-8")
         report("MATH_get_predict" not in text, "no leftover MATH_get_predict")
         report(text.count("shared_score(args.shared_dataset") == 2, "grading replaced in both loops")
         report(text.count("shared_task_labels(") == 2, "task labels replaced in both loops")
+        report(text.count("+ args.batch_size - 1) // args.batch_size") == 2,
+               "training and evaluation keep their final partial batch")
+        report("--max_batches" in text and "min(num_batches, args.max_batches)" in text,
+               "smoke runs can cap training batches")
+    router_text = (REPO / "MAR" / "MasRouter" / "mas_router.py").read_text(encoding="utf-8")
+    report("ThreadPoolExecutor" in router_text and "self.g = g" not in router_text,
+           "parallel Graph objects are thread-local")
     report((REPO / "Datasets" / "shared_dataset.py").exists(), "shared_dataset.py")
     for name in DATASETS:
         path = REPO / "Datasets" / "shared" / f"{name}.jsonl"
@@ -758,7 +800,7 @@ def main() -> None:
         print("[masrouter] installing")
         install_files()
         write_final_node_prompts()
-        write_drop_roles()
+        write_dataset_role_pools()
         patch_role_variants()
         patch_role_registry()
         patch_llm_profile()

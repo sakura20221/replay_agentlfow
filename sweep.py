@@ -60,7 +60,7 @@ try:
 except OSError:
     pass
 sys.path.insert(0, str(ROOT / "shared"))
-from bench import protocol_fingerprint  # noqa: E402 - needs the path above
+from bench import data_fingerprint, protocol_fingerprint  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from vllm_proxy import sampling_protocol  # noqa: E402 - the proxy owns the sampling rules
@@ -99,19 +99,13 @@ COST = {"flowbank": 30, "aflow": 20, "maas": 8, "daao": 8,
 # Bigger evaluation splits take longer, so they go first within a method.
 DATASET_COST = {"mmlu_pro": 1120, "drop": 1000, "math": 486, "mbpp": 500, "amc": 648}
 
-# Batches of the train-then-eval file that belong to the search split, i.e. the
-# value --num_iterations must take so G-Designer/CARD switch to evaluation exactly
-# at the boundary. Produced by make_train_then_eval.py; mmlu_pro differs because
-# its search split has 252 items rather than 256.
+# Exact search boundaries and corresponding numbers of gradient batches.
 # math switched to the AFlow/FlowBank official Level-5 split (119 validate + 486
 # test) on 2026-08-24, replacing MATH-500: the published FlowBank/AFlow numbers
 # are on that split, and MATH-500's mixed difficulty put Qwen3-8B near its
-# ceiling (daao hit 0.838), compressing differences between methods. 119 is not
-# divisible by the batch size, so the generator trims the search side to 29
-# whole batches (116 items) to keep the train/eval switch exact. amc likewise
-# adopted FlowBank's shipped split (2026-08-24): 165 validate items -> 41 whole
-# batches (164), 655-item test.
-TRAIN_BATCHES = {"math": 29, "amc": 41, "mbpp": 64, "drop": 64, "mmlu_pro": 63}
+# ceiling. The runner accepts a smaller final training batch, so no item is cut.
+TRAIN_ITEMS = {"math": 119, "amc": 165, "mbpp": 256, "drop": 256, "mmlu_pro": 252}
+TRAIN_BATCHES = {"math": 30, "amc": 42, "mbpp": 64, "drop": 64, "mmlu_pro": 63}
 
 
 # Cells that are deliberately not run, with the reason. Declared here rather than
@@ -142,10 +136,10 @@ EXCLUDED: dict[tuple[str, str], str] = {}
 # masrouter's batch_size must shrink below the item cap or int(6/16)=0 batches
 # would skip the loops entirely and the smoke would validate nothing.
 SMOKE_APPEND = {
-    "gdesigner": " --num_iterations 1",
-    "card": " --num_iterations 1",
-    "gdesigner_authordefault": " --num_iterations 1",
-    "card_authordefault": " --num_iterations 1",
+    "gdesigner": " --num_iterations 1 --train_items 4 --search_items 4",
+    "card": " --num_iterations 1 --train_items 4 --search_items 4",
+    "gdesigner_authordefault": " --num_iterations 1 --train_items 4 --search_items 4",
+    "card_authordefault": " --num_iterations 1 --train_items 4 --search_items 4",
     "masrouter": " --batch_size 2 --max_batches 1 --epochs 1",
     "aflow": " --max_rounds 1",
     "flowbank": " --max_rounds 1 --check_convergence false",
@@ -195,7 +189,8 @@ METHODS: dict[str, dict] = {
     },
     # One process, one file: train on the search split, then evaluate on held-out
     # data with the topology just learned. --num_iterations is the search split's
-    # batch count, so every method trains on the identical 256 items. The earlier
+    # batch count, so every method sees the complete frozen search split for that
+    # dataset. The earlier
     # two-process split started the test run from an untrained GCN and ran
     # backward()/step() on the evaluation data.
     "gdesigner": {
@@ -209,7 +204,8 @@ METHODS: dict[str, dict] = {
         "search": "{py} experiments/run_shared.py"
                   " --dataset_json datasets/shared/{ds}_train_then_eval.jsonl"
                   " --domain {ds} --llm_name qwen3-8b --batch_size 4"
-                  " --num_iterations {train_batches} --num_rounds 1 --optimized_spatial --eval_batch_size 32",
+                  " --num_iterations {train_batches} --train_items {train_items}"
+                  " --search_items {train_items} --num_rounds 1 --optimized_spatial --eval_batch_size 32",
         "test": None,
     },
     "card": {
@@ -223,11 +219,13 @@ METHODS: dict[str, dict] = {
         "search": "{py} experiments/run_shared.py"
                   " --dataset_json datasets/shared/{ds}_train_then_eval.jsonl"
                   " --domain {ds} --llm_name qwen3-8b --mode FullConnected --batch_size 4"
-                  " --num_iterations {train_batches} --num_rounds 1 --optimized_spatial --eval_batch_size 32",
+                  " --num_iterations {train_batches} --train_items {train_items}"
+                  " --search_items {train_items} --num_rounds 1 --optimized_spatial --eval_batch_size 32",
         "test": None,
     },
     # Author-default budget, kept as a control row: num_iterations=10 is 40 items
-    # rather than 256. Reported separately, never mixed into the main table --
+    # rather than the complete dataset-specific search split. Reported separately,
+    # never mixed into the seven-method primary table --
     # 64 gradient steps at lr 0.1 could destabilise the topology learner, and if
     # unifying the training set hurts these two, that has to be visible.
     "gdesigner_authordefault": {
@@ -241,7 +239,8 @@ METHODS: dict[str, dict] = {
         "search": "{py} experiments/run_shared.py"
                   " --dataset_json datasets/shared/{ds}_train_then_eval.jsonl"
                   " --domain {ds} --llm_name qwen3-8b --batch_size 4"
-                  " --num_iterations 10 --num_rounds 1 --optimized_spatial --eval_batch_size 32",
+                  " --num_iterations 10 --train_items 40 --search_items {train_items}"
+                  " --num_rounds 1 --optimized_spatial --eval_batch_size 32",
         "test": None,
     },
     "card_authordefault": {
@@ -255,7 +254,8 @@ METHODS: dict[str, dict] = {
         "search": "{py} experiments/run_shared.py"
                   " --dataset_json datasets/shared/{ds}_train_then_eval.jsonl"
                   " --domain {ds} --llm_name qwen3-8b --mode FullConnected --batch_size 4"
-                  " --num_iterations 10 --num_rounds 1 --optimized_spatial --eval_batch_size 32",
+                  " --num_iterations 10 --train_items 40 --search_items {train_items}"
+                  " --num_rounds 1 --optimized_spatial --eval_batch_size 32",
         "test": None,
     },
     "masrouter": {
@@ -267,7 +267,7 @@ METHODS: dict[str, dict] = {
                   # batch_size=16 and epochs=5 are both the author defaults
                   # (run_math.py). The 4 and 2 used earlier were my own inventions:
                   # they gave MasRouter a different gradient variance and less data
-                  # than its paper setting. Five epochs over the 256-item pool means
+                  # than its paper setting. Five epochs over the frozen search pool means
                   # it sees every training question, like every other method here.
                   " --batch_size 16 --epochs 5 --num_rounds 1",
         "test": None,
@@ -319,7 +319,25 @@ def build(method: str, dataset: str, phase: str) -> str | None:
         ds=dataset,
         rounds=ROUNDS.get(method, 1),
         train_batches=TRAIN_BATCHES[dataset],
+        train_items=TRAIN_ITEMS[dataset],
     )
+
+
+def current_job_protocol(method: str, dataset: str, repeat: int) -> dict:
+    """Every protocol dimension that can change a search artifact or score."""
+    return {
+        **protocol_fingerprint(),
+        "data": data_fingerprint(dataset),
+        "sampling": sampling_protocol(),
+        "method": method,
+        "dataset": dataset,
+        "run_tag": RUN_TAG,
+        "repeat": repeat,
+    }
+
+
+def protocol_differences(recorded: dict, current: dict) -> list[str]:
+    return [key for key, value in current.items() if recorded.get(key) != value]
 
 
 def run_job(method: str, dataset: str, repeat: int, phases: list[str], timeout: int) -> tuple[str, str]:
@@ -328,25 +346,30 @@ def run_job(method: str, dataset: str, repeat: int, phases: list[str], timeout: 
     out.mkdir(parents=True, exist_ok=True)
     status_path = out / "status"
 
+    # Refuse to relabel an already-produced phase with a newer protocol. Without
+    # this guard, a resumed job could overwrite protocol.json, skip its old search
+    # because search.seconds exists, and test an old artifact under a new stamp.
+    protocol_path = out / "protocol.json"
+    current_protocol = current_job_protocol(method, dataset, repeat)
+    completed_phases = [phase for phase in ("search", "test")
+                        if (out / f"{phase}.seconds").exists()]
+    if protocol_path.exists():
+        try:
+            recorded_protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            differences = ["missing-or-unreadable-stamp"]
+        else:
+            differences = protocol_differences(recorded_protocol, current_protocol)
+        if differences:
+            status_path.write_text("failed protocol mismatch\n", encoding="utf-8")
+            prior = f"completed phases {completed_phases}" if completed_phases else "prior run state"
+            log(f"{tag}: REFUSING resume; {prior} uses a different protocol "
+                f"({', '.join(differences)}). Use a new runs directory and tag.")
+            return tag, "failed:protocol-mismatch"
     if status_path.exists() and status_path.read_text(encoding="utf-8").strip() == "ok":
         return tag, "skipped"
-
-    # Stamp the protocol this job runs under. The prompt hash covers the answer-format
-    # instruction and its example, i.e. the text the model actually sees; the scorer
-    # hash covers the extraction tiers. collect.py compares both against the current
-    # code, so a directory left over from an earlier protocol is reported as stale
-    # instead of being averaged into the table as if it were comparable.
-    # The sampling configuration belongs in the fingerprint too. It was missing, and
-    # it is not a detail: presence_penalty, the per-reply cap and what happens when
-    # a reply fills that cap all change what the model produces. A run made with
-    # continuation-on-truncation and no penalty is not comparable with one made with
-    # penalty 1.0 and a retry, and without this the two would have looked identical
-    # to the collector.
-    (out / "protocol.json").write_text(
-        json.dumps({**protocol_fingerprint(),
-                    "run_tag": RUN_TAG,
-                    "repeat": repeat,
-                    "sampling": sampling_protocol(),
+    protocol_path.write_text(
+        json.dumps({**current_protocol,
                     "started": time.strftime("%Y-%m-%dT%H:%M:%S")},
                    indent=2) + "\n",
         encoding="utf-8")
@@ -461,7 +484,7 @@ def run_job(method: str, dataset: str, repeat: int, phases: list[str], timeout: 
             # The train/eval boundary of the G-Designer family's concatenated
             # file, in items -- eval smoke items must come from past it so their
             # uids belong to the evaluation split.
-            phase_env["SHIM_SMOKE_EVAL_FROM"] = str(TRAIN_BATCHES.get(dataset, 64) * 4)
+            phase_env["SHIM_SMOKE_EVAL_FROM"] = str(TRAIN_ITEMS.get(dataset, 256))
         phase_env["SHIM_NAMESPACE"] = namespace
         phase_env["SHIM_BASE_URL"] = f"{PROXY_ROOT}/{namespace}/v1"
         phase_env["BASE_URL"] = f"{PROXY_ROOT}/{namespace}/v1/chat/completions"

@@ -43,8 +43,8 @@ SYSTEM = {
 ANSWER_FORMAT = {
     "math": "End your reply with the final answer inside \\boxed{}.",
     "amc": "End your reply with the final answer inside \\boxed{}.",
-    "mbpp": "Return only a single self-contained Python function inside a ```python code block.",
-    "drop": "End your reply with 'Answer: <answer>' using the shortest exact span from the passage.",
+    "mbpp": "Return self-contained Python code defining the requested entry point inside a ```python code block.",
+    "drop": "End your reply with 'Answer: <answer>', using a concise span, number, date, or list as appropriate.",
     "mmlu_pro": "End your reply with 'Answer: (X)' where X is the option letter.",
 }
 

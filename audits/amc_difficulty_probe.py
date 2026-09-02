@@ -3,7 +3,8 @@
 
 Decision support for 2026-08-24: ours is AI-MO/aimo-validation-amc (83 items,
 the 2022-2023 AMC12 papers with numeric answers); FlowBank ships its own
-amc_validate/amc_test (165+655) whose rows carry MATH-style level/type fields.
+amc_validate/amc_test (165+648 after leakage filtering) whose rows carry
+MATH-style level/type fields.
 Which one is harder cannot be read off metadata -- the honest measure is the
 same model, the same plain prompt, the same scorer, on a sample of each.
 

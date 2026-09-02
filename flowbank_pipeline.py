@@ -67,6 +67,37 @@ def run(command: str, cwd: Path, label: str, namespace: str) -> None:
         raise SystemExit(f"[{label}] failed with rc={completed.returncode}")
 
 
+def expected_items(dataset: str, split: str) -> int:
+    names = {
+        "SHARED_MATH": "math",
+        "SHARED_AMC": "amc",
+        "SHARED_MBPP": "mbpp",
+        "SHARED_DROP": "drop",
+        "SHARED_MMLUPRO": "mmlu_pro",
+    }
+    if dataset not in names:
+        raise ValueError(f"unknown shared dataset {dataset!r}")
+    name = names[dataset]
+    suffix = "_search" if split == "train" else ""
+    path = ROOT / "shared" / "data" / f"{name}{suffix}.jsonl"
+    with path.open(encoding="utf-8") as handle:
+        return sum(1 for line in handle if line.strip())
+
+
+def verify_aggregate(path: Path, expected: int, label: str) -> None:
+    sources = json.loads((path / "sources.json").read_text(encoding="utf-8"))
+    queries = json.loads((path / "queries.json").read_text(encoding="utf-8"))
+    item_ids = json.loads((path / "item_ids.json").read_text(encoding="utf-8"))
+    lengths = {name: len(scores) for name, scores in sources.items()}
+    if len(queries) != expected or len(item_ids) != expected or any(
+            count != expected for count in lengths.values()):
+        raise SystemExit(
+            f"[{label}] incomplete benchmark coverage: expected {expected}, "
+            f"queries={len(queries)}, ids={len(item_ids)}, workflows={lengths}"
+        )
+    print(f"  [{label}] complete coverage: {len(lengths)} workflows x {expected} items")
+
+
 def round_dirs(dataset: str, optimized_path: str) -> list[int]:
     results = DIVERSE / optimized_path / dataset / "workflows" / "results.json"
     if not results.exists():
@@ -94,7 +125,7 @@ def workflow_args(dataset: str, rounds: list[int], test: bool,
     return " ".join(parts)
 
 
-def selected_rounds(out_dir: Path, fallback: list[int], k: int) -> list[int]:
+def selected_rounds(out_dir: Path, pool: list[int], k: int) -> list[int]:
     """Read CuraFlow's size-k portfolio out of k_coverage.csv.
 
     The file is a curve, one row per k, whose `best_combo` column holds the chosen
@@ -107,15 +138,17 @@ def selected_rounds(out_dir: Path, fallback: list[int], k: int) -> list[int]:
 
     path = out_dir / "k_coverage.csv"
     if not path.exists():
-        print(f"  {path} missing; falling back to the {k} best-scoring rounds")
-        return fallback[:k]
+        raise SystemExit(f"{path} missing; stage 2b must select the portfolio")
 
     rows = list(csv.DictReader(path.open(encoding="utf-8")))
     if not rows:
-        print(f"  {path} is empty; falling back to the {k} best-scoring rounds")
-        return fallback[:k]
+        raise SystemExit(f"{path} is empty; refusing to invent a portfolio")
 
-    wanted = [r for r in rows if int(float(r["k"])) == k] or [rows[-1]]
+    target_k = min(k, len(pool))
+    wanted = [r for r in rows if int(float(r["k"])) == target_k]
+    if len(wanted) != 1:
+        raise SystemExit(
+            f"{path} has {len(wanted)} rows for required k={target_k}")
     row = wanted[0]
     labels = [x.strip() for x in row["best_combo"].split(";") if x.strip()]
     picked = [int(label.replace("Flow_", "")) for label in labels
@@ -127,7 +160,13 @@ def selected_rounds(out_dir: Path, fallback: list[int], k: int) -> list[int]:
     for other in rows:
         print(f"    k={other['k']:>2}  oracle={other['oracle_per_query']}  "
               f"gain={other['oracle_gain_per_query']}")
-    return picked or fallback[:k]
+    if len(picked) != target_k or len(set(picked)) != len(picked):
+        raise SystemExit(
+            f"CuraFlow returned {picked}; expected {target_k} distinct rounds")
+    unknown = sorted(set(picked) - set(pool))
+    if unknown:
+        raise SystemExit(f"CuraFlow selected rounds outside the search pool: {unknown}")
+    return picked
 
 
 def main() -> None:
@@ -169,6 +208,7 @@ def main() -> None:
             f"{workflow_args(ds, pool, test=False, optimized_path=args.optimized_path)} "
             f"--out {train_dir}",
             FLOWBANK, "2a aggregate TRAIN", f"{namespace_root}/2a")
+        verify_aggregate(train_dir, expected_items(ds, "train"), "2a")
 
     if "2b" in args.stages:
         run(f"{PYG} CuraFlow/k_coverage_selection.py --dataset-name {ds} "
@@ -190,6 +230,7 @@ def main() -> None:
             f"{workflow_args(ds, picked, test=True, optimized_path=args.optimized_path)} "
             f"--out {test_dir}",
             FLOWBANK, "3b aggregate TEST", f"{namespace_root}/3b")
+        verify_aggregate(test_dir, expected_items(ds, "test"), "3b")
 
     if "3c" in args.stages:
         # describe_workflows generates the workflow descriptions with an LLM, so it
@@ -215,6 +256,7 @@ def main() -> None:
             f"--out {train_dir}",
             FLOWBANK, "3d-prep re-aggregate TRAIN over portfolio",
             f"{namespace_root}/3d_prep")
+        verify_aggregate(train_dir, expected_items(ds, "train"), "3d-prep")
         run(f"{PYG} data_processing/build_selector_data.py "
             f"--train-scores {train_dir / 'sources.json'} "
             f"--train-queries {train_dir / 'queries.json'} "

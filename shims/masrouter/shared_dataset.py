@@ -73,12 +73,10 @@ def shared_score(name: str, row: dict, prediction: str) -> float:
     """Score in [0, 1]. DROP returns F1, so this is not always 0 or 1.
 
     Every scored item is also appended to logs/scored_items_<dataset>.jsonl.
-    MasRouter was the one method with no per-item record, so its headline number
-    could only be read back from its own log's running mean -- computed by
-    whichever scorer was live during the run; a scorer fix never reached it,
-    while every other method is re-graded from disk (the 2026-08-24 mmlu_pro
-    letter-extractor fix is exactly such a case). The dump carries the full row
-    and the raw prediction so collect.py can re-grade masrouter the same way.
+    Upstream MasRouter has no per-item record: its headline number can otherwise
+    only be read from the running mean produced by the scorer live during the
+    run. This dump carries the full row and raw prediction so collect.py can
+    re-grade MasRouter exactly like the other methods.
     Train and test items share the file and are told apart by uid namespace
     ("<dataset>/..." is evaluation, "<dataset>_search/..." is training).
     """

@@ -32,7 +32,7 @@ from GDesigner.prompt.prompt_set_registry import PromptSetRegistry
 
 @PromptSetRegistry.register("math")
 class MathSharedPromptSet(GSM8KPromptSet):
-    """MATH-500: maths word problems, same shape as GSM8K."""
+    """MATH Level-5: maths problems, same response shape as GSM8K."""
 
 
 @PromptSetRegistry.register("amc")
@@ -83,10 +83,10 @@ class DROPSharedPromptSet(MMLUPromptSet):
         return """
             I will ask you a question about a passage.
             I will also give you the passage the question refers to.
-            Exactly one span of the passage answers the question.
-            You must find the span that answers the question.
+            The answer may be a passage span, number, date, or short list.
+            You must find the concise answer supported by the passage.
             Your response must end with a line of the form 'Answer: <answer>',
-            where <answer> is the shortest exact span from the passage.
+            where <answer> is that concise answer.
             Your answer can refer to the answers of other agents provided to you.
             Your reply must be less than 100 words but include your answer and a brief step by step analysis of the question.
             The last line of your reply must contain only the answer line(for example : Answer: 57)
@@ -96,7 +96,7 @@ class DROPSharedPromptSet(MMLUPromptSet):
     def get_analyze_constraint(role):
         return ROLE_DESCRIPTION[role] if role in ROLE_DESCRIPTION.keys() else ""+ """
 I will ask you a question about a passage, and give you the passage it refers to.
-Exactly one span of the passage answers the question.
+The answer may be a passage span, number, date, or short list.
 Using the reasoning from other agents as additional advice with critical thinking, can you give an updated answer?
 You are strictly prohibited from imitating the analysis process of other agents
 Your reply must be less than 100 words but include your answer and a brief step by step analysis of the question.
@@ -108,10 +108,10 @@ The last line of your reply must contain only the answer line(for example : Answ
         return """
         I will ask you a question about a passage.
         I will also give you the passage the question refers to.
-        Exactly one span of the passage answers the question.
-        You must find the span that answers the question.
+        The answer may be a passage span, number, date, or short list.
+        You must find the concise answer supported by the passage.
         Your response must end with a line of the form 'Answer: <answer>',
-        where <answer> is the shortest exact span from the passage.
+        where <answer> is that concise answer.
         I will give you some other people's answers and analysis.
         Your reply must only contain that answer line and cannot have any other characters.
         For example, your reply can be Answer: 57.

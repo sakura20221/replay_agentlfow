@@ -11,6 +11,9 @@ RECOVER = [
     (r"\frac{1}{2}\!",                   r"\boxed{\frac{1}{2}}",        "spacing macro"),
     (r"(3,\frac{\pi}{2})",  r"\boxed{\left(3, \frac{\pi}{2}\right)}",   "reverse direction"),
     (r"\text{Evelyn}",                   r"\boxed{Evelyn}",             "word answer"),
+    (r"8\sqrt{3}",                       r"\boxed{8sqrt(3)}",           "plain sqrt"),
+    (r"\sqrt{6}+3\sqrt{2}",              r"\boxed{sqrt(6)+3sqrt(2)}",   "two plain sqrts"),
+    (r"\frac{\sqrt{6}}{3}",              r"\boxed{\frac{sqrt(6)}{3}}", "sqrt in fraction"),
 ]
 # Wrong answers that a careless normalisation would start accepting.
 REJECT = [
@@ -22,6 +25,9 @@ REJECT = [
     (r"\left[0,1\right)", r"\boxed{[0,1]}",       "open vs closed interval"),
     (r"\text{Evelyn}",    r"\boxed{Brenda}",      "wrong name"),
     (r"\frac{1}{2}",      r"\boxed{\frac{2}{1}}", "fraction inverted"),
+    (r"\sqrt{3}",         r"\boxed{sqrt(2)}",      "wrong plain sqrt"),
+    (r"\sqrt{3}",         r"\boxed{sqrt(3}",       "unbalanced plain sqrt"),
+    (r"\frac{\sqrt{3}}{2}", r"\boxed{\frac{sqrt(2)}{2}}", "wrong sqrt in fraction"),
 ]
 
 
