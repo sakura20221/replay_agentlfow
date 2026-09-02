@@ -1142,7 +1142,7 @@ def link_data(pkg: Path) -> None:
             if target.is_symlink() or target.exists():
                 target.unlink()
             try:
-                target.symlink_to(source)
+                target.symlink_to(os.path.relpath(source, start=target.parent))
             except OSError:
                 shutil.copyfile(source, target)
     made = sorted(p.name for p in data_dir.glob("*.jsonl"))
@@ -1236,7 +1236,8 @@ def check(pkg: Path, label: str) -> None:
     for key in DATASETS:
         for suffix in ("train", "test"):
             path = data_dir / f"{key.lower()}_{suffix}.jsonl"
-            ok = path.exists() and path.stat().st_size > 0
+            portable = not path.is_symlink() or not Path(os.readlink(path)).is_absolute()
+            ok = path.exists() and path.stat().st_size > 0 and portable
             report(ok, f"data {path.name}")
 
     operator_files = list((pkg / "ext" / "maas" / "scripts" / "optimized")

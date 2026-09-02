@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import os
 import re
 import shutil
 import sys
@@ -790,7 +791,7 @@ def link_data(repo: Path) -> None:
             if target.is_symlink() or target.exists():
                 target.unlink()
             try:
-                target.symlink_to(source)
+                target.symlink_to(os.path.relpath(source, start=target.parent))
             except OSError:
                 shutil.copyfile(source, target)
     count = len(list(target_dir.glob("*.jsonl")))
@@ -877,7 +878,13 @@ def check(repo: Path, package: str, label: str) -> None:
            "execute_code_get_return bounded (30 s)")
     for name in DATASETS:
         path = repo / "datasets" / "shared" / f"{name}.jsonl"
-        report(path.exists() and path.stat().st_size > 0, f"data {name}.jsonl")
+        portable = not path.is_symlink() or not Path(os.readlink(path)).is_absolute()
+        report(path.exists() and path.stat().st_size > 0 and portable,
+               f"data {name}.jsonl")
+    links = list((repo / "datasets" / "shared").glob("*.jsonl"))
+    report(all(not path.is_symlink() or
+               not Path(os.readlink(path)).is_absolute() for path in links),
+           "shared-data links are relative")
 
 
 def main() -> None:

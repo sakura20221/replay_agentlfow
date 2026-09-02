@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import sys
@@ -398,7 +399,7 @@ def link_data() -> None:
         if target.is_symlink() or target.exists():
             target.unlink()
         try:
-            target.symlink_to(source)
+            target.symlink_to(os.path.relpath(source, start=target.parent))
         except OSError:
             shutil.copyfile(source, target)
     report(len(list(target_dir.glob("*.jsonl"))) >= 9,
@@ -784,7 +785,12 @@ def check() -> None:
     report((REPO / "Datasets" / "shared_dataset.py").exists(), "shared_dataset.py")
     for name in DATASETS:
         path = REPO / "Datasets" / "shared" / f"{name}.jsonl"
-        report(path.exists(), f"data {name}.jsonl")
+        portable = not path.is_symlink() or not Path(os.readlink(path)).is_absolute()
+        report(path.exists() and portable, f"data {name}.jsonl")
+    links = list((REPO / "Datasets" / "shared").glob("*.jsonl"))
+    report(all(not path.is_symlink() or
+               not Path(os.readlink(path)).is_absolute() for path in links),
+           "shared-data links are relative")
 
 
 def main() -> None:
