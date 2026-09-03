@@ -1001,6 +1001,32 @@ def patch_indented_code(pkg: Path) -> None:
            f"sanitize preserves indented model code ({sanitize_outcome})")
 
 
+def link_sentence_model(pkg: Path) -> None:
+    """Expose the shared MiniLM checkout at DAAO's legacy relative path.
+
+    DAAO constructs ``SentenceTransformer('./all-MiniLM-L6-v2')`` while its
+    repository directory is the current working directory.  The old server had
+    an untracked absolute symlink there, so a fresh clone failed before the
+    first request.  Keep the upstream code unchanged and create a portable,
+    repository-relative link during installation.
+    """
+    if pkg.parent.name != "daao":
+        return
+    link = pkg.parent / "all-MiniLM-L6-v2"
+    target = Path("../../shared/models/all-MiniLM-L6-v2")
+    if link.is_symlink():
+        if os.readlink(link) == str(target):
+            report(True, "DAAO MiniLM path is a portable relative link")
+        else:
+            report(False, f"DAAO MiniLM link points to {os.readlink(link)!r}")
+        return
+    if link.exists():
+        report(False, "DAAO MiniLM path exists but is not the expected symlink")
+        return
+    link.symlink_to(target)
+    report(True, "DAAO MiniLM path linked to shared model")
+
+
 def patch_prompt_task_wording(pkg: Path) -> None:
     """Repair the mis-escaped LaTeX and adapt task identity per dataset."""
     base = pkg / "ext" / "maas" / "scripts" / "optimized"
@@ -1268,6 +1294,13 @@ def check(pkg: Path, label: str) -> None:
     report(sanitizer.exists() and "_shim_dedent_code(code)" in sanitizer.read_text(encoding="utf-8"),
            "sanitize dedents model replies for every caller")
 
+    if pkg.parent.name == "daao":
+        link = pkg.parent / "all-MiniLM-L6-v2"
+        report(link.is_symlink()
+               and os.readlink(link) == "../../shared/models/all-MiniLM-L6-v2"
+               and link.resolve().is_dir(),
+               "DAAO MiniLM path is a portable relative link")
+
 
 def _prompt_namespace(path: Path, dataset: str) -> dict:
     """Execute a prompt module as the given dataset and return its constants.
@@ -1407,6 +1440,7 @@ def main() -> None:
         patch_prompt_task_wording(pkg)
         patch_code_execution(pkg)
         patch_indented_code(pkg)
+        link_sentence_model(pkg)
         patch_namespace_override(pkg)
         patch_test_result_data(pkg)
         # After patch_prompt_formatting, not before: that function skips any file
