@@ -5,32 +5,18 @@
 @File    : __init__.py
 """
 
-from daao.provider.google_gemini_api import GeminiLLM
-from daao.provider.ollama_api import OllamaLLM
-from daao.provider.openai_api import OpenAILLM
-from daao.provider.zhipuai_api import ZhiPuAILLM
-from daao.provider.azure_openai_api import AzureOpenAILLM
-from daao.provider.metagpt_api import MetaGPTLLM
-from daao.provider.human_provider import HumanProvider
-from daao.provider.spark_api import SparkLLM
-from daao.provider.qianfan_api import QianFanLLM
-from daao.provider.dashscope_api import DashScopeLLM
-from daao.provider.anthropic_api import AnthropicLLM
-from daao.provider.bedrock_api import BedrockLLM
-from daao.provider.ark_api import ArkLLM
+# --- shared-layer shim: tolerant provider imports ---
+import importlib as _importlib
 
-__all__ = [
-    "GeminiLLM",
-    "OpenAILLM",
-    "ZhiPuAILLM",
-    "AzureOpenAILLM",
-    "MetaGPTLLM",
-    "OllamaLLM",
-    "HumanProvider",
-    "SparkLLM",
-    "QianFanLLM",
-    "DashScopeLLM",
-    "AnthropicLLM",
-    "BedrockLLM",
-    "ArkLLM",
-]
+_PROVIDERS = [('google_gemini_api', 'GeminiLLM'), ('ollama_api', 'OllamaLLM'), ('openai_api', 'OpenAILLM'), ('zhipuai_api', 'ZhiPuAILLM'), ('azure_openai_api', 'AzureOpenAILLM'), ('metagpt_api', 'MetaGPTLLM'), ('human_provider', 'HumanProvider'), ('spark_api', 'SparkLLM'), ('qianfan_api', 'QianFanLLM'), ('dashscope_api', 'DashScopeLLM'), ('anthropic_api', 'AnthropicLLM'), ('bedrock_api', 'BedrockLLM'), ('ark_api', 'ArkLLM')]
+
+for _module_name, _class_name in _PROVIDERS:
+    try:
+        _module = _importlib.import_module(f"daao.provider.{_module_name}")
+        globals()[_class_name] = getattr(_module, _class_name)
+    except Exception:
+        # Backend not installed or not importable on this Python; the
+        # bake-off does not use it, so skip rather than fail the package.
+        pass
+
+__all__ = [_class_name for _, _class_name in _PROVIDERS if _class_name in globals()]

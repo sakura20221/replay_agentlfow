@@ -24,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import exec_guard_patch  # noqa: E402
 import dedent_patch  # noqa: E402
 import namespace_patch  # noqa: E402
+from maas_family import patch_providers  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 SHIM_SOURCE = Path(__file__).resolve().parent / "shared_shim.py"
@@ -1253,6 +1254,11 @@ def check(pkg: Path, label: str) -> None:
     report(not ns_problems, "namespace override present"
            + ("" if not ns_problems else f" ({ns_problems})"))
 
+    provider_init = pkg / "provider" / "__init__.py"
+    report(provider_init.exists()
+           and patch_providers.MARKER in provider_init.read_text(encoding="utf-8"),
+           "unused provider SDK imports are optional")
+
     check_prompt_wording(pkg)
 
     node = pkg / "actions" / "action_node.py"
@@ -1392,6 +1398,7 @@ def main() -> None:
             check(pkg, label)
             continue
         print(f"\n[{label}] installing")
+        patch_providers.patch(label, pkg / "provider" / "__init__.py")
         install_shim(pkg)
         patch_evaluator(pkg)
         patch_experiment_configs(pkg)
@@ -1414,6 +1421,8 @@ def main() -> None:
         patch_mbpp_test_identity(pkg)
         link_data(pkg)
         write_config(pkg.parent, label)
+
+    problems.extend(patch_providers.problems)
 
     print("\n" + "=" * 60)
     if problems:
